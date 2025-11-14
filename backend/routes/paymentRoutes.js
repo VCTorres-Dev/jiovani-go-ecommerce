@@ -20,9 +20,16 @@ router.use((req, res, next) => {
 /**
  * @route   POST /api/payments/init
  * @desc    Iniciar proceso de pago con Transbank
- * @access  Public (sin autenticación requerida para testing/producción)
+ * @access  Private (requiere autenticación)
  */
-router.post('/init', initPayment);
+router.post('/init', auth, initPayment);
+
+/**
+ * @route   POST /api/payments/init-test
+ * @desc    Iniciar proceso de pago SIN autenticación (SOLO TESTING)
+ * @access  Public (para testing sin token)
+ */
+router.post('/init-test', initPayment);
 
 /**
  * @route   POST /api/payments/confirm
