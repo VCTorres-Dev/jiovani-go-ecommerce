@@ -1,0 +1,4 @@
+# Fuerza redeploy en Railway
+# Esta archivo se crea solo para forzar un nuevo build
+# Fecha: 2025-11-14
+# Cambio: Forzar detección de nuevo endpoint /api/payments/init-test
