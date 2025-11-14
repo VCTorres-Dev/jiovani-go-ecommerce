@@ -1,7 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config();
+// En production (Railway), las variables de entorno ya están disponibles
+// En desarrollo local, crear archivo .env manualmente
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
