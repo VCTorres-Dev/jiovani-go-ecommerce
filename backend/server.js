@@ -377,9 +377,12 @@ app.get("/api/products", (req, res) => {
     
     let filteredProducts = MOCK_PRODUCTS;
     
-    // Filtrar por género si es necesario
+    // Filtrar por género si es necesario (case-insensitive)
     if (gender && gender !== 'undefined' && gender !== '') {
-      filteredProducts = filteredProducts.filter(p => p.gender === gender);
+      const genderLower = gender.toLowerCase();
+      filteredProducts = filteredProducts.filter(p => 
+        p.gender.toLowerCase() === genderLower
+      );
     }
     
     // Filtrar por búsqueda
