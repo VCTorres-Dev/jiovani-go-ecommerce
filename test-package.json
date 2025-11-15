@@ -1,0 +1,15 @@
+{
+  "name": "start-test-servers",
+  "version": "1.0.0",
+  "description": "Script para iniciar servidores de testing",
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "start:both": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "test:integration": "cd backend && node test-integration.js",
+    "test:full": "concurrently \"npm run start:backend\" \"timeout 10 && npm run test:integration\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

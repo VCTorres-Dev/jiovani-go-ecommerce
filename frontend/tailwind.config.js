@@ -1,6 +1,9 @@
 // tailwind.config.js
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "node_modules/flowbite-react/lib/esm/**/*.js"
+  ],
   theme: {
     extend: {
       colors: {
@@ -9,8 +12,16 @@ module.exports = {
         accent: "#D4AF37", // Dorado
         background: "#F5F5DC", // Fondo beige claro
         textPrimary: "#000000", // Texto negro
+        gold: {
+          500: "#b29600",
+          600: "#8a7300", // Ajustar el color dorado para que sea más suave
+        },
+        darkGold: {
+          500: "#514600",
+          600: "#3c3500",
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [require('flowbite/plugin')],
 };

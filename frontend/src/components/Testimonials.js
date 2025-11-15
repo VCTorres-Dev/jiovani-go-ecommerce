@@ -22,7 +22,7 @@ function Testimonials() {
         </div>
         <div className="p-4">
           <p className="italic">
-            "Unique and lasting fragrances. Dejo Aromas is now my go-to perfume
+            "Unique and lasting fragrances. Jiovanni Go is now my go-to perfume
             brand!"
           </p>
           <p className="mt-4 text-right">- Customer 3</p>

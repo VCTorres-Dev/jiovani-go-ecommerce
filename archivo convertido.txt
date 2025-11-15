@@ -1,0 +1,1166 @@
+PDF To Markdown Converter
+
+  *
+  * Feedback & Bug Reports <https://github.com/jzillmann/pdf-to-
+    markdown/issues>
+  * Code @Github <http://github.com/jzillmann/pdf-to-markdown>
+  *
+  * About <#>
+
+  * Debug View <#>
+  * Result View <#>
+
+Edit
+
+Preview
+
+------------------------------------------------------------------------
+
+
+  PLAN DE PROYECTO
+
+
+        PROJ-VDJG- 2025
+
+Vitrina Digital Jiovani Go (VDJG): Plataforma Web para Optimización de
+Presencia en Línea
+
+Integrantes : Joaquín Cancino Torres
+Carrera : Ingeniería Civil informática
+Asignatura : Ingeniería de Software II
+Docente : Jerman Espíndola Sandoval
+Fecha de Entrega : 14 de mayo de 2025
+
+
+    Índice
+
+  * 1
+    Introducción..............................................................................................................................
+  * 2 Problemática
+  * 3
+    Solución....................................................................................................................................
+      o 3.1 Solución propuesta
+      o 3.2 Que no incluye
+  * 4 Arquitectura
+      o 4.1 Descripción de la arquitectura
+      o 4.2 Esquema / Arquitectura
+  * 5 Objetivos
+      o 5.1 Objetivo general:
+      o 5.2 Objetivos específicos para el desarrollo del software
+      o 5.3 Objetivos para realizar Mediciones en el Proyecto (OMP)
+  * 6 Estructura de Descomposición de Trabajo
+    (EDT).................................................................
+  * 7 Riesgos
+      o 7.1 Matriz de Riesgos (MR)
+  * 8 Historias de Usuarios (HU)
+  * 9
+    Conclusiones..........................................................................................................................
+
+
+    1
+    Introducción..............................................................................................................................
+
+El proyecto "Plataforma Web para Optimización de Ventas - Jiovani Go"
+surge como respuesta
+a la necesidad de mejorar la presencia digital de la empresa de
+perfumería "Jiovani Go", que
+actualmente carece de presencia en línea. En el mercado actual, donde la
+digitalización es cada
+vez más relevante para el éxito comercial, esta ausencia representa una
+desventaja competitiva
+significativa.
+
+La industria de la perfumería ha experimentado una transformación
+importante en los últimos
+años, con un creciente número de consumidores que utilizan plataformas
+digitales para
+informarse sobre productos, comparar opciones y realizar compras. Según
+estudios recientes,
+más del 60% de los consumidores de productos de belleza y perfumería
+investigan en línea antes
+de realizar una compra, incluso si luego adquieren el producto en una
+tienda física.
+
+En este contexto, el desarrollo de una plataforma web para Jiovani Go no
+solo representa una
+oportunidad para aumentar la visibilidad de la marca, sino también para
+establecer un nuevo
+canal de comunicación con los clientes, potenciar las ventas y obtener
+información valiosa sobre
+preferencias y comportamientos del consumidor.
+
+Este plan de proyecto define la estrategia para el desarrollo e
+implementación de dicha
+plataforma, contemplando desde los aspectos técnicos y funcionales hasta
+los riesgos
+potenciales y medidas de mitigación. El propósito es proporcionar una
+hoja de ruta clara y
+detallada que guíe el proceso de desarrollo, asegurando que el producto
+final cumpla con las
+expectativas del cliente y aporte valor real a su negocio.
+
+La plataforma web propuesta será desarrollada siguiendo metodologías
+ágiles, con un enfoque
+centrado en el usuario y considerando las mejores prácticas en diseño
+web y experiencia de
+usuario (UX). El resultado será una herramienta digital que no solo
+mejore la visibilidad de Jiovani
+Go en el mercado, sino que también contribuya a la optimización de sus
+procesos de venta y al
+fortalecimiento de su relación con los clientes.
+
+
+    2 Problemática
+
+El sector de la perfumería enfrenta actualmente desafíos significativos
+en relación con la
+digitalización y presencia en línea, especialmente para empresas
+tradicionales que no han
+adaptado sus estrategias al entorno digital. En el caso específico de
+"Jiovani Go", se ha
+identificado una problemática multidimensional que afecta directamente
+su competitividad y
+potencial de crecimiento.
+
+La empresa carece por completo de presencia digital, lo que implica una
+invisibilidad práctica
+en un mercado donde los consumidores utilizan cada vez más internet para
+descubrir,
+investigar y comprar productos de perfumería. Esta ausencia no solo
+limita el alcance de la
+marca a un público físicamente cercano, sino que también restringe
+severamente las
+oportunidades de captación de nuevos clientes potenciales que, por
+tendencia global, inician
+su proceso de compra con una búsqueda en línea.
+
+La falta de un sitio web impacta negativamente en múltiples aspectos del
+negocio:
+
+ 1. Visibilidad limitada: Los consumidores no pueden encontrar
+    información sobre Jiovani
+    Go al realizar búsquedas relacionadas con perfumes en su área
+    geográfica, cediendo
+    ese espacio a competidores con presencia digital.
+ 2. Oportunidades de venta perdidas: Sin una plataforma para mostrar su
+    catálogo de
+    productos, la empresa pierde ventas potenciales de clientes que
+    prefieren explorar
+    opciones en línea antes de realizar una compra.
+ 3. Desventaja competitiva: Mientras los competidores aprovechan las
+    herramientas
+    digitales para construir relaciones con sus clientes, Jiovani Go
+    queda rezagada, sin
+    acceso a los beneficios del marketing digital y el análisis de datos.
+ 4. Falta de información sobre el mercado: Sin presencia digital, la
+    empresa carece de
+    medios para recopilar información valiosa sobre comportamientos y
+    preferencias de
+    sus clientes potenciales.
+ 5. Limitaciones en estrategias de fidelización: La ausencia de canales
+    digitales
+    dificulta la implementación de programas de fidelización efectivos,
+    que podrían
+    aumentar las tasas de retención de clientes.
+
+
+    3
+    Solución....................................................................................................................................
+
+
+      3.1 Solución propuesta
+
+La solución propuesta consiste en el desarrollo e implementación de una
+plataforma web inicial
+para la empresa "Jiovani Go", diseñada específicamente para mejorar su
+presencia digital y la
+visibilidad de sus productos de perfumería. Esta primera fase de la
+plataforma funcionará como
+vitrina digital de la marca, presentando su catálogo de productos de
+manera atractiva y
+profesional.
+
+Los componentes principales de la solución incluyen:
+
+ 1. Sitio web responsive y funcional: Desarrollo de una interfaz web
+    adaptativa
+    utilizando React.js como biblioteca principal de JavaScript y
+    Tailwind CSS para el
+    diseño y estilizado, garantizando una experiencia óptima en todos
+    los dispositivos con
+    un diseño moderno y coherente con la identidad de la marca.
+ 2. Catálogo digital básico: Implementación de un catálogo que presente
+    los productos
+    de Jiovani Go con fotografías, descripciones breves, información
+    sobre notas olfativas
+    y concentración, organizado por categorías.
+ 3. Panel de administración simplificado: Desarrollo de un backend
+    básico que permita
+    al personal de Jiovani Go actualizar el catálogo y gestionar
+    contenidos sin necesidad
+    de conocimientos técnicos avanzados.
+ 4. Sección informativa: Creación de páginas estáticas con información
+    sobre la
+    empresa, su historia y filosofía, así como contenido educativo
+    básico sobre perfumes.
+ 5. Blog simple: Implementación de un blog básico para publicación de
+    artículos
+    relacionados con el mundo de las fragancias, sin sistema de
+    comentarios en esta
+    primera fase.
+ 6. Formulario de contacto: Inclusión de un formulario simple que
+    facilite la comunicación
+    entre clientes potenciales y la empresa.
+
+
+      3.2 Que no incluye
+
+Para mantener la viabilidad del proyecto con los recursos y tiempo
+disponibles, esta primera
+fase no incluirá:
+
+ 1. Desarrollo de aplicaciones móviles nativas: La solución contempla un
+    diseño web
+    responsive que funcionará en dispositivos móviles, pero no incluye
+    el desarrollo de
+    aplicaciones específicas para iOS, Android u otras plataformas.
+ 2. Sistema de pagos en línea integrado: El alcance actual no abarca la
+    implementación
+    de un sistema de comercio electrónico completo con pasarela de
+    pagos, carrito de
+    compras y gestión de pedidos en línea.
+ 3. Integración con sistemas ERP o CRM existentes: La plataforma
+    funcionará como un
+    sistema independiente y no se integrará con otros sistemas de
+    gestión empresarial que
+    la empresa pudiera utilizar.
+ 4. Sistema de métricas y análisis: No se implementarán sistemas de
+    seguimiento y
+    análisis de usuarios, ni propios ni de terceros como Google Analytics.
+ 5. Optimización SEO: No se incluirán estrategias ni implementaciones
+    específicas para
+    posicionamiento en buscadores.
+ 6. Sistema de comentarios en blog: El blog será inicialmente de solo
+    lectura, sin
+    funcionalidad de comentarios.
+ 7. Estructura compleja de contenidos: Se utilizará un modelo
+    simplificado de
+    contenidos sin implementar herencia compleja entre tipos de contenido.
+ 8. Gestión avanzada de múltiples imágenes: Se limitará a una imagen
+    principal por
+    producto en esta fase.
+ 9. Optimización de rendimiento avanzada: Se implementarán prácticas
+    básicas de
+    programación, pero no técnicas avanzadas como CDN personalizado o
+    sistemas
+    complejos de caching.
+10. Integraciones avanzadas con redes sociales: Se incluirán botones
+    básicos para
+    compartir, pero no integración bidireccional completa con
+    plataformas sociales.
+
+Estos elementos podrían considerarse para fases posteriores del
+proyecto, según el éxito de
+la implementación inicial y las necesidades evolutivas de Jiovani Go.
+
+
+    4 Arquitectura
+
+
+      4.1 Descripción de la arquitectura
+
+|La solución propuesta para Jiovani Go estará basada en una arquitectura de aplicación web
+de tres capas: Frontend, Backend y Base de datos.
+|
+
+  * Frontend
+    Para la capa Frontend, se utilizará React como biblioteca principal
+    de JavaScript,
+    complementada con Tailwind CSS como framework de utilidades para el
+    diseño.
+      o React: Permitirá crear una interfaz de usuario dinámica y
+        eficiente mediante un enfoque
+        basado en componentes reutilizables.
+      o Tailwind CSS: Proporcionará un sistema de diseño altamente
+        personalizable y
+        eficiente, basado en clases de utilidad que acelerará el
+        desarrollo visual y garantizará
+        consistencia en toda la aplicación.
+      o Vite: Se utilizará como herramienta de construcción para
+        optimizar el proceso de
+        desarrollo, ofreciendo un servidor de desarrollo rápido y eficiente.
+        Esta combinación tecnológica permitirá:
+  * Desarrollar componentes modulares que faciliten el mantenimiento y
+    la escalabilidad
+  * Lograr un diseño responsive con mínimo esfuerzo
+  * Mantener una coherencia visual en toda la plataforma
+  * Optimizar los tiempos de carga mediante la generación eficiente de
+    código
+  * Backend
+    En la capa backend, se utilizará el framework Node.js con Express:
+      o Node.js/Express: Permitirá desarrollar una API REST eficiente
+        que sirva como puente
+        entre el frontend y la base de datos.
+      o Middleware de autenticación: Para gestionar el acceso seguro al
+        panel de
+        administración.
+      o Controladores modulares: Organizados para gestionar productos,
+        contenidos y
+        usuarios.
+  * Base de Datos
+    Se utilizará MongoDB como el sistema de gestión de base de datos:
+      o MongoDB: Base de datos NoSQL que proporciona flexibilidad para
+        el modelado de
+        productos con atributos variables y facilita la gestión de
+        contenidos.
+
+  * Esquemas optimizados: Diseñados específicamente para las necesidades
+    de un
+    catálogo de perfumería, con campos especializados para notas
+    olfativas, concentración
+    y duración.
+    Esta arquitectura de tres capas proporciona una separación clara de
+    responsabilidades,
+    facilitando el mantenimiento y permitiendo la evolución
+    independiente de cada capa según las
+    necesidades futuras de Jiovani Go.
+
+
+      4.2 Esquema / Arquitectura
+
+|El diagrama anterior representa el modelo de datos diseñado para la plataforma web de Jiovani
+Go, mostrando las entidades principales y sus relaciones:
+|
+
+ 1. Producto: Entidad central que almacena la información de los
+    perfumes, incluyendo
+    atributos específicos del sector como notas olfativas, concentración
+    y duración. Cada
+    producto pertenece a una categoría y es gestionado por un usuario
+    administrador.
+
+ 2. Categoría: Permite la clasificación jerárquica de los productos,
+    facilitando la
+    navegación y organización del catálogo. Contiene datos básicos como
+    nombre,
+    descripción e imagen representativa.
+ 3. Usuario: Gestiona los permisos y accesos al sistema, con roles
+    definidos que
+    determinan las acciones permitidas dentro de la plataforma. Este
+    componente es
+    fundamental para la seguridad y administración del contenido.
+ 4. Contenido: Representa la estructura base para los elementos
+    informativos de la
+    plataforma. Incluye atributos comunes como título, descripción,
+    cuerpo del texto e
+    imagen destacada.
+ 5. Blog y Novedad: Entidades que heredan de Contenido, extendiendo su
+    funcionalidad
+    para casos de uso específicos. Blog permite la gestión de artículos
+    informativos,
+    mientras que Novedad está orientada a anuncios temporales con fechas
+    de inicio y fin.
+ 6. Métrica: Aunque en la versión inicial no implementaremos sistemas de
+    análisis, el
+    modelo contempla esta entidad para futuras expansiones, permitiendo
+    registrar datos
+    sobre el uso de la plataforma.
+
+
+    5 Objetivos
+
+5.1 Objetivo general: Desarrollar e implementar una plataforma web
+básica y funcional para
+la empresa "Jiovani Go" que mejore su presencia digital, facilite la
+visibilidad de su
+catálogo de productos y establezca un canal de comunicación con sus clientes
+potenciales, contribuyendo así a aumentar su reconocimiento en el mercado de
+perfumería.
+
+
+      5.2 Objetivos específicos para el desarrollo del software
+
+ 1. Diseñar e implementar un sitio web responsive con una interfaz
+    intuitiva y atractiva que
+    refleje la identidad de marca de Jiovani Go, garantizando una
+    experiencia básica óptima
+    en diferentes dispositivos, utilizando React y Tailwind CSS.
+
+ 2. Desarrollar un catálogo digital funcional que presente los productos
+    de perfumería de
+    manera organizada y atractiva, con imágenes de calidad,
+    descripciones breves y sistema
+    de categorización básico.
+ 3. Implementar un panel de administración simple que permita al
+    personal de Jiovani Go
+    gestionar el contenido del sitio y actualizar el catálogo de
+    productos sin necesidad de
+    conocimientos técnicos avanzados.
+ 4. Crear un blog básico para la publicación de contenido relacionado
+    con el mundo de las
+    fragancias, como artículos educativos y novedades del sector.
+ 5. Crear formularios de contacto funcionales que faciliten la
+    comunicación entre clientes
+    potenciales y la empresa, con validación básica de campos.
+ 6. Asegurar un rendimiento aceptable de la plataforma mediante
+    prácticas básicas de
+    programación y estructura adecuada del código.
+ 7. Implementar una estructura de navegación intuitiva que permita a los
+    usuarios
+    encontrar fácilmente los productos y la información que buscan.
+ 8. Establecer medidas básicas de seguridad para proteger la información
+    del sitio y del
+    panel de administración.
+
+
+      5.3 Objetivos para realizar Mediciones en el Proyecto (OMP)
+
+|Objetivos específicos Indicador de éxito (Meta) del
+objetivo
+Alcance
+|
+
+|1.- Elaborar todos los entregables propuestos (Entregables cumplidos actuales * 100)
+/ Entregables propuestos. índice de
+éxito 100%
+2.- Realizar los requerimientos solicitados por el cliente.
+(Entregables cumplidos actuales * 100) / requerimientos
+totales. índice de éxito 100%
+|
+
+|2.- Realizar los requerimientos solicitados
+por el cliente. (Entregables cumplidos
+actuales * 100) / requerimientos totales.
+índice de éxito 100%
+|
+
+|Cronograma (Tiempo)
+|
+
+|1.- Cumplir con las horas estimadas para el proyecto
+(Horas actuales*100) / total de horas estimadas (2.160).
+Índice de éxito 100%
+|
+
+|1.- Cumplir con las horas estimadas para el
+proyecto (Horas actuales*100) / total de
+horas estimadas (2.160). Índice de éxito
+100%
+2.- Medir el tiempo de las etapas de codificación del
+proyecto (Horas actuales*100) / total de horas
+estimadas de codificación (1.440). Índice de éxito 110%
+|
+
+|2.- Medir el tiempo de las etapas de
+codificación del proyecto (Horas
+actuales*100) / total de horas estimadas
+de codificación (1.440). Índice de éxito
+110%
+|
+
+|Costo
+|
+
+|1.- Cumplir con el presupuesto estimado del proyecto
+(Presupuesto actual * 100) / Presupuesto total acordado
+($14.500.000 CLP). índice de éxito 90%
+|
+
+|1.- Cumplir con el presupuesto estimado del
+proyecto (Presupuesto actual * 100) /
+Presupuesto total acordado ($14.500.
+CLP). índice de éxito 90%
+2.- Contrastar gastos de organización, administración y 2.- Contrastar gastos de organización,
+|
+
+dirección (Presupuesto actual * 100) / Presupuesto total
+
+acordado. índice de éxito 90%
+
+|administración y dirección (Presupuesto
+actual * 100) / Presupuesto total
+acordado. índice de éxito 90%
+|
+
+|Calidad
+|
+
+1.- Cumplir con la cantidad de pruebas estimadas para el
+
+proyecto (Pruebas exitosas realizadas*100) /cantidad
+total de pruebas definidas. Índice de éxito 100%.
+
+|1.- Cumplir con la cantidad de pruebas
+estimadas para el proyecto (Pruebas
+exitosas realizadas*100) /cantidad total de
+pruebas definidas. Índice de éxito 100%.
+|
+
+2.- Calcular la cantidad de pruebas exitosas para el
+proyecto (Pruebas exitosas*100) / cantidad total de
+pruebas. Índice de éxito 90%
+
+|2.- Calcular la cantidad de pruebas exitosas
+para el proyecto (Pruebas exitosas*100) /
+cantidad total de pruebas. Índice de éxito
+90%
+|
+
+
+    6 Estructura de Descomposición de Trabajo
+    (EDT).................................................................
+
+
+    7 Riesgos
+
+|Causa
+(hecho)
+|
+
+|Riesgo
+(evento incierto)
+|
+
+|Efecto
+(impacto)
+|
+
+|Acciones para mitigar riesgo
+(Acciones)
+Falta de definición
+clara en los requisitos
+iniciales
+|
+
+|Cambios frecuentes en los
+requisitos durante el
+desarrollo
+|
+
+|Retrasos en el cronograma,
+aumento de costos,
+reelaboración de componentes
+|
+
+|Dedicar tiempo suficiente a la fase de
+análisis, documentar detalladamente los
+requisitos, implementar procesos ágiles
+que permitan adaptarse a cambios,
+mantener comunicación constante con el
+cliente
+Retrasos en la
+entrega de
+información o
+aprobaciones por
+parte del cliente
+|
+
+|Bloqueos en el avance del
+proyecto
+|
+
+|Incumplimiento de plazos,
+reasignación ineficiente de
+recursos
+|
+
+|Establecer acuerdos claros sobre tiempos
+de respuesta, definir un calendario de
+reuniones y aprobaciones, implementar
+un plan de escalamiento para
+resoluciones
+Inexperiencia del
+equipo con algunas
+tecnologías
+seleccionadas
+|
+
+|Dificultades técnicas
+inesperadas
+|
+
+|Retrasos en la implementación,
+calidad inferior del código
+|
+
+|Planificar tiempo para capacitación,
+establecer estándares de codificación
+claros, implementar revisiones de código
+frecuentes, considerar mentorías
+Estimación optimista
+del esfuerzo
+requerido
+|
+
+|Subestimación de la
+complejidad de las tareas
+|
+
+|Incumplimiento de plazos,
+presión excesiva sobre el
+equipo
+|
+
+|Utilizar técnicas de estimación basadas
+en datos históricos, incluir márgenes de
+seguridad en las estimaciones, revisar
+periódicamente el progreso real vs.
+estimado
+|
+
+Deficiencias en las
+pruebas
+
+|Descubrimiento tardío de
+errores o problemas de
+usabilidad
+|
+
+|Retrasos por correcciones
+tardías, percepción negativa
+del usuario final
+|
+
+Implementar estrategias de pruebas
+continuas, incluir pruebas automatizadas,
+realizar pruebas de usabilidad tempranas
+con usuarios reales
+Selección
+inadecuada de
+proveedores de
+hosting
+
+|Problemas de rendimiento o
+disponibilidad en producción
+|
+
+|Experiencia negativa del
+usuario, daño a la reputación
+|
+
+Realizar un análisis detallado de
+proveedores, establecer SLAs claros,
+implementar pruebas de carga previas,
+tener planes de contingencia
+Rotación de personal
+clave
+
+|Pérdida de conocimiento
+específico del proyecto
+|
+
+|Retrasos mientras nuevos
+miembros se familiarizan,
+inconsistencias en la
+implementación
+|
+
+Documentar adecuadamente el
+conocimiento, fomentar la propiedad
+colectiva del código, mantener
+repositorios bien organizados
+Cambios en
+navegadores o
+tecnologías web
+durante el desarrollo
+
+|Incompatibilidades con
+nuevas versiones
+|
+
+|Problemas de funcionamiento
+en ciertos entornos, trabajo
+adicional de adaptación
+|
+
+Implementar pruebas en múltiples
+navegadores, utilizar estándares web
+establecidos, monitorear anuncios de
+cambios en plataformas relevantes
+Fallos en la
+identificación de
+todas las
+integraciones
+necesarias
+
+|Descubrimiento tardío de
+necesidades de integración
+|
+
+|Retrasos, cambios de
+arquitectura
+|
+
+|Realizar un mapeo completo de sistemas
+al inicio, validar con todas las áreas
+involucradas, planificar capacidad de
+extensión
+|
+
+Falta de participación
+de usuarios finales en
+las fases de diseño
+
+|Desarrollo de funcionalidades
+que no satisfacen
+necesidades reales
+|
+
+|Baja adopción, necesidad de
+rediseños
+|
+
+|Incluir a usuarios representativos en
+sesiones de diseño, implementar
+procesos de validación de prototipos,
+|
+
+realizar pruebas de usabilidad tempranas
+Eventos externos
+imprevistos
+(desastres naturales,
+crisis sanitarias)
+
+|Interrupción del trabajo del
+equipo
+|
+
+|Retrasos significativos, posible
+necesidad de replantear
+alcance
+|
+
+|Implementar capacidades de trabajo
+remoto, tener planes de continuidad,
+mantener comunicación efectiva en
+situaciones de crisis
+Requisitos de
+accesibilidad no
+considerados
+inicialmente
+|
+
+|Incumplimiento de estándares
+de accesibilidad
+|
+
+|Exclusión de usuarios con
+discapacidades, posibles
+implicaciones legales
+|
+
+Incluir requisitos de accesibilidad desde el
+diseño, realizar auditorías periódicas,
+utilizar herramientas automatizadas de
+verificación
+Cambios en
+estrategia comercial
+de Jiovani Go
+
+|Modificación de prioridades
+durante el proyecto
+|
+
+|Necesidad de reenfocar el
+desarrollo, posible redefinición
+de alcance
+|
+
+|Mantener comunicación constante con
+directivos, incluir flexibilidad en la
+planificación, documentar formalmente
+los cambios de alcance
+|
+
+
+      7.1 Matriz de Riesgos (MR)
+
+RIESGO
+
+|MUY
+BAJO 1
+|
+
+|BAJO
+2
+|
+
+|MEDIO
+3
+|
+
+|ALTO
+4
+|
+
+|MUY
+ALTO 5
+Hackeo robo de las recetas de la página
+web^3412 Importante MUY ALTA 5 5 10 15 20 25
+Hackeo robo de datos del usuario 5 5 25 Muy grave ALTA 4 4 8 12 16 20
+Error de planificación en tiempo 3 4 12 Importante MEDIA 3 3 6 9 12 15
+Error de planificación económica 5 5 25 Muy grave BAJA 2 2 4 6 8 12
+Padecimiento de personal 3 3 9 Importante MUY BAJA 1 1 2 3 4 5
+Renuncia de personal 4 4 16 Muy grave
+Inundación en la empresa 2 5 10 Importante
+Daño infraestructura 3 5 15 Muy grave
+Robo de instrumentaría 3 5 15 Muy grave
+Error de mantenimiento 2 4 8 Apreciable
+Error en la asignación de permisos 2 4 8 Apreciable
+Fallas en los sistemas de validación 3 4 12 Importante
+Perdida de datos sensibles 4 5 20 Muy grave
+Instalación de programas maliciosos 3 5 15 Muy grave
+Caida del sistema 5 5 25 Muy grave
+Ataque Ddos 5 5 25 Muy grave
+Incendio en la empresa 5 5 25 Muy grave
+corto circuito 4 5 20 Muy grave
+|
+
+MATRIZ DE RIESGOS
+
+|GRAVEDAD (IMPACTO)
+|
+
+|PROBABILIDAD
+|
+
+LEYENDA
+
+|Riesgo muy grave. Requiere medidas preventivas urgentes. No se debe
+iniciar el proyecto sin la aplicación de medidas preventivas urgentes.
+|
+
+|Riesgo importante. Medidas preventivas obligatorias. Se deben controlar
+fuertemente las variables de riesgo durante el proyecto.
+Riesgo apreciable. Estudiar económicamente si es posible introducir medidas
+preventivas para reducir el nivel de riesgo. Si no fuera posible, mantener las
+variables controladas.
+Riesgo marginal.Se vigilará aunque no requiere medidas preventivas de
+partida.
+|
+
+|Probabilidad
+(Ocurrencia)
+|
+
+|Gravedad
+(Impacto)
+|
+
+|Valor del
+Riesgo
+|
+
+|Nivel de Riesgo
+|
+
+
+    8 Historias de Usuarios (HU)
+
+
+        ÉPICA O MÓDULO 1 HISTORIAS DE USUARIOS
+
+En este módulo se
+gestiona todo lo
+relacionado con la
+creación y
+administración de
+cuentas de usuario,
+perfiles y autenticación.
+
+|N.º 1 TÍTULO: visualización de productos
+destacados
+|
+
+|HISTORIA
+|
+
+|Como cliente quiero ver los productos destacados en la página principal para
+conocer las mejores of ertas de Jiovani Go.
+CRITERIOS DE ACEPTACIÓN PH^
+1 La página principal debe mostrar al menos 4 productos destacados
+2 Cada producto debe mostrar imagen, nombre y precio como mínimo
+3 Al hacer clic en un producto se debe dirigir a la página de detalle de este
+4 Los productos destacados deben rotarse periódicamente
+|
+
+
+        HISTORIAS DE USUARIOS^
+
+|N.º 2 TÍTULO: Navegación por categorías
+|
+
+
+        HISTORIA
+
+|Como cliente quiero navegar por categorías de perfumes para encontrar
+fácilmente productos según mis intereses.
+CRITERIOS DE ACEPTACIÓN PH
+1 Debe existir un menú de navegación con categorías claramente identificadas
+2 Al seleccionar una categoría, se deben mostrar solo los productos de esa categoría
+3 Las categorías deben incluir como mínimo: perfumes masculinos y femeninos
+4 Debe haber una opción para ver todos los productos sin filtrar
+|
+
+
+        ÉPICA O MÓDULO 1 HISTORIAS DE USUARIOS
+
+|N.º 3 TÍTULO: Detalle de producto
+|
+
+|HISTORIA
+|
+
+|Como cliente quiero ver inf ormación detallada de cada perf ume para conocer sus
+características antes de contactar a la empresa.
+CRITERIOS DE ACEPTACIÓN PH^
+1 La página de detalle debe mostrar: nombre, imagen, precio, descripción y notas olfativas
+2 Mostrar información sobre la concentración del perfume (eau de toilette, eau de parfum)
+|
+
+|3 Incluir información sobre el tiempo de duración estimado del perfume
+4 Mostrar información sobre disponibilidad del producto (en stock, agotado, etc.)
+|
+
+
+        ÉPICA O MÓDULO 2 ADMINISTRACION DE PRODUCTOS
+
+Este módulo permite al
+personal de Jiovani Go
+gestionar el catálogo de
+productos de manera
+eficiente y mantenerlo
+actualizado.
+
+|N.º 4 TÍTULO: Creación de productos
+|
+
+|HISTORIA
+|
+
+|Como administrador quiero añadir nuevos productos al catálogo para
+mantenerlo actualizado con las últimas novedades.
+CRITERIOS DE ACEPTACIÓN PH^
+1 Formulario con campos para nombre, imagen, categoría, precio, descripción y notas olfativas
+2 Validación de campos obligatorios antes de guardar (nombre, categoría, precio e imagen)
+3 Opción para marcar el producto como destacado
+4 Confirmación exitosa tras guardar y opción para añadir otro producto o volver al listado
+|
+
+
+        ÉPICA O MÓDULO 2 ADMINISTRACION DE PRODUCTOS
+
+|N.º 5 TÍTULO: Edición de productos
+|
+
+|HISTORIA
+|
+
+|Como administrador quiero editar los productos existentes para mantener la
+inf ormación actualizada y corregir errores.
+CRITERIOS DE ACEPTACIÓN PH^
+1 Acceso a la edición desde el listado de productos mediante botón claramente visible
+2 Formulario prellenado con los datos actuales del producto seleccionado
+3 Capacidad para actualizar cualquier campo, incluyendo la imagen del producto
+4 Notificación de confirmación al guardar los cambios realizados
+|
+
+
+        ÉPICA O MÓDULO 2 ADMINISTRACION DE PRODUCTOS
+
+|N.º 6 TÍTULO: Eliminación de productos
+|
+
+
+        HISTORIA
+
+|Como administrador quiero eliminar productos del catálogo para retirar
+aquellos que ya no están disponibles.
+CRITERIOS DE ACEPTACIÓN PH
+1 Opción de eliminación accesible desde el listado de productos
+2 Solicitud de confirmación antes de eliminar definitivamente un producto
+3 Notificación clara tras la eliminación exitosa del producto
+4 Opción para cancelar la eliminación en la ventana de confirmación
+|
+
+
+        ÉPICA O MÓDULO 3 GESTION DE CONTENIDOS
+
+Este módulo permite
+administrar los
+contenidos informativos
+y educativos del blog y
+las páginas estáticas
+del sitio.
+
+|N.º 7 TÍTULO: Creación de artículos para blog
+|
+
+|HISTORIA
+|
+
+|Como administrador quiero crear artículos para el blog sobre el mundo de las
+f ragancias para educar a los clientes y mejorar el SEO.
+CRITERIOS DE ACEPTACIÓN PH^
+1 Editor de texto enriquecido para crear contenido con formato (negritas, listas, etc.)
+2 Opción para añadir imágenes al artículo
+3 Campos para título, resumen y contenido principal
+4 Vista previa del artículo antes de publicarlo
+|
+
+
+        ÉPICA O MÓDULO 3 GESTION DE CONTENIDOS
+
+|N.º 8 TÍTULO: Gestión de páginas informativas
+|
+
+
+        HISTORIA
+
+|Como administrador quiero editar las páginas informativas (Sobre nosotros,
+filosofía) para mantener actualizada la información de la empresa.
+CRITERIOS DE ACEPTACIÓN PH
+1 Listado de páginas disponibles para editar
+2 Editor de contenido similar al del blog
+3 Capacidad para actualizar imágenes y textos
+4 Cambios reflejados inmediatamente en el sitio público después de guardar
+|
+
+
+        ÉPICA O MÓDULO 4 COMUNICACIÓN CON CLIENTES
+
+Este módulo gestiona
+las funcionalidades de
+contacto y
+comunicación entre los
+clientes y la empresa.
+
+|N.º 9 TÍTULO: Formulario de contacto
+|
+
+|HISTORIA
+|
+
+|Como cliente quiero contactar a la empresa a través de un f ormulario para hacer
+consultas sobre productos o inf ormación de compra.
+CRITERIOS DE ACEPTACIÓN PH^
+1 Formulario con campos para nombre, email, teléfono, asunto y mensaje
+2 Validación de campos obligatorios (nombre, email y mensaje)
+3 Mensaje de confirmación tras el envío exitoso
+4 Notificación al administrador cuando se recibe un nuevo mensaje
+|
+
+
+        ÉPICA O MÓDULO 4 COMUNICACIÓN CON CLIENTES
+
+|N.º 10 TÍTULO: Gestión de mensajes recibidos
+|
+
+
+        HISTORIA
+
+|Como administrador quiero ver y gestionar los mensajes recibidos a través
+del formulario de contacto para responder a los clientes.
+CRITERIOS DE ACEPTACIÓN PH
+1 Listado de mensajes recibidos con fecha, remitente y asunto
+2 Opción para marcar mensajes como leídos o pendientes
+3 Visualización del contenido completo de cada mensaje
+4 Función para eliminar mensajes antiguos o archivados
+|
+
+
+        ÉPICA O MÓDULO 5 SEGURIDAD Y ACCESOS
+
+Este módulo gestiona la
+autenticación y
+seguridad del panel de
+administración.
+
+|N.º 1 1 TÍTULO: Inicio de sesión de administradores
+|
+
+|HISTORIA
+|
+
+|Como administrador quiero iniciar sesión de f orma segura para acceder al panel
+de administración de la plataf orma.
+CRITERIOS DE ACEPTACIÓN PH^
+1 Formulario de login con campos de usuario y contraseña
+2 Validación de credenciales contra la base de datos
+3 Bloqueo temporal tras múltiples intentos fallidos
+4 Redirección al dashboard tras inicio de sesión exitoso
+|
+
+
+        ÉPICA O MÓDULO 5 SEGURIDAD Y ACCESOS
+
+|N.º 12 TÍTULO: Gestión de usuarios administradores
+|
+
+
+        HISTORIA
+
+|Como administrador principal quiero gestionar usuarios con acceso al panel
+para controlar quién puede modificar el contenido del sitio.
+CRITERIOS DE ACEPTACIÓN PH
+1 Listar usuarios administradores existentes
+2 Crear nuevos usuarios con nombre, email y contraseña
+3 Editar permisos de usuarios existentes
+4 Desactivar usuarios sin eliminarlos completamente
+|
+
+
+    9
+    Conclusiones..........................................................................................................................
+
+La problemática de la falta de presencia digital para Jiovani Go ha sido
+claramente identificada
+como un factor limitante para su competitividad en el mercado actual de
+perfumería. Esta situación
+plantea una pregunta fundamental: ¿cómo puede una empresa tradicional de
+perfumes adaptarse
+al entorno digital y aprovechar las oportunidades que ofrece sin perder
+su esencia y valores?
+
+La respuesta se encuentra en la solución propuesta en este Plan de
+Proyecto, que establece un
+enfoque gradual y estratégico para desarrollar una plataforma web que
+funcione como vitrina
+digital, permitiendo a Jiovani Go mostrar su catálogo de productos,
+compartir su historia y filosofía,
+y establecer un canal directo de comunicación con sus clientes potenciales.
+
+A lo largo de este documento, hemos definido con precisión la
+arquitectura tecnológica, los
+objetivos específicos y las métricas de éxito que guiarán el desarrollo
+del proyecto. La metodología
+ágil adoptada, junto con las historias de usuario detalladas,
+proporciona un marco claro para la
+implementación de cada funcionalidad, asegurando que respondan
+directamente a las
+necesidades tanto de la empresa como de sus clientes.
+
+La identificación temprana de riesgos y sus correspondientes estrategias
+de mitigación permitirá
+anticiparnos a posibles obstáculos, minimizando su impacto en el
+progreso del proyecto.
+Especialmente relevantes son las consideraciones sobre la experiencia de
+usuario, la seguridad
+de la información y la flexibilidad para futuras expansiones.
+
+En conclusión, este Plan de Proyecto establece las bases para
+transformar la presencia digital de
+Jiovani Go, ofreciendo una solución escalable y adaptada a sus recursos
+actuales. La
+implementación exitosa de esta primera fase sentará las bases para una
+evolución progresiva
+hacia funcionalidades más avanzadas, como el comercio electrónico
+completo, que podrían ser
+consideradas en etapas posteriores según el éxito y la adopción de esta
+plataforma inicial.
+
+This is a offline tool, your data stays locally and is not send to any
+server!
+
+Feedback & Bug Reports <https://github.com/jzillmann/pdf-to-markdown/issues>
+

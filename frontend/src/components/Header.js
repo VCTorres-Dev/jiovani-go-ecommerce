@@ -6,7 +6,7 @@ function Header() {
   return (
     <header className="bg-blue-900 text-white py-4">
       <nav className="container mx-auto flex justify-between items-center">
-        <div className="text-2xl font-bold">Dejo Aromas</div>
+        <div className="text-2xl font-bold">Jiovanni Go</div>
         <ul className="flex space-x-4">
           <li>
             <Link

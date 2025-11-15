@@ -1,0 +1,916 @@
+PS C:\Users\Vicente\Documents\RESPALDO PAGINA DEJO AROMAS\DA_Page - V2\backend> npm start
+
+> backend@1.0.0 start
+> node server.js
+
+[TRACE] authRoutes.js cargado.
+🔧 Configurando Ethereal para pruebas...
+[2025-11-14 16:57:11] DEBUG Creating transport: nodemailer (7.0.6; +https://nodemailer.com/; SMTP/7.0.6[client:7.0.6])
+✅ Ethereal email service configurado para pruebas
+📧 Host: smtp.ethereal.email
+🔌 Port: 587
+✅ Transbank configurado para ambiente de integración
+📋 Código de comercio: 597055555532
+🔑 API Key configurada correctamente
+(node:15936) [MONGOOSE] DeprecationWarning: Mongoose: the `strictQuery` option will be switched back to `false` by default in Mongoose 7. Use `mongoose.set('strictQuery', false);` if you want to prepare for this change. Or use `mongoose.set('strictQuery', true);` to suppress this warning.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Servidor ejecutándose en puerto 5000
+Accede a: http://localhost:5000
+MongoDB conectado exitosamente
+[2025-11-14 16:57:11] DEBUG [SVywPgMRKhQ] Resolved smtp.ethereal.email as 95.216.108.161 [cache miss]
+[2025-11-14 16:57:11] INFO  [SVywPgMRKhQ] Connection established to 95.216.108.161:587
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 220 smtp.ethereal.email ESMTP Welcome to Ethereal MSA
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] C: EHLO [127.0.0.1]
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 250-smtp.ethereal.email Nice to meet you, client-181-42-214-214.imovil.entelpcs.cl
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 250-PIPELINING
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 250-8BITMIME
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 250-SMTPUTF8
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 250-AUTH LOGIN PLAIN   
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 250 STARTTLS
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] C: STARTTLS
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] S: 220 Ready to start TLS
+[2025-11-14 16:57:12] INFO  [SVywPgMRKhQ] Connection upgraded with STARTTLS
+[2025-11-14 16:57:12] DEBUG [SVywPgMRKhQ] C: EHLO [127.0.0.1]
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 250-smtp.ethereal.email Nice to meet you, client-181-42-214-214.imovil.entelpcs.cl
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 250-PIPELINING
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 250-8BITMIME
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 250-SMTPUTF8
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 250 AUTH LOGIN PLAIN   
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] SMTP handshake finished   
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] C: AUTH PLAIN AGVreGxzZWF4Z25wb3pmM2RAZXRoZXJlYWwuZW1haWwALyogc2VjcmV0ICov
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 235 Authentication successful
+[2025-11-14 16:57:13] INFO  [SVywPgMRKhQ] User "ekxlseaxgnpozf3d@ethereal.email" authenticated
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] C: QUIT
+✅ Email service connection verified
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] S: 221 Bye
+[2025-11-14 16:57:13] DEBUG [SVywPgMRKhQ] Closing connection to the server using "end"
+[2025-11-14 16:57:13] INFO  [SVywPgMRKhQ] Connection closed
+[CORS DEBUG] Origin received: undefined
+[INCOMING REQUEST] 2025-11-14T16:57:18.218Z - GET /main.bbd1f96fa5f852a00785.hot-update.json
+[CORS DEBUG] Origin received: undefined
+[INCOMING REQUEST] 2025-11-14T16:57:19.220Z - GET /main.bbd1f96fa5f852a00785.hot-update.json
+[CORS DEBUG] Origin received: undefined
+[INCOMING REQUEST] 2025-11-14T16:57:19.263Z - GET /main.bbd1f96fa5f852a00785.hot-update.json
+[CORS DEBUG] Origin received: undefined
+[INCOMING REQUEST] 2025-11-14T16:57:19.454Z - GET /main.bbd1f96fa5f852a00785.hot-update.json
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.507Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.534Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.660Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.676Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.804Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.825Z - GET /api/auth/user    
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.878Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.892Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.907Z - GET /api/auth/user    
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.955Z - POST /api/payments/confirm
+[PAYMENT ROUTES] 2025-11-14T16:57:19.956Z - POST /api/payments/confirm
+🔄 [CONFIRM] Iniciando confirmación de pago...
+📥 [CONFIRM] Body recibido: {
+  "token_ws": "simulated_token_1763135057290"
+}
+📥 [CONFIRM] Query params: {}
+🔑 [CONFIRM] Token recibido: simulated_token_1763...
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:19.967Z - POST /api/payments/confirm
+[PAYMENT ROUTES] 2025-11-14T16:57:19.967Z - POST /api/payments/confirm
+🔄 [CONFIRM] Iniciando confirmación de pago...
+📥 [CONFIRM] Body recibido: {
+  "token_ws": "simulated_token_1763135057290"
+}
+📥 [CONFIRM] Query params: {}
+🔑 [CONFIRM] Token recibido: simulated_token_1763...
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:20.008Z - GET /api/auth/user
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+📋 [CONFIRM] Orden encontrada: 69174e518b37de12b5efd4ca
+📊 [CONFIRM] Estado actual: completed
+⚠️ [CONFIRM] ADVERTENCIA: Orden ya fue confirmada previamente       
+📋 [CONFIRM] Orden encontrada: 69174e518b37de12b5efd4ca
+📊 [CONFIRM] Estado actual: completed
+⚠️ [CONFIRM] ADVERTENCIA: Orden ya fue confirmada previamente       
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:20.100Z - GET /api/payments/order/69174e518b37de12b5efd4ca
+[PAYMENT ROUTES] 2025-11-14T16:57:20.100Z - GET /api/payments/order/69174e518b37de12b5efd4ca
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/payments/order/69174e518b37de12b5efd4ca
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:20.141Z - GET /api/payments/order/69174e518b37de12b5efd4ca
+[PAYMENT ROUTES] 2025-11-14T16:57:20.142Z - GET /api/payments/order/69174e518b37de12b5efd4ca
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/payments/order/69174e518b37de12b5efd4ca
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:20.631Z - GET /api/products?page=1&limit=1000&gender=varon
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:37.206Z - GET /api/products?page=1&limit=1000&gender=varon
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: undefined
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:55.887Z - POST /api/payments/init
+[PAYMENT ROUTES] 2025-11-14T16:57:55.887Z - POST /api/payments/init 
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/payments/init
+🚀 [PAYMENT] Iniciando proceso de pago...
+📥 [PAYMENT] Request body: {
+  "orderItems": [
+    {
+      "_id": "684e72208d209416487ec6f0",
+      "name": "Aroma Odín",
+      "price": 17990,
+      "quantity": 1,
+      "imageURL": "/images/varon_06.webp"
+    }
+  ],
+  "totalAmount": 17990,
+  "shippingInfo": {
+    "name": "Juan Perez",
+    "email": "outside1940@gmail.com",
+    "phone": "+56939891312",
+    "address": "Ejemplo#1231",
+    "city": "Santiago",
+    "region": "Aysén"
+  }
+}
+👤 [PAYMENT] Usuario: hola2@hola2.com
+📝 [PAYMENT] Validando stock para 1 productos...
+🔍 [PAYMENT] Items recibidos: [
+  {
+    id: '684e72208d209416487ec6f0',
+    name: 'Aroma Odín',
+    imageURL: '/images/varon_06.webp',
+    hasImageURL: true
+  }
+]
+✅ [PAYMENT] Producto validado: {
+  name: 'Aroma Odín',
+  imageURL: '/images/varon_06.webp',
+  fromCart: true,
+  fromDB: true
+}
+📋 Datos de transacción:
+      - Buy Order: ORD3947589944B7F5Y121RT
+      - Session ID: SES_1763139475899_5ji6wsxe54o
+      - Amount: $17.990
+      - Return URL: https://magaly-beamlike-ken.ngrok-free.dev/api/payments/result
+✅ Orden creada en DB con ID: 69175f938d466e31cda7fc9d
+❌ Error con Transbank: AxiosError: Request failed with status code 401
+Not Authorized
+
+💡 Usando simulación para desarrollo local...
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:57.049Z - GET /api/auth/user    
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:57:57.056Z - GET /api/auth/user    
+[TRACE] Petición recibida en authRoutes: GET /user
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/auth/user
+
+
+
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             padding: 0;   
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         .step-list li {   
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             padding: 8px 0;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             color: #856404;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             position: relative;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             padding-left: 25px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         .step-list li:before {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             content: "=E2=9C=93";
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             position: absolute;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             left: 0;      
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             color: #28a745;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             font-weight: bold;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         .footer {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             background: #495057;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             color: #fff;  
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             padding: 30px 20px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             text-align: center;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         .footer p {       
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             margin-bottom: 10px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             opacity: 0.9; 
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         .footer a {       
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             color: #fff;  
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             text-decoration: none;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         .footer a:hover {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             text-decoration: underline;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         @media (max-width: 600px) {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             .email-container {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 margin: 10px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 border-radius: 8px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             .header {     
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 padding: 20px 15px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             .header h1 {  
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 font-size: 24px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             .content {    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 padding: 20px 15px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             .product-item {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 flex-direction: column;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 align-items: flex-start;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             .product-price {
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 margin-top: 10px;
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         }
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]     </style>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] </head>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] <body>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]     <div class=3D"email-container">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <!-- Header -->   
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <div class=3D"header">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <h1>=F0=9F=9A=80 jiovaniGo Chile</h1>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p>=C2=A1Gracias por elegir nuestros productos!</p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <!-- Success Banner -->
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <div class=3D"success-banner">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             =E2=9C=85 Tu pago ha sido procesado exitosamente
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <!-- Content -->  
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <div class=3D"content">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <h2 style=3D"color: #495057; margin-bottom: 20px;">Hola hola2,=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] </h2>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p style=3D"margin-bottom: 20px; color: #6c757d;">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 Tu pedido ha sido confirmado y procesado correctamente. A =
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] continuaci=C3=B3n encontrar=C3=A1s todos los detalles de tu compra:
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <!-- Order Information -->
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <div class=3D"order-info">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <h3>=F0=9F=93=8B Informaci=C3=B3n del Pedido</h3>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span>N=C3=BAmero de Orden:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span><strong>ORD3947589944B7F5Y121RT</strong></span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </div>    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span>Fecha de Compra:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span>14-11-2025</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </div>    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span>Estado del Pago:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span style=3D"color: #28a745;"><strong>Aprobado</stron=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] g></span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </div>    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span>C=C3=B3digo de Autorizaci=C3=B3n:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <span>SIM1763139492269</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </div>    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </div>        
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <!-- Products -->
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <div class=3D"products-section">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <h3>=F0=9F=93=A6 Productos Comprados</h3>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"product-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"product-details">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <div class=3D"product-name">Aroma Od=C3=ADn</div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <div class=3D"product-info">Cantidad: 1 | Precio =
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] unitario: $17.990</div>   
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"product-price">$17.990</div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </div>    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </div>        
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <!-- Total -->
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <div class=3D"total-section">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div style=3D"font-size: 18px; margin-bottom: 10px;">Total =
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] Pagado</div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"total-amount">$17.990</div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </div>        
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <!-- Shipping Information -->
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <div class=3D"shipping-info">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <h3>=F0=9F=9A=9A Informaci=C3=B3n de Env=C3=ADo</h3>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <div class=3D"shipping-details">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-label">Nombre:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-value">Juan Perez</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-label">Email:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-value">outside1940@gmail.=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] com</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-label">Tel=C3=A9fono:</span=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] >
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-value">+56939891312</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-label">Direcci=C3=B3n:</spa=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] n>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-value">Ejemplo#1231</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-label">Ciudad:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-value">Santiago</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-label">Regi=C3=B3n:</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                         <span class=3D"shipping-value">Ays=C3=A9n</span>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </div>    
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </div>        
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]            =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <!-- Next Steps -->
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <div class=3D"next-steps">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <h3>=F0=9F=93=8B Pr=C3=B3ximos Pasos</h3>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 <ul class=3D"step-list">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <li>Recibir=C3=A1s un email de confirmaci=C3=B3n cuando=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]  tu pedido est=C3=A9 listo para env=C3=ADo</li>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <li>Preparamos tu pedido en 24-48 horas =
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] h=C3=A1biles</li>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <li>El env=C3=ADo toma entre 2-5 d=C3=ADas h=C3=A1biles=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]  seg=C3=BAn tu ubicaci=C3=B3n</li>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                     <li>Recibir=C3=A1s el c=C3=B3digo de seguimiento por =
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] email</li>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 </ul>     
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </div>        
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]        =20
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <!-- Footer -->   
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         <div class=3D"footer">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p><strong>=C2=BFNecesitas ayuda?</strong></p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p>Cont=C3=A1ctanos en <a href=3D"mailto:soporte@jiovani.=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] cl">soporte@jiovani.cl</a></p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p>o ll=C3=A1manos al +56 9 1234 5678</p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <br>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p style=3D"font-size: 14px; opacity: 0.8;">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 Este es un email autom=C3=A1tico. Por favor no respondas a =
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] este mensaje.
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             <p style=3D"font-size: 12px; opacity: 0.7; margin-top: 15px;">
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]                 =C2=A9 2025 jiovaniGo Chile. Todos los derechos reservados.=
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]             </p>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]         </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]     </div>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] </body>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] </html>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw]
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] ----_NmP-764d663a913888e7-Part_1--
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] .
+[2025-11-14 16:58:16] INFO  [zOQcTTKIfLw] <13025 bytes encoded mime message (source size 13012 bytes)>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] S: 354 End data with <CR><LF>.<CR><LF>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] From: jiovaniGo Chile <ekxlseaxgnpozf3d@ethereal.email>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] To: hola2@hola2.com
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Subject: =?UTF-8?Q?=E2=9C=85_Confirmaci=C3=B3n_de_Compra_?=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]  =?UTF-8?Q?=23ORD3947589944B7F5Y121RT_-_jiovaniGo_C?= =?UTF-8?Q?hile?=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Message-ID: <d22e4b93-9911-18c9-7762-23d510252273@ethereal.email>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Date: Fri, 14 Nov 2025 16:58:12 +0000
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] MIME-Version: 1.0
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Content-Type: multipart/alternative;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]  boundary="--_NmP-a845f5e7d4a2dafc-Part_1"
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] ----_NmP-a845f5e7d4a2dafc-Part_1
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Content-Type: text/plain; charset=utf-8
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Content-Transfer-Encoding: quoted-printable
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           =C2=A1Gracias por tu compra en jiovaniGo Chile!
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]          =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           Orden: ORD3947589944B7F5Y121RT
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           Fecha: 14-11-2025
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           Total: $17.990  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           Estado: Aprobado
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]          =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           Productos:      
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]           - Aroma Od=C3=ADn x1: $17.990
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] ----_NmP-a845f5e7d4a2dafc-Part_1
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Content-Type: text/html; charset=utf-8
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Content-Transfer-Encoding: quoted-printable
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] <!DOCTYPE html>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] <html lang=3D"es">        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] <head>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     <meta charset=3D"UTF-8">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     <meta name=3D"viewport" content=3D"width=3Ddevice-width, =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] initial-scale=3D1.0">     
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     <title>Confirmaci=C3=B3n de Compra - Dejo Aromas</title>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     <style>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         * {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 0;    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 0;   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             box-sizing: border-box;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         body {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             line-height: 1.6;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #333333;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background-color: #f8f9fa;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .email-container {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             max-width: 600px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 20px auto;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #ffffff;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-radius: 12px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             overflow: hidden;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .header {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 30px 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             text-align: center;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: white; 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .header h1 {      
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 28px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 10px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 300;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .header p {       
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 16px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             opacity: 0.9; 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .success-banner { 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #d4edda;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #155724;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             text-align: center;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 18px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 500;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-left: 4px solid #28a745;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .content {        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 30px 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .order-info {     
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #f8f9fa;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-radius: 8px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 20px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .order-info h3 {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #495057;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 18px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .info-row {       
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             display: flex;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             justify-content: space-between;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 8px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-bottom: 1px solid #e9ecef;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .info-row:last-child {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-bottom: none;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 600;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 16px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .products-section {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 25px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .products-section h3 {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #495057;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 18px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .product-item {   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             display: flex;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             justify-content: space-between;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             align-items: center;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #fff;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border: 1px solid #e9ecef;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-radius: 6px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 10px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .product-details {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             flex: 1;      
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .product-name {   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 600;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #495057;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 5px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .product-info {   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #6c757d;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 14px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .product-price {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 600;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #28a745;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 16px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .total-section {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: white; 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-radius: 8px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             text-align: center;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 25px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .total-amount {   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 24px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 700;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 5px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .shipping-info {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #f8f9fa;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-radius: 8px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 20px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .shipping-info h3 {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #495057;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 18px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .shipping-details {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             display: grid;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             gap: 8px;     
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .shipping-item {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             display: flex;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             justify-content: space-between;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 5px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .shipping-label { 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: 500;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #6c757d;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .shipping-value { 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #495057;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .next-steps {     
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #fff3cd;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border: 1px solid #ffeaa7;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             border-radius: 8px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin: 25px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .next-steps h3 {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #856404;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-size: 18px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .step-list {      
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             list-style: none;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 0;   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .step-list li {   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 8px 0;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #856404;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             position: relative;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding-left: 25px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .step-list li:before {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             content: "=E2=9C=93";
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             position: absolute;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             left: 0;      
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #28a745;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             font-weight: bold;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .footer {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             background: #495057;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #fff;  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             padding: 30px 20px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             text-align: center;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .footer p {       
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             margin-bottom: 10px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             opacity: 0.9; 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .footer a {       
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             color: #fff;  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             text-decoration: none;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         .footer a:hover { 
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             text-decoration: underline;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         @media (max-width: 600px) {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             .email-container {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 margin: 10px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 border-radius: 8px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             .header {     
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 padding: 20px 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             .header h1 {  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 font-size: 24px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             .content {    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 padding: 20px 15px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             .product-item {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 flex-direction: column;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 align-items: flex-start;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             .product-price {
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 margin-top: 10px;
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         }
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     </style>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] </head>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] <body>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     <div class=3D"email-container">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <!-- Header -->   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <div class=3D"header">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <h1>=F0=9F=9A=80 jiovaniGo Chile</h1>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p>=C2=A1Gracias por elegir nuestros productos!</p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <!-- Success Banner -->
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <div class=3D"success-banner">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             =E2=9C=85 Tu pago ha sido procesado exitosamente
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <!-- Content -->  
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <div class=3D"content">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <h2 style=3D"color: #495057; margin-bottom: 20px;">Hola hola2,=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] </h2>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p style=3D"margin-bottom: 20px; color: #6c757d;">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 Tu pedido ha sido confirmado y procesado correctamente. A =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] continuaci=C3=B3n encontrar=C3=A1s todos los detalles de tu compra:
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <!-- Order Information -->
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <div class=3D"order-info">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <h3>=F0=9F=93=8B Informaci=C3=B3n del Pedido</h3>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span>N=C3=BAmero de Orden:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span><strong>ORD3947589944B7F5Y121RT</strong></span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </div>    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span>Fecha de Compra:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span>14-11-2025</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </div>    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span>Estado del Pago:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span style=3D"color: #28a745;"><strong>Aprobado</stron=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] g></span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </div>    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"info-row">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span>C=C3=B3digo de Autorizaci=C3=B3n:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <span>SIM1763139492282</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </div>    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </div>        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <!-- Products -->
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <div class=3D"products-section">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <h3>=F0=9F=93=A6 Productos Comprados</h3>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"product-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"product-details">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <div class=3D"product-name">Aroma Od=C3=ADn</div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <div class=3D"product-info">Cantidad: 1 | Precio =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] unitario: $17.990</div>   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"product-price">$17.990</div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </div>    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </div>        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <!-- Total -->
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <div class=3D"total-section">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div style=3D"font-size: 18px; margin-bottom: 10px;">Total =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Pagado</div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"total-amount">$17.990</div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </div>        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <!-- Shipping Information -->
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <div class=3D"shipping-info">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <h3>=F0=9F=9A=9A Informaci=C3=B3n de Env=C3=ADo</h3>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <div class=3D"shipping-details">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-label">Nombre:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-value">Juan Perez</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-label">Email:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-value">outside1940@gmail.=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] com</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-label">Tel=C3=A9fono:</span=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] >
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-value">+56939891312</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-label">Direcci=C3=B3n:</spa=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] n>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-value">Ejemplo#1231</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-label">Ciudad:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-value">Santiago</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <div class=3D"shipping-item">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-label">Regi=C3=B3n:</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                         <span class=3D"shipping-value">Ays=C3=A9n</span>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </div>    
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </div>        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]            =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <!-- Next Steps -->
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <div class=3D"next-steps">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <h3>=F0=9F=93=8B Pr=C3=B3ximos Pasos</h3>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 <ul class=3D"step-list">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <li>Recibir=C3=A1s un email de confirmaci=C3=B3n cuando=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]  tu pedido est=C3=A9 listo para env=C3=ADo</li>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <li>Preparamos tu pedido en 24-48 horas =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] h=C3=A1biles</li>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <li>El env=C3=ADo toma entre 2-5 d=C3=ADas h=C3=A1biles=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]  seg=C3=BAn tu ubicaci=C3=B3n</li>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                     <li>Recibir=C3=A1s el c=C3=B3digo de seguimiento por =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] email</li>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 </ul>     
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </div>        
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]        =20
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <!-- Footer -->   
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         <div class=3D"footer">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p><strong>=C2=BFNecesitas ayuda?</strong></p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p>Cont=C3=A1ctanos en <a href=3D"mailto:soporte@jiovani.=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] cl">soporte@jiovani.cl</a></p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p>o ll=C3=A1manos al +56 9 1234 5678</p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <br>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p style=3D"font-size: 14px; opacity: 0.8;">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 Este es un email autom=C3=A1tico. Por favor no respondas a =
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] este mensaje.
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             <p style=3D"font-size: 12px; opacity: 0.7; margin-top: 15px;">
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]                 =C2=A9 2025 jiovaniGo Chile. Todos los derechos reservados.=
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]             </p>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]         </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]     </div>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] </body>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] </html>
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] ----_NmP-a845f5e7d4a2dafc-Part_1--
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] .
+[2025-11-14 16:58:16] INFO  [Ka7IakpcJWE] <13025 bytes encoded mime message (source size 13012 bytes)>
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] S: 250 Accepted [STATUS=new MSGID=aNgW28wdoJ-eRBVGaRdfqFPQQmY68ixVAAAAPljdDW.9FOGY4uc.Qd6IfDg]
+[2025-11-14 16:58:16] DEBUG [zOQcTTKIfLw] Closing connection to the server using "end"
+✅ [EMAIL] Email enviado exitosamente!
+📨 [EMAIL] Message ID: <f06373c6-ffa6-f297-524d-963f741aac14@ethereal.email>
+👤 [EMAIL] Enviado a: hola2@hola2.com
+👀 [EMAIL] Ver email en navegador: https://ethereal.email/message/aNgW28wdoJ-eRBVGaRdfqFPQQmY68ixVAAAAPljdDW.9FOGY4uc.Qd6IfDg
+✅ [PAYMENT] Email confirmación enviado exitosamente a: hola2@hola2.com
+📨 [PAYMENT] Message ID: <f06373c6-ffa6-f297-524d-963f741aac14@ethereal.email>
+👀 [PAYMENT] Ver email en: https://ethereal.email/message/aNgW28wdoJ-eRBVGaRdfqFPQQmY68ixVAAAAPljdDW.9FOGY4uc.Qd6IfDg
+[CORS DEBUG] Origin received: http://localhost:3000
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:58:16.392Z - GET /api/payments/order/69175f938d466e31cda7fc9d
+[PAYMENT ROUTES] 2025-11-14T16:58:16.392Z - GET /api/payments/order/69175f938d466e31cda7fc9d
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/payments/order/69175f938d466e31cda7fc9d
+[CORS DEBUG] Origin received: undefined
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] S: 250 Accepted [STATUS=new MSGID=aNgW28wdoJ-eRBVGaRdfqIQ.v3CUzxXgAAAAPzk4sNXnZfda7WOayV3j1mc]
+[2025-11-14 16:58:16] DEBUG [Ka7IakpcJWE] Closing connection to the server using "end"
+✅ [EMAIL] Email enviado exitosamente!
+📨 [EMAIL] Message ID: <d22e4b93-9911-18c9-7762-23d510252273@ethereal.email>
+👤 [EMAIL] Enviado a: hola2@hola2.com
+👀 [EMAIL] Ver email en navegador: https://ethereal.email/message/aNgW28wdoJ-eRBVGaRdfqIQ.v3CUzxXgAAAAPzk4sNXnZfda7WOayV3j1mc
+✅ [PAYMENT] Email confirmación enviado exitosamente a: hola2@hola2.com
+📨 [PAYMENT] Message ID: <d22e4b93-9911-18c9-7762-23d510252273@ethereal.email>
+👀 [PAYMENT] Ver email en: https://ethereal.email/message/aNgW28wdoJ-eRBVGaRdfqIQ.v3CUzxXgAAAAPzk4sNXnZfda7WOayV3j1mc
+[CORS DEBUG] Origin received: http://localhost:3000
+[INCOMING REQUEST] 2025-11-14T16:58:16.461Z - GET /api/payments/order/69175f938d466e31cda7fc9d
+[PAYMENT ROUTES] 2025-11-14T16:58:16.461Z - GET /api/payments/order/69175f938d466e31cda7fc9d
+[TRACE] authMiddleware se está ejecutando para la ruta: /api/payments/order/69175f938d466e31cda7fc9d
+[2025-11-14 16:58:16] INFO  [zOQcTTKIfLw] Connection closed
+[2025-11-14 16:58:16] INFO  [Ka7IakpcJWE] Connection closed

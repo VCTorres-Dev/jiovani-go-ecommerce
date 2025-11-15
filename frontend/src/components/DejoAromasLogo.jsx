@@ -4,7 +4,7 @@ import { ReactComponent as PerfumeIcon } from "../icons/perfume-channel-national
 
 export const DejoAromasLogo = () => (
   <div className="dejoAromasLogo">
-    <PerfumeIcon width="36" height="36" />
+    <PerfumeIcon width="36" height="36" title="" />
   </div>
 );
 

@@ -1,3 +1,4 @@
+/* App.css */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 
 @tailwind base;
@@ -256,4 +257,29 @@ body {
 
 .ml-2 {
   margin-left: 0.5rem; /* 8px */
+}
+
+/* Define el color dorado para el anillo de enfoque */
+.ring-gold {
+  --tw-ring-color: gold;
+}
+
+/* Define la sombra dorada al hacer foco */
+.focus\:shadow-gold:focus {
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.5); /* Ajusta el valor de rgba para la sombra dorada */
+}
+
+/* Estilos para las tarjetas de productos */
+.perfume-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.perfume-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para el input de búsqueda */
+input:focus {
+  outline: none; /* Eliminar outline para asegurar el uso de estilos de Tailwind */
 }

@@ -1,0 +1,38 @@
+# Configuración de ngrok para desarrollo de JiovaniGo E-Commerce
+# ESTE ES UN ARCHIVO DE EJEMPLO - NO CONTIENE CREDENCIALES REALES
+
+# INSTRUCCIONES:
+# 1. Copia este archivo y renómbralo a: ngrok-config.yml
+# 2. Reemplaza YOUR_AUTHTOKEN_HERE con tu token real de ngrok
+# 3. Ve a: https://dashboard.ngrok.com/get-started/your-authtoken
+# 4. Copia tu authtoken
+# 5. Pégalo en la línea "authtoken:" del archivo ngrok-config.yml
+# 6. NO subas ngrok-config.yml a GitHub (ya está en .gitignore)
+
+version: "2"
+authtoken: YOUR_AUTHTOKEN_HERE
+
+tunnels:
+  backend:
+    proto: http
+    addr: 5000
+    # El backend estará disponible en: https://xxxxx.ngrok.io
+    # Este será tu nuevo FRONTEND_URL para que el backend sepa dónde está el frontend
+    
+  frontend:
+    proto: http
+    addr: 3000
+    # El frontend estará disponible en: https://yyyyy.ngrok.io
+    # Esta URL la usarás en el navegador para acceder a la aplicación
+
+# IMPORTANTE:
+# 1. Reemplaza YOUR_AUTHTOKEN_HERE con tu token real de ngrok
+# 2. Ejecuta: ngrok start --all --config=ngrok-config.yml
+# 3. Copia las URLs generadas (https://xxxxx.ngrok.io)
+# 4. Actualiza el archivo .env con las nuevas URLs
+# 5. Reinicia backend y frontend
+
+# SEGURIDAD:
+# - NUNCA subas tu authtoken a GitHub
+# - ngrok-config.yml ya está en .gitignore
+# - Este archivo .example es seguro para compartir

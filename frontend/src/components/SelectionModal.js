@@ -1,12 +1,17 @@
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { XIcon } from "@heroicons/react/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 const SelectionModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+
+  const handleSelection = (path) => {
+    navigate(path);
+    onClose();
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -47,21 +52,21 @@ const SelectionModal = ({ isOpen, onClose }) => {
                     className="text-gray-400 hover:text-gray-500"
                     onClick={onClose}
                   >
-                    <XIcon className="w-5 h-5" aria-hidden="true" />
+                    <XMarkIcon className="w-5 h-5" aria-hidden="true" />
                   </button>
                 </div>
                 <div className="mt-4 flex space-x-4 justify-center">
                   <button
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-lg hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all"
-                    onClick={() => navigate("/catalogo/dama")}
+                    onClick={() => handleSelection("/catalogo-dama")}
                   >
                     Aromas para Dama
                   </button>
                   <button
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-lg hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 transition-all"
-                    onClick={() => navigate("/catalogo/varon")}
+                    onClick={() => handleSelection("/catalogo-varon")}
                   >
                     Aromas para Varón
                   </button>

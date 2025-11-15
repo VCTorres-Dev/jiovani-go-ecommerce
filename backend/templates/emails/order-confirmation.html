@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Compra - Dejo Aromas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f8f9fa;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .success-banner {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            border-left: 4px solid #28a745;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .order-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .order-info h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .products-section {
+            margin: 25px 0;
+        }
+        
+        .products-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .product-info {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .product-price {
+            font-weight: 600;
+            color: #28a745;
+            font-size: 16px;
+        }
+        
+        .total-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .total-amount {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .shipping-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .shipping-info h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .shipping-details {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .shipping-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        
+        .shipping-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .shipping-value {
+            color: #495057;
+        }
+        
+        .next-steps {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .next-steps h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            padding: 8px 0;
+            color: #856404;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .step-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background: #495057;
+            color: #fff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .product-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .product-price {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 jiovaniGo Chile</h1>
+            <p>¡Gracias por elegir nuestros productos!</p>
+        </div>
+        
+        <!-- Success Banner -->
+        <div class="success-banner">
+            ✅ Tu pago ha sido procesado exitosamente
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <h2 style="color: #495057; margin-bottom: 20px;">Hola {{customerName}},</h2>
+            <p style="margin-bottom: 20px; color: #6c757d;">
+                Tu pedido ha sido confirmado y procesado correctamente. A continuación encontrarás todos los detalles de tu compra:
+            </p>
+            
+            <!-- Order Information -->
+            <div class="order-info">
+                <h3>📋 Información del Pedido</h3>
+                <div class="info-row">
+                    <span>Número de Orden:</span>
+                    <span><strong>{{orderNumber}}</strong></span>
+                </div>
+                <div class="info-row">
+                    <span>Fecha de Compra:</span>
+                    <span>{{orderDate}}</span>
+                </div>
+                <div class="info-row">
+                    <span>Estado del Pago:</span>
+                    <span style="color: #28a745;"><strong>{{paymentStatus}}</strong></span>
+                </div>
+                <div class="info-row">
+                    <span>Código de Autorización:</span>
+                    <span>{{transactionId}}</span>
+                </div>
+            </div>
+            
+            <!-- Products -->
+            <div class="products-section">
+                <h3>📦 Productos Comprados</h3>
+                {{#each products}}
+                <div class="product-item">
+                    <div class="product-details">
+                        <div class="product-name">{{name}}</div>
+                        <div class="product-info">Cantidad: {{quantity}} | Precio unitario: ${{price}}</div>
+                    </div>
+                    <div class="product-price">${{subtotal}}</div>
+                </div>
+                {{/each}}
+            </div>
+            
+            <!-- Total -->
+            <div class="total-section">
+                <div style="font-size: 18px; margin-bottom: 10px;">Total Pagado</div>
+                <div class="total-amount">${{total}}</div>
+            </div>
+            
+            <!-- Shipping Information -->
+            <div class="shipping-info">
+                <h3>🚚 Información de Envío</h3>
+                <div class="shipping-details">
+                    <div class="shipping-item">
+                        <span class="shipping-label">Nombre:</span>
+                        <span class="shipping-value">{{shippingInfo.name}}</span>
+                    </div>
+                    <div class="shipping-item">
+                        <span class="shipping-label">Email:</span>
+                        <span class="shipping-value">{{shippingInfo.email}}</span>
+                    </div>
+                    <div class="shipping-item">
+                        <span class="shipping-label">Teléfono:</span>
+                        <span class="shipping-value">{{shippingInfo.phone}}</span>
+                    </div>
+                    <div class="shipping-item">
+                        <span class="shipping-label">Dirección:</span>
+                        <span class="shipping-value">{{shippingInfo.address}}</span>
+                    </div>
+                    <div class="shipping-item">
+                        <span class="shipping-label">Ciudad:</span>
+                        <span class="shipping-value">{{shippingInfo.city}}</span>
+                    </div>
+                    <div class="shipping-item">
+                        <span class="shipping-label">Región:</span>
+                        <span class="shipping-value">{{shippingInfo.region}}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3>📋 Próximos Pasos</h3>
+                <ul class="step-list">
+                    <li>Recibirás un email de confirmación cuando tu pedido esté listo para envío</li>
+                    <li>Preparamos tu pedido en 24-48 horas hábiles</li>
+                    <li>El envío toma entre 2-5 días hábiles según tu ubicación</li>
+                    <li>Recibirás el código de seguimiento por email</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>¿Necesitas ayuda?</strong></p>
+            <p>Contáctanos en <a href="mailto:soporte@jiovani.cl">soporte@jiovani.cl</a></p>
+            <p>o llámanos al +56 9 1234 5678</p>
+            <br>
+            <p style="font-size: 14px; opacity: 0.8;">
+                Este es un email automático. Por favor no respondas a este mensaje.
+            </p>
+            <p style="font-size: 12px; opacity: 0.7; margin-top: 15px;">
+                © 2025 jiovaniGo Chile. Todos los derechos reservados.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
