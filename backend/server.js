@@ -108,20 +108,29 @@ app.post("/api/payments/init-test", (req, res) => {
 });
 
 // Importar y usar rutas
-const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes");
-const analyticsRoutes = require("./routes/analyticsRoutes"); 
-const orderRoutes = require("./routes/orderRoutes"); 
-const messageRoutes = require('./routes/messageRoutes'); 
-const paymentRoutes = require('./routes/paymentRoutes'); // Nueva ruta de pagos
+try {
+  // TEMPORAL: Comentar authRoutes porque requiere bcryptjs que aún está en issues de instalación
+  // const authRoutes = require("./routes/authRoutes");
+  
+  const productRoutes = require("./routes/productRoutes");
+  const analyticsRoutes = require("./routes/analyticsRoutes"); 
+  const orderRoutes = require("./routes/orderRoutes"); 
+  const messageRoutes = require('./routes/messageRoutes'); 
+  const paymentRoutes = require('./routes/paymentRoutes');
+  const userRoutes = require("./routes/userRoutes");
 
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/analytics", analyticsRoutes); 
-app.use("/api/orders", orderRoutes); 
-app.use("/api/messages", messageRoutes); 
-app.use("/api/payments", paymentRoutes); // Registrar rutas de pago
-app.use("/api/users", require("./routes/userRoutes")); 
+  // app.use("/api/auth", authRoutes);
+  app.use("/api/products", productRoutes);
+  app.use("/api/analytics", analyticsRoutes); 
+  app.use("/api/orders", orderRoutes); 
+  app.use("/api/messages", messageRoutes); 
+  app.use("/api/payments", paymentRoutes);
+  app.use("/api/users", userRoutes);
+  console.log("✅ Todas las rutas cargadas exitosamente (authRoutes temporalmente deshabilitada)");
+} catch (error) {
+  console.warn("⚠️ No se pudieron cargar algunas rutas:", error.message);
+  console.log("💡 Las rutas pueden no estar disponibles en este ambiente");
+} 
 
 // Manejo de errores 404
 app.use("*", (req, res) => {
