@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { 
-  initPayment, 
+  initPayment,
+  initTestPayment,
   confirmPayment, 
   getOrderStatus, 
   getUserOrders,
@@ -29,7 +30,7 @@ router.post('/init', auth, initPayment);
  * @desc    Iniciar proceso de pago SIN autenticación (SOLO TESTING)
  * @access  Public (para testing sin token)
  */
-router.post('/init-test', initPayment);
+router.post('/init-test', initTestPayment)
 
 /**
  * @route   POST /api/payments/confirm

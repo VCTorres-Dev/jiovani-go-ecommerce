@@ -1107,8 +1107,65 @@ const reconcileTransactions = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Iniciar transacción de pago para TESTING
+ * @route   POST /api/payments/init-test
+ * @access  Public
+ */
+const initTestPayment = async (req, res) => {
+  try {
+    console.log('🚀 [PAYMENT-TEST] Iniciando pago de PRUEBA...');
+
+    // Importar la transacción del SDK
+    const { transaction } = require('../config/transbank');
+
+    // Tomar los datos EXACTOS de tu body de Postman
+    const { amount, buyOrder, sessionId, returnUrl } = req.body;
+
+    // Validar
+    if (!amount || !buyOrder || !sessionId || !returnUrl) {
+      console.log('❌ [PAYMENT-TEST] Faltan datos en el body de Postman');
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Faltan datos: amount, buyOrder, sessionId, returnUrl' 
+      });
+    }
+
+    console.log(`📋 [PAYMENT-TEST] Datos de prueba:
+      - Buy Order: ${buyOrder}
+      - Session ID: ${sessionId}
+      - Amount: ${amount}
+      - Return URL: ${returnUrl}`);
+
+    // Llamar al SDK de Transbank
+    const transbankResponse = await transaction.create(
+      buyOrder,
+      sessionId,
+      Math.round(amount), // Usar 'amount' del body
+      returnUrl
+    );
+
+    console.log('✅ [PAYMENT-TEST] Transacción de prueba creada:');
+
+    // Devolver la respuesta de Transbank (url y token)
+    res.status(200).json({ 
+      success: true, 
+      data: transbankResponse 
+    });
+
+  } catch (error) {
+    console.error('❌ [PAYMENT-TEST] Error:', error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message,
+      rawError: error
+    });
+  }
+};
+
 module.exports = {
   initPayment,
+  initTestPayment,
   confirmPayment,
   getOrderStatus,
   getUserOrders,
