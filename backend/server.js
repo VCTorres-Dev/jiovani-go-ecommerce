@@ -127,7 +127,7 @@ app.post("/api/payments/init-test", (req, res) => {
     const options = {
       hostname: host,
       port: 443,
-      path: '/rswebpay/api/webpay/v1.3/transactions',
+      path: '/rswebpay/api/webpay/v1.2/transactions',
       method: 'POST',
       headers: {
         'Tbk-Api-Key-Id': commerceCode,
@@ -164,7 +164,7 @@ app.post("/api/payments/init-test", (req, res) => {
             console.log('✅ [TRANSBANK] Transacción creada exitosamente');
             
             // Construir URL de redirección
-            const redirectUrl = `https://${host}/webpay/v1.3/${result.token}`;
+const redirectUrl = `https://${host}/webpay/v1.2/${result.token}`;
             
             res.json({
               success: true,
@@ -371,7 +371,7 @@ app.post("/api/payments/confirm", (req, res) => {
     // Opciones del request HTTPS
     const options = {
       hostname: host,
-      path: '/rswebpay/api/webpay/v1.3/transactions/confirm',
+      path: '/rswebpay/api/webpay/v1.2/transactions/confirm',
       method: 'POST',
       headers: {
         'Tbk-Api-Key-Id': commerceCode,
