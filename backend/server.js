@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const { WebpayPlus } = require("transbank-sdk");
+const https = require("https");
+const querystring = require("querystring");
 
 // En production (Railway), las variables de entorno ya están disponibles
 // En desarrollo local, crear archivo .env manualmente
@@ -69,7 +70,7 @@ app.get("/", (req, res) => {
   res.json({ message: "API de Jiovanni Go funcionando correctamente" });
 });
 
-// TEST ENDPOINT - Transbank WebPay Plus REAL (usando SDK oficial)
+// TEST ENDPOINT - Transbank WebPay Plus REAL (HTTP REST API)
 app.post("/api/payments/init-test", (req, res) => {
   try {
     console.log('🚀 [TRANSBANK INIT] Iniciando transacción Transbank WebPay Plus...');
@@ -99,46 +100,93 @@ app.post("/api/payments/init-test", (req, res) => {
       });
     }
     
-    // Configurar Transbank WebPay Plus
-    // La SDK trae preconfiguradas las credenciales de TESTING
-    // Para PRODUCCIÓN, se configuraría con credenciales reales
-    const txn = new WebpayPlus.Transaction({
-      apiKey: process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C',
-      commerceCode: process.env.TRANSBANK_COMMERCE_CODE || '597055555532',
-      environment: (process.env.TRANSBANK_ENV === 'PRODUCTION') ? 'LIVE' : 'INTEGRATION'
+    // Credenciales Transbank (DEMO para testing)
+    const commerceCode = process.env.TRANSBANK_COMMERCE_CODE || '597055555532';
+    const apiKey = process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C';
+    const isProduction = process.env.TRANSBANK_ENV === 'PRODUCTION';
+    const host = isProduction ? 'webpay3g.transbank.cl' : 'webpay3gint.transbank.cl';
+    
+    // Body para Transbank API
+    const body = JSON.stringify({
+      buy_order: buyOrder,
+      session_id: sessionId || Date.now().toString(),
+      amount: Math.floor(amount),
+      return_url: returnUrl
     });
     
-    // Crear transacción
-    txn.create(
-      buyOrder,
-      sessionId || Date.now().toString(),
-      amount,
-      returnUrl
-    ).then(response => {
-      console.log('✅ [TRANSBANK] Transacción creada exitosamente');
-      console.log('📊 Response:', JSON.stringify(response, null, 2));
+    // Opciones del request HTTPS
+    const options = {
+      hostname: host,
+      path: '/rswebpay/api/webpay/v1.3/transactions',
+      method: 'POST',
+      headers: {
+        'Tbk-Api-Key-Id': commerceCode,
+        'Tbk-Api-Key-Secret': apiKey,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+    
+    // Request a Transbank
+    const request = https.request(options, (response) => {
+      let data = '';
       
-      // Devolver la URL y token real de Transbank
-      res.json({
-        success: true,
-        message: 'Transacción iniciada correctamente con Transbank',
-        data: {
-          url: response.url,
-          token: response.token,
-          transactionId: buyOrder,
-          userEmail: userEmail,
-          amount: amount,
-          environment: (process.env.TRANSBANK_ENV === 'PRODUCTION') ? 'production' : 'integration'
+      response.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      response.on('end', () => {
+        try {
+          const result = JSON.parse(data);
+          
+          if (response.statusCode === 201 || response.statusCode === 200) {
+            console.log('✅ [TRANSBANK] Transacción creada exitosamente');
+            
+            // Construir URL de redirección
+            const redirectUrl = `https://${host}/webpay/v1.3/${result.token}`;
+            
+            res.json({
+              success: true,
+              message: 'Transacción iniciada correctamente con Transbank',
+              data: {
+                url: redirectUrl,
+                token: result.token,
+                transactionId: buyOrder,
+                userEmail: userEmail,
+                amount: amount,
+                environment: isProduction ? 'production' : 'integration'
+              }
+            });
+          } else {
+            console.error('❌ [TRANSBANK] Error:', result);
+            res.status(response.statusCode).json({ 
+              success: false, 
+              message: 'Error iniciando transacción',
+              error: result.detail || result.message
+            });
+          }
+        } catch (parseError) {
+          console.error('❌ [TRANSBANK] Error parsing response:', parseError);
+          res.status(500).json({ 
+            success: false, 
+            message: 'Error procesando respuesta de Transbank',
+            error: parseError.message
+          });
         }
       });
-    }).catch(error => {
-      console.error('❌ [TRANSBANK] Error creando transacción:', error);
+    });
+    
+    request.on('error', (error) => {
+      console.error('❌ [TRANSBANK INIT] Error en request:', error);
       res.status(500).json({ 
         success: false, 
-        message: 'Error iniciando transacción Transbank',
-        error: error.message 
+        message: 'Error comunicándose con Transbank',
+        error: error.message
       });
     });
+    
+    request.write(body);
+    request.end();
     
   } catch (error) {
     console.error('❌ [TRANSBANK INIT] Error:', error);
@@ -163,38 +211,88 @@ app.post("/api/payments/confirm", (req, res) => {
       });
     }
     
-    const txn = new WebpayPlus.Transaction({
-      apiKey: process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C',
-      commerceCode: process.env.TRANSBANK_COMMERCE_CODE || '597055555532',
-      environment: (process.env.TRANSBANK_ENV === 'PRODUCTION') ? 'LIVE' : 'INTEGRATION'
+    // Credenciales Transbank
+    const commerceCode = process.env.TRANSBANK_COMMERCE_CODE || '597055555532';
+    const apiKey = process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C';
+    const isProduction = process.env.TRANSBANK_ENV === 'PRODUCTION';
+    const host = isProduction ? 'webpay3g.transbank.cl' : 'webpay3gint.transbank.cl';
+    
+    // Body para Transbank API
+    const body = JSON.stringify({
+      token_ws: token
     });
     
-    // Confirmar la transacción con Transbank
-    txn.commit(token).then(response => {
-      console.log('✅ [TRANSBANK CONFIRM] Pago confirmado');
-      console.log('📊 Response:', JSON.stringify(response, null, 2));
+    // Opciones del request HTTPS
+    const options = {
+      hostname: host,
+      path: '/rswebpay/api/webpay/v1.3/transactions/confirm',
+      method: 'POST',
+      headers: {
+        'Tbk-Api-Key-Id': commerceCode,
+        'Tbk-Api-Key-Secret': apiKey,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+    
+    // Request a Transbank
+    const request = https.request(options, (response) => {
+      let data = '';
       
-      // Aquí podrías guardar en BD, actualizar orden, etc
-      res.json({
-        success: true,
-        message: 'Pago confirmado exitosamente',
-        data: {
-          transactionId: response.buy_order,
-          accountingDate: response.accounting_date,
-          transactionDate: response.transaction_date,
-          vci: response.vci,
-          status: response.status,
-          amount: response.amount
+      response.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      response.on('end', () => {
+        try {
+          const result = JSON.parse(data);
+          
+          if (response.statusCode === 200) {
+            console.log('✅ [TRANSBANK CONFIRM] Pago confirmado');
+            
+            res.json({
+              success: true,
+              message: 'Pago confirmado exitosamente',
+              data: {
+                transactionId: result.buy_order,
+                accountingDate: result.accounting_date,
+                transactionDate: result.transaction_date,
+                vci: result.vci,
+                status: result.status,
+                amount: result.amount,
+                cardNumber: result.card_detail?.card_number
+              }
+            });
+          } else {
+            console.error('❌ [TRANSBANK CONFIRM] Error:', result);
+            res.status(response.statusCode).json({
+              success: false,
+              message: 'Error confirmando transacción',
+              error: result.detail || result.message
+            });
+          }
+        } catch (parseError) {
+          console.error('❌ [TRANSBANK CONFIRM] Error parsing response:', parseError);
+          res.status(500).json({
+            success: false,
+            message: 'Error procesando respuesta de Transbank',
+            error: parseError.message
+          });
         }
       });
-    }).catch(error => {
-      console.error('❌ [TRANSBANK CONFIRM] Error confirmando:', error);
-      res.status(400).json({
+    });
+    
+    request.on('error', (error) => {
+      console.error('❌ [TRANSBANK CONFIRM] Error en request:', error);
+      res.status(500).json({
         success: false,
-        message: 'Error confirmando transacción',
+        message: 'Error comunicándose con Transbank',
         error: error.message
       });
     });
+    
+    request.write(body);
+    request.end();
     
   } catch (error) {
     console.error('❌ [TRANSBANK CONFIRM] Error:', error);
