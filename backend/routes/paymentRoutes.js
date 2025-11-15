@@ -112,13 +112,5 @@ router.get('/health', (req, res) => {
     transbank_env: process.env.TRANSBANK_ENV || 'TEST'
   });
 });
-router.get('/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Sistema de pagos funcionando correctamente',
-    timestamp: new Date().toISOString(),
-    transbank: 'Configurado para integración'
-  });
-});
 
 module.exports = router;
