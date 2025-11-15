@@ -1,20 +1,34 @@
-const { WebpayPlus, IntegrationCommerceCodes, IntegrationApiKeys } = require('transbank-sdk');
+const { WebpayPlus, Environment, Options } = require('transbank-sdk');
 
-// Configuración para ambiente de integración (sandbox)
-// Según la documentación oficial de Transbank
-const INTEGRATION_COMMERCE_CODE = IntegrationCommerceCodes.WEBPAY_PLUS;
-const INTEGRATION_API_KEY = IntegrationApiKeys.WEBPAY;
+// 1. Lee las credenciales de las variables de entorno de Railway
+const commerceCode = process.env.TRANSBANK_COMMERCE_CODE;
+const apiKey = process.env.TRANSBANK_API_KEY;
+const env = process.env.TRANSBANK_ENV || 'integration'; // 'integration' por defecto
 
-// Construir la instancia de transacción para integración
-const transaction = WebpayPlus.Transaction.buildForIntegration();
+// 2. Valida que existan
+if (!commerceCode || !apiKey) {
+  console.error('❌ Error: Faltan variables de entorno TRANSBANK_COMMERCE_CODE o TRANSBANK_API_KEY');
+  // Lanzar un error aquí detendrá la app si faltan las llaves, lo cual es bueno.
+  throw new Error('Missing Transbank environment variables');
+}
 
-console.log('✅ Transbank configurado para ambiente de integración');
-console.log(`📋 Código de comercio: ${INTEGRATION_COMMERCE_CODE}`);
-console.log(`🔑 API Key configurada correctamente`);
+// 3. Configura el ambiente (Integración o Producción)
+const transbankEnv = env === 'production' 
+  ? Environment.Production 
+  : Environment.Integration;
+
+console.log(`✅ Transbank configurando para ambiente: ${env}`);
+
+// 4. Configura las opciones con tus llaves y el ambiente
+const options = new Options(commerceCode, apiKey, transbankEnv);
+
+// 5. Construye la transacción usando tus opciones
+const transaction = new WebpayPlus.Transaction(options);
+
+console.log(`📋 Código de comercio: ${commerceCode.substring(0, 4)}...`);
+console.log('🔑 API Key configurada.');
 
 module.exports = {
   transaction,
-  WebpayPlus,
-  INTEGRATION_COMMERCE_CODE,
-  INTEGRATION_API_KEY
+  WebpayPlus
 };
