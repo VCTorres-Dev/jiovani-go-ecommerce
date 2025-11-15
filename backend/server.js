@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const { WebpayPlus } = require("transbank-sdk");
+
 // En production (Railway), las variables de entorno ya están disponibles
 // En desarrollo local, crear archivo .env manualmente
 if (process.env.NODE_ENV !== "production") {
@@ -67,15 +69,15 @@ app.get("/", (req, res) => {
   res.json({ message: "API de Jiovanni Go funcionando correctamente" });
 });
 
-// TEST ENDPOINT - Para testing de Transbank SIN depender de paymentRoutes
+// TEST ENDPOINT - Transbank WebPay Plus REAL (usando SDK oficial)
 app.post("/api/payments/init-test", (req, res) => {
   try {
-    console.log('🚀 [TEST ENDPOINT] Iniciando pago de prueba...');
+    console.log('🚀 [TRANSBANK INIT] Iniciando transacción Transbank WebPay Plus...');
     console.log('📥 Body recibido:', JSON.stringify(req.body, null, 2));
     
     const { amount, buyOrder, sessionId, returnUrl, userEmail } = req.body;
     
-    // Validación básica
+    // Validación
     if (!amount || amount <= 0) {
       return res.status(400).json({ 
         success: false, 
@@ -83,26 +85,123 @@ app.post("/api/payments/init-test", (req, res) => {
       });
     }
     
-    // Para testing, devolvemos URL mock de Transbank
-    const mockTransbankUrl = "https://webpay3g.transbank.cl/initTransaction?wpm_token=test_token_123456";
+    if (!buyOrder) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'buyOrder es requerido' 
+      });
+    }
     
-    res.json({
-      success: true,
-      message: 'Transacción iniciada correctamente (TEST)',
-      data: {
-        url: mockTransbankUrl,
-        token: "test_token_123456",
-        transactionId: Date.now().toString(),
-        userEmail: userEmail,
-        amount: amount
-      }
+    if (!returnUrl) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'returnUrl es requerido' 
+      });
+    }
+    
+    // Configurar Transbank WebPay Plus
+    // La SDK trae preconfiguradas las credenciales de TESTING
+    // Para PRODUCCIÓN, se configuraría con credenciales reales
+    const txn = new WebpayPlus.Transaction({
+      apiKey: process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C',
+      commerceCode: process.env.TRANSBANK_COMMERCE_CODE || '597055555532',
+      environment: (process.env.TRANSBANK_ENV === 'PRODUCTION') ? 'LIVE' : 'INTEGRATION'
     });
+    
+    // Crear transacción
+    txn.create(
+      buyOrder,
+      sessionId || Date.now().toString(),
+      amount,
+      returnUrl
+    ).then(response => {
+      console.log('✅ [TRANSBANK] Transacción creada exitosamente');
+      console.log('📊 Response:', JSON.stringify(response, null, 2));
+      
+      // Devolver la URL y token real de Transbank
+      res.json({
+        success: true,
+        message: 'Transacción iniciada correctamente con Transbank',
+        data: {
+          url: response.url,
+          token: response.token,
+          transactionId: buyOrder,
+          userEmail: userEmail,
+          amount: amount,
+          environment: (process.env.TRANSBANK_ENV === 'PRODUCTION') ? 'production' : 'integration'
+        }
+      });
+    }).catch(error => {
+      console.error('❌ [TRANSBANK] Error creando transacción:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Error iniciando transacción Transbank',
+        error: error.message 
+      });
+    });
+    
   } catch (error) {
-    console.error('❌ [TEST ENDPOINT] Error:', error);
+    console.error('❌ [TRANSBANK INIT] Error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Error en endpoint de test',
+      message: 'Error en endpoint de pago',
       error: error.message 
+    });
+  }
+});
+
+// CONFIRMATION ENDPOINT - Confirmar pago después que usuario retorna de Transbank
+app.post("/api/payments/confirm", (req, res) => {
+  try {
+    console.log('🔐 [TRANSBANK CONFIRM] Confirmando transacción...');
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token es requerido'
+      });
+    }
+    
+    const txn = new WebpayPlus.Transaction({
+      apiKey: process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C',
+      commerceCode: process.env.TRANSBANK_COMMERCE_CODE || '597055555532',
+      environment: (process.env.TRANSBANK_ENV === 'PRODUCTION') ? 'LIVE' : 'INTEGRATION'
+    });
+    
+    // Confirmar la transacción con Transbank
+    txn.commit(token).then(response => {
+      console.log('✅ [TRANSBANK CONFIRM] Pago confirmado');
+      console.log('📊 Response:', JSON.stringify(response, null, 2));
+      
+      // Aquí podrías guardar en BD, actualizar orden, etc
+      res.json({
+        success: true,
+        message: 'Pago confirmado exitosamente',
+        data: {
+          transactionId: response.buy_order,
+          accountingDate: response.accounting_date,
+          transactionDate: response.transaction_date,
+          vci: response.vci,
+          status: response.status,
+          amount: response.amount
+        }
+      });
+    }).catch(error => {
+      console.error('❌ [TRANSBANK CONFIRM] Error confirmando:', error);
+      res.status(400).json({
+        success: false,
+        message: 'Error confirmando transacción',
+        error: error.message
+      });
+    });
+    
+  } catch (error) {
+    console.error('❌ [TRANSBANK CONFIRM] Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error en confirmación',
+      error: error.message
     });
   }
 });
