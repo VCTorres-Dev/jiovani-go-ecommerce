@@ -62,14 +62,28 @@ app.use((req, res, next) => {
   next();
 });
 
-// Conectar a MongoDB (opcional - no bloquea si falla)
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/dejoaromas", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB conectado exitosamente"))
-  .catch((err) => console.log("⚠️  Advertencia: MongoDB no disponible (esto es OK para testing de pagos):", err.message));
+// Conectar a MongoDB y esperar la conexión
+let mongoConnected = false;
+
+const connectMongoDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/dejoaromas", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    console.log("✅ MongoDB conectado exitosamente");
+    mongoConnected = true;
+  } catch (err) {
+    console.log("⚠️ Advertencia: MongoDB no disponible:", err.message);
+    console.log("⚠️ Los endpoints de productos y autenticación no funcionarán sin MongoDB");
+    mongoConnected = false;
+  }
+};
+
+// Iniciar conexión
+connectMongoDB();
 
 // Rutas básicas
 app.get("/", (req, res) => {
@@ -305,12 +319,25 @@ app.post("/api/payments/confirm", (req, res) => {
 });
 
 // ============================================================
+// MIDDLEWARE: Validar que MongoDB esté conectado
+// ============================================================
+const requireMongoDB = (req, res, next) => {
+  if (!mongoConnected || mongoose.connection.readyState !== 1) {
+    return res.status(503).json({
+      success: false,
+      message: "Base de datos no disponible. Intenta nuevamente en unos segundos."
+    });
+  }
+  next();
+};
+
+// ============================================================
 // PRODUCTOS REALES DEL USUARIO (desde MongoDB)
 // ============================================================
 const Product = require('./models/Product');
 
 // Endpoint: Productos desde MongoDB
-app.get("/api/products", async (req, res) => {
+app.get("/api/products", requireMongoDB, async (req, res) => {
   try {
     const { gender, page = 1, limit = 1000, search = '' } = req.query;
     
@@ -362,7 +389,7 @@ const User = require('./models/User');
 const jwt = require('jsonwebtoken');
 
 // LOGIN endpoint
-app.post("/api/auth/login", async (req, res) => {
+app.post("/api/auth/login", requireMongoDB, async (req, res) => {
   try {
     const { email, password } = req.body;
     
@@ -435,7 +462,7 @@ app.post("/api/auth/login", async (req, res) => {
 // ============================================================
 // ENDPOINT DE REGISTRO - Crear nuevo usuario en MongoDB
 // ============================================================
-app.post("/api/auth/register", async (req, res) => {
+app.post("/api/auth/register", requireMongoDB, async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
@@ -512,7 +539,7 @@ app.post("/api/auth/register", async (req, res) => {
 // ============================================================
 // ENDPOINT PARA OBTENER USUARIO ACTUAL - Verificar sesión
 // ============================================================
-app.get("/api/auth/user", async (req, res) => {
+app.get("/api/auth/user", requireMongoDB, async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     
@@ -558,7 +585,7 @@ app.get("/api/auth/user", async (req, res) => {
 // ============================================================
 // ENDPOINT /api/auth/me - Alias de /api/auth/user
 // ============================================================
-app.get("/api/auth/me", async (req, res) => {
+app.get("/api/auth/me", requireMongoDB, async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     
@@ -574,182 +601,6 @@ app.get("/api/auth/me", async (req, res) => {
     
     // Obtener usuario de MongoDB
     const user = await User.findById(decoded.id).select('-password');
-    
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Usuario no encontrado"
-      });
-    }
-    
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      }
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error verificando token: ${err.message}`);
-    res.status(401).json({ 
-      success: false,
-      message: "Token inválido o expirado" 
-    });
-  }
-});
-
-// ============================================================
-// ENDPOINT DE REGISTRO - Crear nuevo usuario
-// ============================================================
-app.post("/api/auth/register", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    
-    console.log('[AUTH] Intento de registro:', email);
-    
-    // Validaciones
-    if (!username || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Username, email y password son requeridos"
-      });
-    }
-    
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "La contraseña debe tener al menos 6 caracteres"
-      });
-    }
-    
-    // Verificar si el email ya existe
-    const existingUser = getUserByEmail(email);
-    if (existingUser) {
-      console.log('[AUTH] Email ya registrado:', email);
-      return res.status(409).json({
-        success: false,
-        message: "Este email ya está registrado"
-      });
-    }
-    
-    // Verificar si el username ya existe
-    const usernameTaken = MOCK_USERS.some(u => u.username.toLowerCase() === username.toLowerCase());
-    if (usernameTaken) {
-      console.log('[AUTH] Username ya registrado:', username);
-      return res.status(409).json({
-        success: false,
-        message: "Este username ya está en uso"
-      });
-    }
-    
-    // Hashear password
-    const bcrypt = require('bcryptjs');
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    
-    // Crear nuevo usuario
-    const newUser = {
-      _id: `user_${Date.now()}`,
-      username: username,
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      role: "user", // Los nuevos usuarios siempre son "user"
-      fechaRegistro: new Date()
-    };
-    
-    // Agregar a la lista de usuarios (en producción, guardar en MongoDB)
-    MOCK_USERS.push(newUser);
-    
-    console.log('[AUTH] Usuario registrado exitosamente:', email);
-    
-    res.status(201).json({
-      success: true,
-      message: "Cuenta creada exitosamente",
-      user: {
-        id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-        role: newUser.role
-      }
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error en registro: ${err.message}`);
-    res.status(500).json({ 
-      success: false,
-      message: `Error en el servidor: ${err.message}` 
-    });
-  }
-});
-
-// ============================================================
-// ENDPOINT PARA OBTENER USUARIO ACTUAL - Verificar sesión
-// ============================================================
-app.get("/api/auth/user", async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No se proporcionó token de autenticación"
-      });
-    }
-    
-    // Verificar token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
-    
-    // Obtener usuario
-    const user = getUserById(decoded.id);
-    
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Usuario no encontrado"
-      });
-    }
-    
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      }
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error verificando token: ${err.message}`);
-    res.status(401).json({ 
-      success: false,
-      message: "Token inválido o expirado" 
-    });
-  }
-});
-
-// ============================================================
-// ENDPOINT /api/auth/me - Alias de /api/auth/user
-// ============================================================
-app.get("/api/auth/me", async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No se proporcionó token de autenticación"
-      });
-    }
-    
-    // Verificar token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
-    
-    // Obtener usuario
-    const user = getUserById(decoded.id);
     
     if (!user) {
       return res.status(404).json({
