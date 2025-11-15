@@ -305,75 +305,14 @@ app.post("/api/payments/confirm", (req, res) => {
 });
 
 // ============================================================
-// MOCK DATA - PRODUCTOS (temporal hasta que MongoDB funcione)
+// PRODUCTOS REALES DEL USUARIO (desde seed.js)
 // ============================================================
-const MOCK_PRODUCTS = [
-  {
-    _id: "1",
-    name: "Perfume Sensual",
-    description: "Aroma sofisticado y envolvente para mujeres",
-    price: 25000,
-    gender: "Dama",
-    image: "/images/perfume1.jpg",
-    stock: 10,
-    rating: 4.5
-  },
-  {
-    _id: "2",
-    name: "Colonia Fresh",
-    description: "Aroma fresco y masculino para hombres",
-    price: 22000,
-    gender: "Varón",
-    image: "/images/perfume2.jpg",
-    stock: 8,
-    rating: 4.3
-  },
-  {
-    _id: "3",
-    name: "Esencia Oriental",
-    description: "Aroma oriental intenso y seductor",
-    price: 30000,
-    gender: "Dama",
-    image: "/images/perfume3.jpg",
-    stock: 5,
-    rating: 4.8
-  },
-  {
-    _id: "4",
-    name: "Fragancia Sport",
-    description: "Aroma deportivo y energético",
-    price: 18000,
-    gender: "Varón",
-    image: "/images/perfume4.jpg",
-    stock: 15,
-    rating: 4.2
-  },
-  {
-    _id: "5",
-    name: "Aroma Floral",
-    description: "Mezcla delicada de flores naturales",
-    price: 28000,
-    gender: "Dama",
-    image: "/images/perfume5.jpg",
-    stock: 7,
-    rating: 4.6
-  },
-  {
-    _id: "6",
-    name: "Esencia Masculina",
-    description: "Aroma profundo y duradero para caballeros",
-    price: 26000,
-    gender: "Varón",
-    image: "/images/perfume6.jpg",
-    stock: 12,
-    rating: 4.4
-  }
-];
+const MOCK_PRODUCTS = require('./mockProducts');
 
-// Endpoint temporal: Productos con mock data
+// Endpoint temporal: Productos con TUS datos reales
 app.get("/api/products", (req, res) => {
   try {
-    const { gender, page = 1, limit = 10, search = '' } = req.query;
+    const { gender, page = 1, limit = 1000, search = '' } = req.query;
     
     let filteredProducts = MOCK_PRODUCTS;
     
@@ -406,8 +345,7 @@ app.get("/api/products", (req, res) => {
       products,
       totalPages,
       currentPage: pageNum,
-      totalProducts: filteredProducts.length,
-      note: "MOCK DATA - MongoDB no disponible aún"
+      totalProducts: filteredProducts.length
     });
   } catch (err) {
     console.error(`Error fetching products: ${err.message}`);
