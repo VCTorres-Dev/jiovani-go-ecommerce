@@ -15,7 +15,8 @@
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.0.12",
-    "nodemailer": "^7.0.6"
+    "nodemailer": "^7.0.6",
+    "transbank-sdk": "^6.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
