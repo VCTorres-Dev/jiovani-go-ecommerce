@@ -305,47 +305,49 @@ app.post("/api/payments/confirm", (req, res) => {
 });
 
 // ============================================================
-// PRODUCTOS REALES DEL USUARIO (desde seed.js)
+// PRODUCTOS REALES DEL USUARIO (desde MongoDB)
 // ============================================================
-const MOCK_PRODUCTS = require('./mockProducts');
+const Product = require('./models/Product');
 
-// Endpoint temporal: Productos con TUS datos reales
-app.get("/api/products", (req, res) => {
+// Endpoint: Productos desde MongoDB
+app.get("/api/products", async (req, res) => {
   try {
     const { gender, page = 1, limit = 1000, search = '' } = req.query;
     
-    let filteredProducts = MOCK_PRODUCTS;
+    // Construir query MongoDB
+    const query = {};
     
-    // Filtrar por género si es necesario (case-insensitive)
+    // Filtrar por género (case-insensitive)
     if (gender && gender !== 'undefined' && gender !== '') {
-      const genderLower = gender.toLowerCase();
-      filteredProducts = filteredProducts.filter(p => 
-        p.gender.toLowerCase() === genderLower
-      );
+      query.gender = { $regex: new RegExp(`^${gender}$`, 'i') };
     }
     
     // Filtrar por búsqueda
     if (search) {
-      filteredProducts = filteredProducts.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.description.toLowerCase().includes(search.toLowerCase())
-      );
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
     
     const pageNum = parseInt(page, 10);
     const limitNum = parseInt(limit, 10);
-    const totalPages = Math.ceil(filteredProducts.length / limitNum);
     
-    const products = filteredProducts.slice(
-      (pageNum - 1) * limitNum,
-      pageNum * limitNum
-    );
+    const totalProducts = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalProducts / limitNum);
+    
+    const products = await Product.find(query)
+      .sort({ name: 1 })
+      .limit(limitNum)
+      .skip((pageNum - 1) * limitNum);
+    
+    console.log(`[PRODUCTS] Devolviendo ${products.length} productos desde MongoDB`);
     
     res.json({
       products,
       totalPages,
       currentPage: pageNum,
-      totalProducts: filteredProducts.length
+      totalProducts
     });
   } catch (err) {
     console.error(`Error fetching products: ${err.message}`);
@@ -354,19 +356,19 @@ app.get("/api/products", (req, res) => {
 });
 
 // ============================================================
-// AUTENTICACIÓN REAL CON USUARIOS REALES
+// RUTAS DE AUTENTICACIÓN CON MONGODB REAL
 // ============================================================
+const User = require('./models/User');
 const jwt = require('jsonwebtoken');
-const { validateLogin, getUserByEmail, getUserById, MOCK_USERS } = require('./mockUsers');
 
-// Endpoint de login con VALIDACIÓN REAL
+// LOGIN endpoint
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     
     console.log('[AUTH] Intento de login:', email);
     
-    // Validar que se enviaron email y password
+    // Validaciones
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -374,28 +376,39 @@ app.post("/api/auth/login", async (req, res) => {
       });
     }
     
-    // Validar credenciales (compara password hasheado)
-    const user = await validateLogin(email, password);
+    // Buscar usuario en MongoDB
+    const user = await User.findOne({ email: email.toLowerCase() });
     
     if (!user) {
-      console.log('[AUTH] Credenciales inválidas para:', email);
+      console.log('[AUTH] Login fallido: usuario no encontrado');
       return res.status(401).json({
         success: false,
         message: "Credenciales inválidas"
       });
     }
     
-    console.log('[AUTH] Login exitoso:', user.email, 'Role:', user.role);
+    // Validar password usando el método del modelo
+    const isMatch = await user.comparePassword(password);
+    
+    if (!isMatch) {
+      console.log('[AUTH] Login fallido: password incorrecta');
+      return res.status(401).json({
+        success: false,
+        message: "Credenciales inválidas"
+      });
+    }
+    
+    console.log('[AUTH] Login exitoso:', user.email, '(role:', user.role + ')');
     
     // Generar JWT token
     const token = jwt.sign(
       { 
         id: user._id, 
-        email: user.email, 
+        email: user.email,
         role: user.role 
       },
       process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura',
-      { expiresIn: process.env.JWT_EXPIRE || '30d' }
+      { expiresIn: '30d' }
     );
     
     res.json({
@@ -415,6 +428,175 @@ app.post("/api/auth/login", async (req, res) => {
     res.status(500).json({ 
       success: false,
       message: `Error en el servidor: ${err.message}` 
+    });
+  }
+});
+
+// ============================================================
+// ENDPOINT DE REGISTRO - Crear nuevo usuario en MongoDB
+// ============================================================
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    
+    console.log('[AUTH] Intento de registro:', email);
+    
+    // Validaciones
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Username, email y password son requeridos"
+      });
+    }
+    
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "La contraseña debe tener al menos 6 caracteres"
+      });
+    }
+    
+    // Verificar si el email ya existe en MongoDB
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      console.log('[AUTH] Email ya registrado:', email);
+      return res.status(409).json({
+        success: false,
+        message: "Este email ya está registrado"
+      });
+    }
+    
+    // Verificar si el username ya existe
+    const usernameTaken = await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
+    if (usernameTaken) {
+      console.log('[AUTH] Username ya registrado:', username);
+      return res.status(409).json({
+        success: false,
+        message: "Este username ya está en uso"
+      });
+    }
+    
+    // Crear nuevo usuario (el password se hasheará automáticamente por el pre-save hook)
+    const newUser = new User({
+      username: username,
+      email: email.toLowerCase(),
+      password: password,
+      role: "user" // Los nuevos usuarios siempre son "user"
+    });
+    
+    // Guardar en MongoDB
+    await newUser.save();
+    
+    console.log('[AUTH] Usuario registrado exitosamente en MongoDB:', email);
+    
+    res.status(201).json({
+      success: true,
+      message: "Cuenta creada exitosamente",
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role
+      }
+    });
+    
+  } catch (err) {
+    console.error(`[AUTH] Error en registro: ${err.message}`);
+    res.status(500).json({ 
+      success: false,
+      message: `Error en el servidor: ${err.message}` 
+    });
+  }
+});
+
+// ============================================================
+// ENDPOINT PARA OBTENER USUARIO ACTUAL - Verificar sesión
+// ============================================================
+app.get("/api/auth/user", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No se proporcionó token de autenticación"
+      });
+    }
+    
+    // Verificar token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
+    
+    // Obtener usuario de MongoDB
+    const user = await User.findById(decoded.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuario no encontrado"
+      });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+    
+  } catch (err) {
+    console.error(`[AUTH] Error verificando token: ${err.message}`);
+    res.status(401).json({ 
+      success: false,
+      message: "Token inválido o expirado" 
+    });
+  }
+});
+
+// ============================================================
+// ENDPOINT /api/auth/me - Alias de /api/auth/user
+// ============================================================
+app.get("/api/auth/me", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No se proporcionó token de autenticación"
+      });
+    }
+    
+    // Verificar token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
+    
+    // Obtener usuario de MongoDB
+    const user = await User.findById(decoded.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuario no encontrado"
+      });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+    
+  } catch (err) {
+    console.error(`[AUTH] Error verificando token: ${err.message}`);
+    res.status(401).json({ 
+      success: false,
+      message: "Token inválido o expirado" 
     });
   }
 });
@@ -597,25 +779,19 @@ app.get("/api/auth/me", async (req, res) => {
 
 // Importar y usar rutas
 try {
-  // TEMPORAL: Comentar authRoutes porque requiere bcryptjs que aún está en issues de instalación
-  // const authRoutes = require("./routes/authRoutes");
-  
-  // const productRoutes = require("./routes/productRoutes");  // Deshabilitado - usando mock
   const analyticsRoutes = require("./routes/analyticsRoutes"); 
   const orderRoutes = require("./routes/orderRoutes"); 
   const messageRoutes = require('./routes/messageRoutes'); 
   const paymentRoutes = require('./routes/paymentRoutes');
   const userRoutes = require("./routes/userRoutes");
 
-  // app.use("/api/auth", authRoutes);
-  // app.use("/api/products", productRoutes);  // Usando mock en lugar de productRoutes
   app.use("/api/analytics", analyticsRoutes); 
   app.use("/api/orders", orderRoutes); 
   app.use("/api/messages", messageRoutes); 
   app.use("/api/payments", paymentRoutes);
   app.use("/api/users", userRoutes);
   console.log("✅ Todas las rutas cargadas exitosamente");
-  console.log("⚠️ NOTA: Usando MOCK DATA para productos y auth (MongoDB no disponible)");
+  console.log("✅ USANDO MONGODB REAL: Usuarios y productos se cargan desde MongoDB Atlas");
 } catch (error) {
   console.warn("⚠️ No se pudieron cargar algunas rutas:", error.message);
   console.log("💡 Las rutas pueden no estar disponibles en este ambiente");
