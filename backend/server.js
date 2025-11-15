@@ -353,33 +353,113 @@ app.get("/api/products", (req, res) => {
   }
 });
 
-// Endpoint temporal: Login con mock (sin BD)
-app.post("/api/auth/login", (req, res) => {
+// ============================================================
+// AUTENTICACIÓN REAL CON USUARIOS REALES
+// ============================================================
+const jwt = require('jsonwebtoken');
+const { validateLogin, getUserByEmail } = require('./mockUsers');
+
+// Endpoint de login con VALIDACIÓN REAL
+app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // Mock login - acepta cualquier email/password
-    if (email && password) {
-      res.json({
-        success: true,
-        message: "Login exitoso (MOCK - sin BD)",
-        user: {
-          id: "mock-user-1",
-          email: email,
-          name: "Usuario Demo",
-          role: "customer"
-        },
-        token: "mock-jwt-token-" + Date.now()
-      });
-    } else {
-      res.status(400).json({
+    console.log('[AUTH] Intento de login:', email);
+    
+    // Validar que se enviaron email y password
+    if (!email || !password) {
+      return res.status(400).json({
         success: false,
         message: "Email y password son requeridos"
       });
     }
+    
+    // Validar credenciales (compara password hasheado)
+    const user = await validateLogin(email, password);
+    
+    if (!user) {
+      console.log('[AUTH] Credenciales inválidas para:', email);
+      return res.status(401).json({
+        success: false,
+        message: "Credenciales inválidas"
+      });
+    }
+    
+    console.log('[AUTH] Login exitoso:', user.email, 'Role:', user.role);
+    
+    // Generar JWT token
+    const token = jwt.sign(
+      { 
+        id: user._id, 
+        email: user.email, 
+        role: user.role 
+      },
+      process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura',
+      { expiresIn: process.env.JWT_EXPIRE || '30d' }
+    );
+    
+    res.json({
+      success: true,
+      message: "Login exitoso",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      },
+      token
+    });
+    
   } catch (err) {
-    console.error(`Error en login: ${err.message}`);
-    res.status(500).json({ message: `Server Error: ${err.message}` });
+    console.error(`[AUTH] Error en login: ${err.message}`);
+    res.status(500).json({ 
+      success: false,
+      message: `Error en el servidor: ${err.message}` 
+    });
+  }
+});
+
+// Endpoint para obtener usuario actual (con token JWT)
+app.get("/api/auth/me", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No se proporcionó token de autenticación"
+      });
+    }
+    
+    // Verificar token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
+    
+    // Obtener usuario
+    const user = getUserByEmail(decoded.email);
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuario no encontrado"
+      });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+    
+  } catch (err) {
+    console.error(`[AUTH] Error verificando token: ${err.message}`);
+    res.status(401).json({ 
+      success: false,
+      message: "Token inválido o expirado" 
+    });
   }
 });
 
