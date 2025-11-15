@@ -467,7 +467,7 @@ try {
   app.use("/api/analytics", analyticsRoutes); 
   app.use("/api/orders", orderRoutes); 
   app.use("/api/messages", messageRoutes); 
-  app.use("/api/payments", paymentRoutes);
+ // app.use("/api/payments", paymentRoutes);
   app.use("/api/users", userRoutes);
   console.log("✅ Todas las rutas cargadas exitosamente (authRoutes temporalmente deshabilitada)");
 } catch (error) {
