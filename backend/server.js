@@ -357,7 +357,7 @@ app.get("/api/products", (req, res) => {
 // AUTENTICACIÓN REAL CON USUARIOS REALES
 // ============================================================
 const jwt = require('jsonwebtoken');
-const { validateLogin, getUserByEmail } = require('./mockUsers');
+const { validateLogin, getUserByEmail, getUserById, MOCK_USERS } = require('./mockUsers');
 
 // Endpoint de login con VALIDACIÓN REAL
 app.post("/api/auth/login", async (req, res) => {
@@ -419,7 +419,139 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// Endpoint para obtener usuario actual (con token JWT)
+// ============================================================
+// ENDPOINT DE REGISTRO - Crear nuevo usuario
+// ============================================================
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    
+    console.log('[AUTH] Intento de registro:', email);
+    
+    // Validaciones
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Username, email y password son requeridos"
+      });
+    }
+    
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "La contraseña debe tener al menos 6 caracteres"
+      });
+    }
+    
+    // Verificar si el email ya existe
+    const existingUser = getUserByEmail(email);
+    if (existingUser) {
+      console.log('[AUTH] Email ya registrado:', email);
+      return res.status(409).json({
+        success: false,
+        message: "Este email ya está registrado"
+      });
+    }
+    
+    // Verificar si el username ya existe
+    const usernameTaken = MOCK_USERS.some(u => u.username.toLowerCase() === username.toLowerCase());
+    if (usernameTaken) {
+      console.log('[AUTH] Username ya registrado:', username);
+      return res.status(409).json({
+        success: false,
+        message: "Este username ya está en uso"
+      });
+    }
+    
+    // Hashear password
+    const bcrypt = require('bcryptjs');
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
+    // Crear nuevo usuario
+    const newUser = {
+      _id: `user_${Date.now()}`,
+      username: username,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      role: "user", // Los nuevos usuarios siempre son "user"
+      fechaRegistro: new Date()
+    };
+    
+    // Agregar a la lista de usuarios (en producción, guardar en MongoDB)
+    MOCK_USERS.push(newUser);
+    
+    console.log('[AUTH] Usuario registrado exitosamente:', email);
+    
+    res.status(201).json({
+      success: true,
+      message: "Cuenta creada exitosamente",
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role
+      }
+    });
+    
+  } catch (err) {
+    console.error(`[AUTH] Error en registro: ${err.message}`);
+    res.status(500).json({ 
+      success: false,
+      message: `Error en el servidor: ${err.message}` 
+    });
+  }
+});
+
+// ============================================================
+// ENDPOINT PARA OBTENER USUARIO ACTUAL - Verificar sesión
+// ============================================================
+app.get("/api/auth/user", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No se proporcionó token de autenticación"
+      });
+    }
+    
+    // Verificar token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
+    
+    // Obtener usuario
+    const user = getUserById(decoded.id);
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuario no encontrado"
+      });
+    }
+    
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+    
+  } catch (err) {
+    console.error(`[AUTH] Error verificando token: ${err.message}`);
+    res.status(401).json({ 
+      success: false,
+      message: "Token inválido o expirado" 
+    });
+  }
+});
+
+// ============================================================
+// ENDPOINT /api/auth/me - Alias de /api/auth/user
+// ============================================================
 app.get("/api/auth/me", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -435,7 +567,7 @@ app.get("/api/auth/me", async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
     
     // Obtener usuario
-    const user = getUserByEmail(decoded.email);
+    const user = getUserById(decoded.id);
     
     if (!user) {
       return res.status(404).json({
