@@ -292,6 +292,56 @@ app.post("/api/payments/init-mock", (req, res) => {
   }
 });
 
+// ============================================================
+// MOCK CONFIRM ENDPOINT - Confirmar pago MOCK
+// ============================================================
+app.post("/api/payments/confirm-mock", (req, res) => {
+  try {
+    console.log('🎭 [MOCK CONFIRM] Confirmando transacción MOCK...');
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token es requerido'
+      });
+    }
+    
+    console.log('✅ [MOCK CONFIRM] Token validado:', token);
+    
+    // Simular respuesta real de Transbank
+    res.json({
+      success: true,
+      message: 'Pago confirmado exitosamente (MOCK)',
+      data: {
+        accountingDate: new Date().toISOString().split('T')[0],
+        transactionDate: new Date().toISOString(),
+        vci: 'TSY', // TSY = tarjeta sin verificación (MOCK)
+        status: 'AUTHORIZED',
+        amount: 10000,
+        buyOrder: 'order-test-123',
+        cardNumber: '****6623',
+        authorizationCode: 'MOCKAUTH123456',
+        responseCode: '0',
+        responseDescription: 'Transacción autorizada',
+        token: token,
+        installmentsAmount: '0',
+        installmentsNumber: '1',
+        transactionVerificationNumber: 'MOCK12345',
+        isMock: true
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ [MOCK CONFIRM] Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error confirmando pago MOCK',
+      error: error.message
+    });
+  }
+});
+
 // CONFIRMATION ENDPOINT - Confirmar pago después que usuario retorna de Transbank
 app.post("/api/payments/confirm", (req, res) => {
   try {
