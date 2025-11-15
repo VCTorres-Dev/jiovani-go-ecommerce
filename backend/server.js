@@ -136,6 +136,9 @@ app.post("/api/payments/init-test", (req, res) => {
       });
       
       response.on('end', () => {
+        console.log('📊 [TRANSBANK] Status Code:', response.statusCode);
+        console.log('📊 [TRANSBANK] Response (primeros 500 chars):', data.substring(0, 500));
+        
         try {
           const result = JSON.parse(data);
           
@@ -158,19 +161,21 @@ app.post("/api/payments/init-test", (req, res) => {
               }
             });
           } else {
-            console.error('❌ [TRANSBANK] Error:', result);
+            console.error('❌ [TRANSBANK] Error:', JSON.stringify(result, null, 2));
             res.status(response.statusCode).json({ 
               success: false, 
-              message: 'Error iniciando transacción',
-              error: result.detail || result.message
+              message: 'Error iniciando transacción en Transbank',
+              error: result.detail || result.message || result
             });
           }
         } catch (parseError) {
-          console.error('❌ [TRANSBANK] Error parsing response:', parseError);
-          res.status(500).json({ 
+          console.error('❌ [TRANSBANK] Error parsing JSON:', parseError.message);
+          console.error('❌ [TRANSBANK] Response completo:', data);
+          res.status(response.statusCode || 500).json({ 
             success: false, 
-            message: 'Error procesando respuesta de Transbank',
-            error: parseError.message
+            message: 'Transbank rechazó el request (posiblemente formato inválido)',
+            statusCode: response.statusCode,
+            error: data.substring(0, 200)
           });
         }
       });
