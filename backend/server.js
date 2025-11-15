@@ -126,13 +126,15 @@ app.post("/api/payments/init-test", (req, res) => {
     // Opciones del request HTTPS
     const options = {
       hostname: host,
+      port: 443,
       path: '/rswebpay/api/webpay/v1.3/transactions',
       method: 'POST',
       headers: {
         'Tbk-Api-Key-Id': commerceCode,
         'Tbk-Api-Key-Secret': apiKey,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body)
+        'Content-Length': Buffer.byteLength(body),
+        'User-Agent': 'JiovaniGo-Ecommerce/1.0'
       }
     };
     
