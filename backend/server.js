@@ -221,6 +221,77 @@ app.post("/api/payments/init-test", (req, res) => {
   }
 });
 
+// ============================================================
+// MOCK ENDPOINT - Para testing SIN credenciales reales
+// ============================================================
+app.post("/api/payments/init-mock", (req, res) => {
+  try {
+    console.log('🎭 [MOCK TRANSBANK] Iniciando transacción MOCK (sin credenciales reales)...');
+    console.log('📥 Body recibido:', JSON.stringify(req.body, null, 2));
+    
+    const { amount, buyOrder, sessionId, returnUrl, userEmail } = req.body;
+    
+    // Validación
+    if (!amount || amount <= 0) {
+      console.log('❌ Amount inválido:', amount);
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Amount inválido',
+        received: amount
+      });
+    }
+    
+    if (!buyOrder) {
+      console.log('❌ buyOrder faltante');
+      return res.status(400).json({ 
+        success: false, 
+        message: 'buyOrder es requerido' 
+      });
+    }
+    
+    if (!returnUrl) {
+      console.log('❌ returnUrl faltante');
+      return res.status(400).json({ 
+        success: false, 
+        message: 'returnUrl es requerido' 
+      });
+    }
+    
+    // Generar token MOCK (formato similar a Transbank real)
+    const mockToken = Math.random().toString(36).substring(2, 15) + 
+                      Math.random().toString(36).substring(2, 15);
+    
+    const host = 'webpay3gint.transbank.cl'; // TEST environment
+    const redirectUrl = `https://${host}/webpay/v1.3/${mockToken}`;
+    
+    console.log('✅ [MOCK] Token generado:', mockToken);
+    console.log('✅ [MOCK] Redirect URL:', redirectUrl);
+    
+    // Responder con formato idéntico a Transbank REAL
+    res.json({
+      success: true,
+      message: 'Transacción iniciada correctamente (MOCK - sin credenciales reales)',
+      data: {
+        url: redirectUrl,
+        token: mockToken,
+        transactionId: buyOrder,
+        userEmail: userEmail,
+        amount: amount,
+        environment: 'mock-integration',
+        info: 'Este es un token MOCK. Para producción, obtén credenciales reales en https://publico.transbank.cl'
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ [MOCK] Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error en endpoint MOCK de pago',
+      error: error.message 
+    });
+  }
+});
+
 // CONFIRMATION ENDPOINT - Confirmar pago después que usuario retorna de Transbank
 app.post("/api/payments/confirm", (req, res) => {
   try {
