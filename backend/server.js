@@ -56,14 +56,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Conectar a MongoDB
+// Conectar a MongoDB (opcional - no bloquea si falla)
 mongoose
   .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/dejoaromas", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB conectado exitosamente"))
-  .catch((err) => console.log("Error conectando a MongoDB:", err));
+  .then(() => console.log("✅ MongoDB conectado exitosamente"))
+  .catch((err) => console.log("⚠️  Advertencia: MongoDB no disponible (esto es OK para testing de pagos):", err.message));
 
 // Rutas básicas
 app.get("/", (req, res) => {
@@ -80,13 +80,16 @@ app.post("/api/payments/init-test", (req, res) => {
     
     // Validación
     if (!amount || amount <= 0) {
+      console.log('❌ Amount inválido:', amount);
       return res.status(400).json({ 
         success: false, 
-        message: 'Amount inválido' 
+        message: 'Amount inválido',
+        received: amount
       });
     }
     
     if (!buyOrder) {
+      console.log('❌ buyOrder faltante');
       return res.status(400).json({ 
         success: false, 
         message: 'buyOrder es requerido' 
@@ -94,6 +97,7 @@ app.post("/api/payments/init-test", (req, res) => {
     }
     
     if (!returnUrl) {
+      console.log('❌ returnUrl faltante');
       return res.status(400).json({ 
         success: false, 
         message: 'returnUrl es requerido' 
@@ -106,13 +110,18 @@ app.post("/api/payments/init-test", (req, res) => {
     const isProduction = process.env.TRANSBANK_ENV === 'PRODUCTION';
     const host = isProduction ? 'webpay3g.transbank.cl' : 'webpay3gint.transbank.cl';
     
+    console.log('🔐 [TRANSBANK] Host:', host);
+    console.log('🔐 [TRANSBANK] Commerce Code:', commerceCode);
+    
     // Body para Transbank API
     const body = JSON.stringify({
-      buy_order: buyOrder,
-      session_id: sessionId || Date.now().toString(),
-      amount: Math.floor(amount),
+      buy_order: String(buyOrder),
+      session_id: String(sessionId || Date.now()),
+      amount: parseInt(amount),
       return_url: returnUrl
     });
+    
+    console.log('📤 [TRANSBANK] Body que enviaremos:', body);
     
     // Opciones del request HTTPS
     const options = {
@@ -127,6 +136,13 @@ app.post("/api/payments/init-test", (req, res) => {
       }
     };
     
+    console.log('📤 [TRANSBANK] Headers:', JSON.stringify({
+      'Tbk-Api-Key-Id': commerceCode,
+      'Tbk-Api-Key-Secret': '***HIDDEN***',
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(body)
+    }, null, 2));
+    
     // Request a Transbank
     const request = https.request(options, (response) => {
       let data = '';
@@ -137,7 +153,7 @@ app.post("/api/payments/init-test", (req, res) => {
       
       response.on('end', () => {
         console.log('📊 [TRANSBANK] Status Code:', response.statusCode);
-        console.log('📊 [TRANSBANK] Response (primeros 500 chars):', data.substring(0, 500));
+        console.log('📊 [TRANSBANK] Response (primeros 1000 chars):', data.substring(0, 1000));
         
         try {
           const result = JSON.parse(data);
@@ -161,28 +177,30 @@ app.post("/api/payments/init-test", (req, res) => {
               }
             });
           } else {
-            console.error('❌ [TRANSBANK] Error:', JSON.stringify(result, null, 2));
+            console.error('❌ [TRANSBANK] Status error:', response.statusCode);
+            console.error('❌ [TRANSBANK] Response:', JSON.stringify(result, null, 2));
             res.status(response.statusCode).json({ 
               success: false, 
               message: 'Error iniciando transacción en Transbank',
+              statusCode: response.statusCode,
               error: result.detail || result.message || result
             });
           }
         } catch (parseError) {
           console.error('❌ [TRANSBANK] Error parsing JSON:', parseError.message);
-          console.error('❌ [TRANSBANK] Response completo:', data);
+          console.error('❌ [TRANSBANK] Response RAW:', data);
           res.status(response.statusCode || 500).json({ 
             success: false, 
-            message: 'Transbank rechazó el request (posiblemente formato inválido)',
+            message: 'Transbank rechazó el request (formato inválido)',
             statusCode: response.statusCode,
-            error: data.substring(0, 200)
+            rawResponse: data.substring(0, 500)
           });
         }
       });
     });
     
     request.on('error', (error) => {
-      console.error('❌ [TRANSBANK INIT] Error en request:', error);
+      console.error('❌ [TRANSBANK INIT] Error en request HTTPS:', error);
       res.status(500).json({ 
         success: false, 
         message: 'Error comunicándose con Transbank',
@@ -194,7 +212,7 @@ app.post("/api/payments/init-test", (req, res) => {
     request.end();
     
   } catch (error) {
-    console.error('❌ [TRANSBANK INIT] Error:', error);
+    console.error('❌ [TRANSBANK INIT] Error general:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error en endpoint de pago',
