@@ -298,12 +298,150 @@ app.post("/api/payments/confirm", (req, res) => {
   }
 });
 
+// ============================================================
+// MOCK DATA - PRODUCTOS (temporal hasta que MongoDB funcione)
+// ============================================================
+const MOCK_PRODUCTS = [
+  {
+    _id: "1",
+    name: "Perfume Sensual",
+    description: "Aroma sofisticado y envolvente para mujeres",
+    price: 25000,
+    gender: "Dama",
+    image: "/images/perfume1.jpg",
+    stock: 10,
+    rating: 4.5
+  },
+  {
+    _id: "2",
+    name: "Colonia Fresh",
+    description: "Aroma fresco y masculino para hombres",
+    price: 22000,
+    gender: "Varón",
+    image: "/images/perfume2.jpg",
+    stock: 8,
+    rating: 4.3
+  },
+  {
+    _id: "3",
+    name: "Esencia Oriental",
+    description: "Aroma oriental intenso y seductor",
+    price: 30000,
+    gender: "Dama",
+    image: "/images/perfume3.jpg",
+    stock: 5,
+    rating: 4.8
+  },
+  {
+    _id: "4",
+    name: "Fragancia Sport",
+    description: "Aroma deportivo y energético",
+    price: 18000,
+    gender: "Varón",
+    image: "/images/perfume4.jpg",
+    stock: 15,
+    rating: 4.2
+  },
+  {
+    _id: "5",
+    name: "Aroma Floral",
+    description: "Mezcla delicada de flores naturales",
+    price: 28000,
+    gender: "Dama",
+    image: "/images/perfume5.jpg",
+    stock: 7,
+    rating: 4.6
+  },
+  {
+    _id: "6",
+    name: "Esencia Masculina",
+    description: "Aroma profundo y duradero para caballeros",
+    price: 26000,
+    gender: "Varón",
+    image: "/images/perfume6.jpg",
+    stock: 12,
+    rating: 4.4
+  }
+];
+
+// Endpoint temporal: Productos con mock data
+app.get("/api/products", (req, res) => {
+  try {
+    const { gender, page = 1, limit = 10, search = '' } = req.query;
+    
+    let filteredProducts = MOCK_PRODUCTS;
+    
+    // Filtrar por género si es necesario
+    if (gender && gender !== 'undefined' && gender !== '') {
+      filteredProducts = filteredProducts.filter(p => p.gender === gender);
+    }
+    
+    // Filtrar por búsqueda
+    if (search) {
+      filteredProducts = filteredProducts.filter(p =>
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.description.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    const totalPages = Math.ceil(filteredProducts.length / limitNum);
+    
+    const products = filteredProducts.slice(
+      (pageNum - 1) * limitNum,
+      pageNum * limitNum
+    );
+    
+    res.json({
+      products,
+      totalPages,
+      currentPage: pageNum,
+      totalProducts: filteredProducts.length,
+      note: "MOCK DATA - MongoDB no disponible aún"
+    });
+  } catch (err) {
+    console.error(`Error fetching products: ${err.message}`);
+    res.status(500).json({ message: `Server Error: ${err.message}` });
+  }
+});
+
+// Endpoint temporal: Login con mock (sin BD)
+app.post("/api/auth/login", (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Mock login - acepta cualquier email/password
+    if (email && password) {
+      res.json({
+        success: true,
+        message: "Login exitoso (MOCK - sin BD)",
+        user: {
+          id: "mock-user-1",
+          email: email,
+          name: "Usuario Demo",
+          role: "customer"
+        },
+        token: "mock-jwt-token-" + Date.now()
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Email y password son requeridos"
+      });
+    }
+  } catch (err) {
+    console.error(`Error en login: ${err.message}`);
+    res.status(500).json({ message: `Server Error: ${err.message}` });
+  }
+});
+
 // Importar y usar rutas
 try {
   // TEMPORAL: Comentar authRoutes porque requiere bcryptjs que aún está en issues de instalación
   // const authRoutes = require("./routes/authRoutes");
   
-  const productRoutes = require("./routes/productRoutes");
+  // const productRoutes = require("./routes/productRoutes");  // Deshabilitado - usando mock
   const analyticsRoutes = require("./routes/analyticsRoutes"); 
   const orderRoutes = require("./routes/orderRoutes"); 
   const messageRoutes = require('./routes/messageRoutes'); 
@@ -311,13 +449,14 @@ try {
   const userRoutes = require("./routes/userRoutes");
 
   // app.use("/api/auth", authRoutes);
-  app.use("/api/products", productRoutes);
+  // app.use("/api/products", productRoutes);  // Usando mock en lugar de productRoutes
   app.use("/api/analytics", analyticsRoutes); 
   app.use("/api/orders", orderRoutes); 
   app.use("/api/messages", messageRoutes); 
   app.use("/api/payments", paymentRoutes);
   app.use("/api/users", userRoutes);
-  console.log("✅ Todas las rutas cargadas exitosamente (authRoutes temporalmente deshabilitada)");
+  console.log("✅ Todas las rutas cargadas exitosamente");
+  console.log("⚠️ NOTA: Usando MOCK DATA para productos y auth (MongoDB no disponible)");
 } catch (error) {
   console.warn("⚠️ No se pudieron cargar algunas rutas:", error.message);
   console.log("💡 Las rutas pueden no estar disponibles en este ambiente");
