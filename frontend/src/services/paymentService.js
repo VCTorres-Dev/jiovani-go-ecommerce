@@ -34,15 +34,14 @@ export const initPayment = async (orderData) => {
       shipping: orderData.shippingInfo.name
     });
 
-    const config = {
-      headers: getAuthHeaders(),
-    };
-
-    const response = await axios.post(`${PAYMENTS_API_URL}/init`, orderData, config);
+    // Usar endpoint de testing (sin autenticación requerida para pruebas)
+    // En producción, cambiar a /init con autenticación
+    const response = await axios.post(`${PAYMENTS_API_URL}/init-test`, orderData);
     
     console.log('✅ Pago iniciado exitosamente:', {
-      orderId: response.data.data.orderId,
-      isSimulation: response.data.data.isSimulation || false
+      token: response.data.data.token.substring(0, 20) + '...',
+      url: response.data.data.url,
+      environment: response.data.data.environment
     });
 
     return response.data;

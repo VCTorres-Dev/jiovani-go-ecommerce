@@ -61,11 +61,14 @@ const Checkout = ({ isOpen, onClose }) => {
   const handlePayment = async (e) => {
     e.preventDefault();
     
-    // Verificar autenticación
+    // NOTA: Para testing, permitimos pagos sin autenticación
+    // En producción, descomentar la validación de autenticación
+    /*
     if (!localStorage.getItem('token')) {
       toast.error('Debes iniciar sesión para realizar la compra.');
       return;
     }
+    */
 
     // Verificar carrito
     if (cartItems.length === 0) {
@@ -97,23 +100,25 @@ const Checkout = ({ isOpen, onClose }) => {
       // Iniciar pago con Transbank
       const response = await initPayment(orderData);
 
-      if (response.success) {
+      if (response.success && response.data.url && response.data.token) {
         // Limpiar carrito antes de redirigir
         clearCart();
         
         // Mostrar mensaje de éxito
-        if (response.data.isSimulation) {
-          toast.success('Redirigiendo al simulador de pagos...');
-        } else {
-          toast.success('Redirigiendo a Transbank...');
-        }
+        const isIntegration = response.data.environment === 'integration';
+        toast.success(isIntegration ? 'Redirigiendo a Transbank (Integración)...' : 'Redirigiendo a Transbank...');
 
         // Cerrar modal
         onClose();
 
-        // Redirigir a Transbank o simulador
-        console.log('🔄 Redirigiendo a:', response.data.url);
-        window.location.href = `${response.data.url}?token_ws=${response.data.token}`;
+        // Construir URL completa de Transbank con el token
+        const transbankUrl = `${response.data.url}?token_ws=${response.data.token}`;
+        console.log('🔄 Redirigiendo a Transbank:', transbankUrl);
+        
+        // Esperar un momento antes de redirigir para que el usuario vea el mensaje
+        setTimeout(() => {
+          window.location.href = transbankUrl;
+        }, 1000);
       } else {
         throw new Error(response.message || 'Error iniciando el pago');
       }

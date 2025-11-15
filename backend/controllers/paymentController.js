@@ -95,7 +95,10 @@ const initPayment = async (req, res) => {
     
     // Configurar URL de retorno basada en el entorno
     // IMPORTANTE: returnUrl debe apuntar al backend (accesible por Transbank)
-    const backendUrl = process.env.FRONTEND_URL || 'http://localhost:5000';
+    // En Railway, usar la URL pública del backend
+    const backendUrl = process.env.BACKEND_URL || process.env.RAILWAY_PUBLIC_DOMAIN 
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` 
+      : 'http://localhost:5000';
     const returnUrl = `${backendUrl}/api/payments/result`;
 
     console.log(`📋 Datos de transacción:
