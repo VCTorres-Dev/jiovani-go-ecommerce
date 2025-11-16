@@ -37,48 +37,34 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const parseJwt = (token) => {
-      try {
-        const payload = token.split('.')[1];
-        const decoded = JSON.parse(atob(payload));
-        // Verificar expiración
-        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-          // Token expirado
-          return null;
-        }
-        return decoded;
-      } catch (err) {
-        return null;
-      }
-    };
-
     const loadUser = async () => {
       const token = localStorage.getItem('token');
+      console.log('[App.js] loadUser ejecutándose, token:', token ? 'encontrado' : 'no encontrado');
       try {
         if (token) {
           setAuthToken(token);
-          // Parse token locally to set preliminary user (avoids flash redirect on reload)
-          const decoded = parseJwt(token);
-          if (decoded) {
-            const id = decoded.user?.id || decoded.id;
-            const email = decoded.user?.email || decoded.email;
-            const role = decoded.user?.role || decoded.role;
-            if (id) {
-              setUser({ id, email, role });
-            }
-          }
-
+          
+          // NO setear user preliminar, esperar a la respuesta del backend
+          // para evitar mostrar datos incompletos (sin username)
+          
           const apiBase = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+          console.log('[App.js] Haciendo petición a:', `${apiBase}/auth/user`);
           const res = await axios.get(`${apiBase}/auth/user`);
+          console.log('[App.js] Respuesta recibida:', res.data);
           setUser(res.data.user || res.data);
+          console.log('[App.js] Usuario seteado:', res.data.user || res.data);
+        } else {
+          console.log('[App.js] No hay token, no se carga usuario');
         }
       } catch (err) {
-        console.error('Error loading user:', err.response ? err.response.data : err.message);
+        console.error('[App.js] Error loading user:', err.response ? err.response.data : err.message);
+        console.error('[App.js] Error completo:', err);
         localStorage.removeItem('token');
         setAuthToken(null);
         setUser(null);
       } finally {
         setLoading(false);
+        console.log('[App.js] loadUser finalizado, loading = false');
       }
     };
 
