@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose"); // AÑADIDO
 
 console.log('[TRACE] authRoutes.js cargado.'); // Para confirmar que el archivo se carga
 
@@ -12,10 +13,21 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { auth } = require("../middleware/authMiddleware");
 
+// Middleware para verificar conexión a MongoDB
+const requireMongoDB = (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({
+      success: false,
+      message: "Base de datos no disponible. Intenta nuevamente en unos segundos."
+    });
+  }
+  next();
+};
+
 // @route   POST api/auth/register
 // @desc    Register a user
 // @access  Public
-router.post("/register", async (req, res) => {
+router.post("/register", requireMongoDB, async (req, res) => {
     console.log('[TRACE] Accediendo a la ruta /register.');
   console.log('[TRACE] Request body:', req.body);
   const { username, email, password } = req.body;
@@ -46,16 +58,28 @@ router.post("/register", async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        email: user.email,
+        role: user.role
       },
     };
 
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 3600 }, // Expires in 1 hour
+      { expiresIn: '30d' }, // Expires in 30 days
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ 
+          success: true,
+          message: "Usuario registrado exitosamente",
+          token,
+          user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role
+          }
+        });
       }
     );
   } catch (err) {
@@ -67,7 +91,7 @@ router.post("/register", async (req, res) => {
 // @route   POST api/auth/login
 // @desc    Authenticate user & get token
 // @access  Public
-router.post("/login", async (req, res) => {
+router.post("/login", requireMongoDB, async (req, res) => {
   console.log('[TRACE] Accediendo a la ruta /login.');
   console.log('[TRACE] Request body:', req.body);
   console.log('[TRACE] Request headers:', req.headers);
@@ -102,6 +126,8 @@ router.post("/login", async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        email: user.email,
+        role: user.role
       },
     };
 
@@ -111,7 +137,7 @@ router.post("/login", async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 3600 }, // Expires in 1 hour
+      { expiresIn: '30d' }, // Expires in 30 days
       (err, token) => {
         if (err) {
           console.log('[TRACE] Error generando JWT:', err);
@@ -120,6 +146,8 @@ router.post("/login", async (req, res) => {
         console.log('[TRACE] JWT generado exitosamente');
         console.log('[TRACE] Enviando respuesta con token y usuario');
         res.json({
+          success: true,
+          message: "Login exitoso",
           token,
           user: {
             id: user.id,
@@ -139,17 +167,31 @@ router.post("/login", async (req, res) => {
 // @route   GET api/auth/user
 // @desc    Get user data from token
 // @access  Private
-router.get('/user', auth, async (req, res) => {
+router.get('/user', auth, requireMongoDB, async (req, res) => {
   try {
     // req.user is attached by the auth middleware, which has the user's id
     const user = await User.findById(req.user.id).select('-password');
     if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado.' });
+        return res.status(404).json({ 
+          success: false,
+          message: 'Usuario no encontrado.' 
+        });
     }
-    res.json(user);
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Error del servidor');
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor'
+    });
   }
 });
 

@@ -1,10 +1,10 @@
-const express = require("express");
+﻿const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const https = require("https");
 const querystring = require("querystring");
 
-// En production (Railway), las variables de entorno ya están disponibles
+// En production (Railway), las variables de entorno ya estÃ¡n disponibles
 // En desarrollo local, crear archivo .env manualmente
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -36,7 +36,7 @@ if (process.env.FRONTEND_URL_REAL) {
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Permitir peticiones sin 'origin' (como las de Postman o apps móviles) o si el origen está en la lista blanca
+    // Permitir peticiones sin 'origin' (como las de Postman o apps mÃ³viles) o si el origen estÃ¡ en la lista blanca
     console.log('[CORS DEBUG] Origin received:', origin);
     const normalized = origin ? origin.replace(/\/$/, '') : origin;
     if (!origin || allowedOrigins.includes(normalized)) {
@@ -50,7 +50,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static("public")); // Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static("public")); // Servir archivos estÃ¡ticos desde la carpeta 'public'
 
 // TRACER: Middleware para registrar todas las solicitudes entrantes
 app.use((req, res, next) => {
@@ -62,7 +62,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Conectar a MongoDB y esperar la conexión
+// Conectar a MongoDB y esperar la conexiÃ³n
 let mongoConnected = false;
 
 const connectMongoDB = async () => {
@@ -73,19 +73,19 @@ const connectMongoDB = async () => {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     });
-    console.log("✅ MongoDB conectado exitosamente");
+    console.log("âœ… MongoDB conectado exitosamente");
     mongoConnected = true;
   } catch (err) {
-    console.log("⚠️ Advertencia: MongoDB no disponible:", err.message);
-    console.log("⚠️ Los endpoints de productos y autenticación no funcionarán sin MongoDB");
+    console.log("âš ï¸ Advertencia: MongoDB no disponible:", err.message);
+    console.log("âš ï¸ Los endpoints de productos y autenticaciÃ³n no funcionarÃ¡n sin MongoDB");
     mongoConnected = false;
   }
 };
 
-// Iniciar conexión
+// Iniciar conexiÃ³n
 connectMongoDB();
 
-// Rutas básicas
+// Rutas bÃ¡sicas
 app.get("/", (req, res) => {
   res.json({ message: "API de Jiovanni Go funcionando correctamente" });
 });
@@ -96,23 +96,23 @@ app.get("/", (req, res) => {
 // ============================================================
 app.post("/api/payments/init-mock", (req, res) => {
   try {
-    console.log('🎭 [MOCK TRANSBANK] Iniciando transacción MOCK (sin credenciales reales)...');
-    console.log('📥 Body recibido:', JSON.stringify(req.body, null, 2));
+    console.log('ðŸŽ­ [MOCK TRANSBANK] Iniciando transacciÃ³n MOCK (sin credenciales reales)...');
+    console.log('ðŸ“¥ Body recibido:', JSON.stringify(req.body, null, 2));
     
     const { amount, buyOrder, sessionId, returnUrl, userEmail } = req.body;
     
-    // Validación
+    // ValidaciÃ³n
     if (!amount || amount <= 0) {
-      console.log('❌ Amount inválido:', amount);
+      console.log('âŒ Amount invÃ¡lido:', amount);
       return res.status(400).json({ 
         success: false, 
-        message: 'Amount inválido',
+        message: 'Amount invÃ¡lido',
         received: amount
       });
     }
     
     if (!buyOrder) {
-      console.log('❌ buyOrder faltante');
+      console.log('âŒ buyOrder faltante');
       return res.status(400).json({ 
         success: false, 
         message: 'buyOrder es requerido' 
@@ -120,7 +120,7 @@ app.post("/api/payments/init-mock", (req, res) => {
     }
     
     if (!returnUrl) {
-      console.log('❌ returnUrl faltante');
+      console.log('âŒ returnUrl faltante');
       return res.status(400).json({ 
         success: false, 
         message: 'returnUrl es requerido' 
@@ -134,13 +134,13 @@ app.post("/api/payments/init-mock", (req, res) => {
     const host = 'webpay3gint.transbank.cl'; // TEST environment
     const redirectUrl = `https://${host}/webpay/v1.3/${mockToken}`;
     
-    console.log('✅ [MOCK] Token generado:', mockToken);
-    console.log('✅ [MOCK] Redirect URL:', redirectUrl);
+    console.log('âœ… [MOCK] Token generado:', mockToken);
+    console.log('âœ… [MOCK] Redirect URL:', redirectUrl);
     
-    // Responder con formato idéntico a Transbank REAL
+    // Responder con formato idÃ©ntico a Transbank REAL
     res.json({
       success: true,
-      message: 'Transacción iniciada correctamente (MOCK - sin credenciales reales)',
+      message: 'TransacciÃ³n iniciada correctamente (MOCK - sin credenciales reales)',
       data: {
         url: redirectUrl,
         token: mockToken,
@@ -148,12 +148,12 @@ app.post("/api/payments/init-mock", (req, res) => {
         userEmail: userEmail,
         amount: amount,
         environment: 'mock-integration',
-        info: 'Este es un token MOCK. Para producción, obtén credenciales reales en https://publico.transbank.cl'
+        info: 'Este es un token MOCK. Para producciÃ³n, obtÃ©n credenciales reales en https://publico.transbank.cl'
       }
     });
     
   } catch (error) {
-    console.error('❌ [MOCK] Error:', error);
+    console.error('âŒ [MOCK] Error:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error en endpoint MOCK de pago',
@@ -167,7 +167,7 @@ app.post("/api/payments/init-mock", (req, res) => {
 // ============================================================
 app.post("/api/payments/confirm-mock", (req, res) => {
   try {
-    console.log('🎭 [MOCK CONFIRM] Confirmando transacción MOCK...');
+    console.log('ðŸŽ­ [MOCK CONFIRM] Confirmando transacciÃ³n MOCK...');
     const { token } = req.body;
     
     if (!token) {
@@ -177,7 +177,7 @@ app.post("/api/payments/confirm-mock", (req, res) => {
       });
     }
     
-    console.log('✅ [MOCK CONFIRM] Token validado:', token);
+    console.log('âœ… [MOCK CONFIRM] Token validado:', token);
     
     // Simular respuesta real de Transbank
     res.json({
@@ -186,14 +186,14 @@ app.post("/api/payments/confirm-mock", (req, res) => {
       data: {
         accountingDate: new Date().toISOString().split('T')[0],
         transactionDate: new Date().toISOString(),
-        vci: 'TSY', // TSY = tarjeta sin verificación (MOCK)
+        vci: 'TSY', // TSY = tarjeta sin verificaciÃ³n (MOCK)
         status: 'AUTHORIZED',
         amount: 10000,
         buyOrder: 'order-test-123',
         cardNumber: '****6623',
         authorizationCode: 'MOCKAUTH123456',
         responseCode: '0',
-        responseDescription: 'Transacción autorizada',
+        responseDescription: 'TransacciÃ³n autorizada',
         token: token,
         installmentsAmount: '0',
         installmentsNumber: '1',
@@ -203,7 +203,7 @@ app.post("/api/payments/confirm-mock", (req, res) => {
     });
     
   } catch (error) {
-    console.error('❌ [MOCK CONFIRM] Error:', error);
+    console.error('âŒ [MOCK CONFIRM] Error:', error);
     res.status(500).json({
       success: false,
       message: 'Error confirmando pago MOCK',
@@ -212,10 +212,10 @@ app.post("/api/payments/confirm-mock", (req, res) => {
   }
 });
 
-// CONFIRMATION ENDPOINT - Confirmar pago después que usuario retorna de Transbank
+// CONFIRMATION ENDPOINT - Confirmar pago despuÃ©s que usuario retorna de Transbank
 app.post("/api/payments/confirm", (req, res) => {
   try {
-    console.log('🔐 [TRANSBANK CONFIRM] Confirmando transacción...');
+    console.log('ðŸ” [TRANSBANK CONFIRM] Confirmando transacciÃ³n...');
     const { token } = req.body;
     
     if (!token) {
@@ -262,7 +262,7 @@ app.post("/api/payments/confirm", (req, res) => {
           const result = JSON.parse(data);
           
           if (response.statusCode === 200) {
-            console.log('✅ [TRANSBANK CONFIRM] Pago confirmado');
+            console.log('âœ… [TRANSBANK CONFIRM] Pago confirmado');
             
             res.json({
               success: true,
@@ -278,15 +278,15 @@ app.post("/api/payments/confirm", (req, res) => {
               }
             });
           } else {
-            console.error('❌ [TRANSBANK CONFIRM] Error:', result);
+            console.error('âŒ [TRANSBANK CONFIRM] Error:', result);
             res.status(response.statusCode).json({
               success: false,
-              message: 'Error confirmando transacción',
+              message: 'Error confirmando transacciÃ³n',
               error: result.detail || result.message
             });
           }
         } catch (parseError) {
-          console.error('❌ [TRANSBANK CONFIRM] Error parsing response:', parseError);
+          console.error('âŒ [TRANSBANK CONFIRM] Error parsing response:', parseError);
           res.status(500).json({
             success: false,
             message: 'Error procesando respuesta de Transbank',
@@ -297,10 +297,10 @@ app.post("/api/payments/confirm", (req, res) => {
     });
     
     request.on('error', (error) => {
-      console.error('❌ [TRANSBANK CONFIRM] Error en request:', error);
+      console.error('âŒ [TRANSBANK CONFIRM] Error en request:', error);
       res.status(500).json({
         success: false,
-        message: 'Error comunicándose con Transbank',
+        message: 'Error comunicÃ¡ndose con Transbank',
         error: error.message
       });
     });
@@ -309,17 +309,17 @@ app.post("/api/payments/confirm", (req, res) => {
     request.end();
     
   } catch (error) {
-    console.error('❌ [TRANSBANK CONFIRM] Error:', error);
+    console.error('âŒ [TRANSBANK CONFIRM] Error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error en confirmación',
+      message: 'Error en confirmaciÃ³n',
       error: error.message
     });
   }
 });
 
 // ============================================================
-// MIDDLEWARE: Validar que MongoDB esté conectado
+// MIDDLEWARE: Validar que MongoDB estÃ© conectado
 // ============================================================
 const requireMongoDB = (req, res, next) => {
   if (!mongoConnected || mongoose.connection.readyState !== 1) {
@@ -344,12 +344,12 @@ app.get("/api/products", requireMongoDB, async (req, res) => {
     // Construir query MongoDB
     const query = {};
     
-    // Filtrar por género (case-insensitive)
+    // Filtrar por gÃ©nero (case-insensitive)
     if (gender && gender !== 'undefined' && gender !== '') {
       query.gender = { $regex: new RegExp(`^${gender}$`, 'i') };
     }
     
-    // Filtrar por búsqueda
+    // Filtrar por bÃºsqueda
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
@@ -383,274 +383,27 @@ app.get("/api/products", requireMongoDB, async (req, res) => {
 });
 
 // ============================================================
-// RUTAS DE AUTENTICACIÓN CON MONGODB REAL
+// IMPORTAR Y USAR RUTAS
 // ============================================================
-const User = require('./models/User');
-const jwt = require('jsonwebtoken');
-
-// LOGIN endpoint
-app.post("/api/auth/login", requireMongoDB, async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    console.log('[AUTH] Intento de login:', email);
-    
-    // Validaciones
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email y password son requeridos"
-      });
-    }
-    
-    // Buscar usuario en MongoDB
-    const user = await User.findOne({ email: email.toLowerCase() });
-    
-    if (!user) {
-      console.log('[AUTH] Login fallido: usuario no encontrado');
-      return res.status(401).json({
-        success: false,
-        message: "Credenciales inválidas"
-      });
-    }
-    
-    // Validar password usando el método del modelo
-    const isMatch = await user.comparePassword(password);
-    
-    if (!isMatch) {
-      console.log('[AUTH] Login fallido: password incorrecta');
-      return res.status(401).json({
-        success: false,
-        message: "Credenciales inválidas"
-      });
-    }
-    
-    console.log('[AUTH] Login exitoso:', user.email, '(role:', user.role + ')');
-    
-    // Generar JWT token con estructura correcta para el middleware
-    const token = jwt.sign(
-      { 
-        user: {
-          id: user._id,
-          email: user.email,
-          role: user.role
-        }
-      },
-      process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura',
-      { expiresIn: '30d' }
-    );
-    
-    res.json({
-      success: true,
-      message: "Login exitoso",
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      },
-      token
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error en login: ${err.message}`);
-    res.status(500).json({ 
-      success: false,
-      message: `Error en el servidor: ${err.message}` 
-    });
-  }
-});
-
-// ============================================================
-// ENDPOINT DE REGISTRO - Crear nuevo usuario en MongoDB
-// ============================================================
-app.post("/api/auth/register", requireMongoDB, async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    
-    console.log('[AUTH] Intento de registro:', email);
-    
-    // Validaciones
-    if (!username || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Username, email y password son requeridos"
-      });
-    }
-    
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "La contraseña debe tener al menos 6 caracteres"
-      });
-    }
-    
-    // Verificar si el email ya existe en MongoDB
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
-    if (existingUser) {
-      console.log('[AUTH] Email ya registrado:', email);
-      return res.status(409).json({
-        success: false,
-        message: "Este email ya está registrado"
-      });
-    }
-    
-    // Verificar si el username ya existe
-    const usernameTaken = await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
-    if (usernameTaken) {
-      console.log('[AUTH] Username ya registrado:', username);
-      return res.status(409).json({
-        success: false,
-        message: "Este username ya está en uso"
-      });
-    }
-    
-    // Crear nuevo usuario (el password se hasheará automáticamente por el pre-save hook)
-    const newUser = new User({
-      username: username,
-      email: email.toLowerCase(),
-      password: password,
-      role: "user" // Los nuevos usuarios siempre son "user"
-    });
-    
-    // Guardar en MongoDB
-    await newUser.save();
-    
-    console.log('[AUTH] Usuario registrado exitosamente en MongoDB:', email);
-    
-    res.status(201).json({
-      success: true,
-      message: "Cuenta creada exitosamente",
-      user: {
-        id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-        role: newUser.role
-      }
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error en registro: ${err.message}`);
-    res.status(500).json({ 
-      success: false,
-      message: `Error en el servidor: ${err.message}` 
-    });
-  }
-});
-
-// ============================================================
-// ENDPOINT PARA OBTENER USUARIO ACTUAL - Verificar sesión
-// ============================================================
-app.get("/api/auth/user", requireMongoDB, async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No se proporcionó token de autenticación"
-      });
-    }
-    
-  // Verificar token
-  const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
-  console.log('[AUTH] Token decodificado:', decoded);
-  // Obtener usuario de MongoDB - usar decoded.user.id (estructura correcta del token)
-  const userId = decoded.user?.id || decoded.id; // Fallback para tokens antiguos
-  console.log('[AUTH] Usando userId:', userId);
-    const user = await User.findById(userId).select('-password');
-    
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Usuario no encontrado"
-      });
-    }
-    
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      }
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error verificando token: ${err.message}`);
-    res.status(401).json({ 
-      success: false,
-      message: "Token inválido o expirado" 
-    });
-  }
-});
-
-// ============================================================
-// ENDPOINT /api/auth/me - Alias de /api/auth/user
-// ============================================================
-app.get("/api/auth/me", requireMongoDB, async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "No se proporcionó token de autenticación"
-      });
-    }
-    
-    // Verificar token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
-    
-    // Obtener usuario de MongoDB - usar decoded.user.id (estructura correcta del token)
-    const userId = decoded.user?.id || decoded.id; // Fallback para tokens antiguos
-    const user = await User.findById(userId).select('-password');
-    
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Usuario no encontrado"
-      });
-    }
-    
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      }
-    });
-    
-  } catch (err) {
-    console.error(`[AUTH] Error verificando token: ${err.message}`);
-    res.status(401).json({ 
-      success: false,
-      message: "Token inválido o expirado" 
-    });
-  }
-});
-
-// Importar y usar rutas
 try {
   const analyticsRoutes = require("./routes/analyticsRoutes"); 
   const orderRoutes = require("./routes/orderRoutes"); 
   const messageRoutes = require('./routes/messageRoutes'); 
   const paymentRoutes = require('./routes/paymentRoutes');
   const userRoutes = require("./routes/userRoutes");
+  const authRoutes = require("./routes/authRoutes"); // <--- AÃ‘ADIDO
 
   app.use("/api/analytics", analyticsRoutes); 
   app.use("/api/orders", orderRoutes); 
   app.use("/api/messages", messageRoutes); 
   app.use("/api/payments", paymentRoutes);
   app.use("/api/users", userRoutes);
-  console.log("✅ Todas las rutas cargadas exitosamente");
-  console.log("✅ USANDO MONGODB REAL: Usuarios y productos se cargan desde MongoDB Atlas");
+  app.use("/api/auth", authRoutes); // <--- AÃ‘ADIDO
+  console.log("âœ… Todas las rutas cargadas exitosamente");
+  console.log("âœ… USANDO MONGODB REAL: Usuarios y productos se cargan desde MongoDB Atlas");
 } catch (error) {
-  console.warn("⚠️ No se pudieron cargar algunas rutas:", error.message);
-  console.log("💡 Las rutas pueden no estar disponibles en este ambiente");
+  console.warn("âš ï¸ No se pudieron cargar algunas rutas:", error.message);
+  console.log("ðŸ’¡ Las rutas pueden no estar disponibles en este ambiente");
 } 
 
 // Manejo de errores 404
@@ -660,6 +413,6 @@ app.use("*", (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en puerto ${PORT}`);
+  console.log(`Servidor ejecutÃ¡ndose en puerto ${PORT}`);
   console.log(`Accede a: http://localhost:${PORT}`);
 });
