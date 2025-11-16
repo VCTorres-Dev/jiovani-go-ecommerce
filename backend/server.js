@@ -427,12 +427,14 @@ app.post("/api/auth/login", requireMongoDB, async (req, res) => {
     
     console.log('[AUTH] Login exitoso:', user.email, '(role:', user.role + ')');
     
-    // Generar JWT token
+    // Generar JWT token con estructura correcta para el middleware
     const token = jwt.sign(
       { 
-        id: user._id, 
-        email: user.email,
-        role: user.role 
+        user: {
+          id: user._id,
+          email: user.email,
+          role: user.role
+        }
       },
       process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura',
       { expiresIn: '30d' }
@@ -553,8 +555,9 @@ app.get("/api/auth/user", requireMongoDB, async (req, res) => {
     // Verificar token
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
     
-    // Obtener usuario de MongoDB
-    const user = await User.findById(decoded.id).select('-password');
+    // Obtener usuario de MongoDB - usar decoded.user.id (estructura correcta del token)
+    const userId = decoded.user?.id || decoded.id; // Fallback para tokens antiguos
+    const user = await User.findById(userId).select('-password');
     
     if (!user) {
       return res.status(404).json({
@@ -599,8 +602,9 @@ app.get("/api/auth/me", requireMongoDB, async (req, res) => {
     // Verificar token
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
     
-    // Obtener usuario de MongoDB
-    const user = await User.findById(decoded.id).select('-password');
+    // Obtener usuario de MongoDB - usar decoded.user.id (estructura correcta del token)
+    const userId = decoded.user?.id || decoded.id; // Fallback para tokens antiguos
+    const user = await User.findById(userId).select('-password');
     
     if (!user) {
       return res.status(404).json({
