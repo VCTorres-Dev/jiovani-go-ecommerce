@@ -34,9 +34,15 @@ export const initPayment = async (orderData) => {
       shipping: orderData.shippingInfo.name
     });
 
-    // Usar endpoint de guest (sin autenticación requerida)
-    // Para usuarios autenticados, el backend detectará automáticamente si existe el usuario por email
-    const response = await axios.post(`${PAYMENTS_API_URL}/init-guest`, orderData);
+    // Intentar endpoint de guest (sin autenticación requerida)
+    // Si falla, como compatibilidad, intentar /init-test (legacy)
+    let response;
+    try {
+      response = await axios.post(`${PAYMENTS_API_URL}/init-guest`, orderData);
+    } catch (err) {
+      console.warn('fallback: init-guest falló, intentando init-test', err.response?.data || err.message);
+      response = await axios.post(`${PAYMENTS_API_URL}/init-test`, orderData);
+    }
     
     console.log('✅ Pago iniciado exitosamente:', {
       token: response.data.data.token.substring(0, 20) + '...',

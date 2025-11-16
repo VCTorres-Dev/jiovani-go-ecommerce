@@ -37,14 +37,39 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const parseJwt = (token) => {
+      try {
+        const payload = token.split('.')[1];
+        const decoded = JSON.parse(atob(payload));
+        // Verificar expiración
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+          // Token expirado
+          return null;
+        }
+        return decoded;
+      } catch (err) {
+        return null;
+      }
+    };
+
     const loadUser = async () => {
       const token = localStorage.getItem('token');
       try {
         if (token) {
           setAuthToken(token);
+          // Parse token locally to set preliminary user (avoids flash redirect on reload)
+          const decoded = parseJwt(token);
+          if (decoded) {
+            const id = decoded.user?.id || decoded.id;
+            const email = decoded.user?.email || decoded.email;
+            const role = decoded.user?.role || decoded.role;
+            if (id) {
+              setUser({ id, email, role });
+            }
+          }
+
           const apiBase = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
           const res = await axios.get(`${apiBase}/auth/user`);
-          // El backend retorna { success: true, user: {...} }
           setUser(res.data.user || res.data);
         }
       } catch (err) {

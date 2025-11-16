@@ -552,11 +552,12 @@ app.get("/api/auth/user", requireMongoDB, async (req, res) => {
       });
     }
     
-    // Verificar token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
-    
-    // Obtener usuario de MongoDB - usar decoded.user.id (estructura correcta del token)
-    const userId = decoded.user?.id || decoded.id; // Fallback para tokens antiguos
+  // Verificar token
+  const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta_jwt_muy_segura');
+  console.log('[AUTH] Token decodificado:', decoded);
+  // Obtener usuario de MongoDB - usar decoded.user.id (estructura correcta del token)
+  const userId = decoded.user?.id || decoded.id; // Fallback para tokens antiguos
+  console.log('[AUTH] Usando userId:', userId);
     const user = await User.findById(userId).select('-password');
     
     if (!user) {

@@ -1123,38 +1123,119 @@ const initTestPayment = async (req, res) => {
     // Importar la transacción del SDK
     const { transaction } = require('../config/transbank');
 
-    // Tomar los datos EXACTOS de tu body de Postman
-    const { amount, buyOrder, sessionId, returnUrl } = req.body;
+  // Soportar dos formatos en body:
+  // - Legacy testing: { amount, buyOrder, sessionId, returnUrl }
+  // - New: { orderItems, totalAmount, shippingInfo }
+  const { amount, buyOrder, sessionId, returnUrl, orderItems, totalAmount, shippingInfo } = req.body;
 
-    // Validar
-    if (!amount || !buyOrder || !sessionId || !returnUrl) {
-      console.log('❌ [PAYMENT-TEST] Faltan datos en el body de Postman');
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Faltan datos: amount, buyOrder, sessionId, returnUrl' 
-      });
+    // Si recibimos orderItems/totalAmount (nuevo formato), derivar valores
+    let finalAmount = amount || totalAmount;
+    let finalBuyOrder = buyOrder;
+    let finalSessionId = sessionId;
+    let finalReturnUrl = returnUrl;
+
+    // Si viene estructura de orden, calcular montos y generar buy/session si faltan
+    if (orderItems && orderItems.length > 0) {
+      // Calcular monto si no viene
+      if (!finalAmount) {
+        finalAmount = orderItems.reduce((sum, it) => sum + (it.price * (it.quantity || 1)), 0);
+      }
+      // Generar buyOrder/sessionId si faltan
+      if (!finalBuyOrder || !finalSessionId) {
+        // Intentar obtener userId desde shippingInfo.email o generar temporal
+        let userId;
+        if (shippingInfo && shippingInfo.email) {
+          const existingUser = await User.findOne({ email: shippingInfo.email.toLowerCase() });
+          userId = existingUser?._id || new mongoose.Types.ObjectId();
+        } else {
+          userId = new mongoose.Types.ObjectId();
+        }
+        finalBuyOrder = finalBuyOrder || Order.generateBuyOrder(userId);
+        finalSessionId = finalSessionId || Order.generateSessionId();
+      }
+      // Si returnUrl no viene, generar uno por defecto
+      if (!finalReturnUrl) {
+        const backendUrl = process.env.BACKEND_URL || process.env.RAILWAY_PUBLIC_DOMAIN 
+          ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+          : 'http://localhost:5000';
+        finalReturnUrl = `${backendUrl}/api/payments/result`;
+      }
     }
 
     console.log(`📋 [PAYMENT-TEST] Datos de prueba:
-      - Buy Order: ${buyOrder}
-      - Session ID: ${sessionId}
-      - Amount: ${amount}
-      - Return URL: ${returnUrl}`);
+      - Buy Order: ${finalBuyOrder}
+      - Session ID: ${finalSessionId}
+      - Amount: ${finalAmount}
+      - Return URL: ${finalReturnUrl}`);
+
+    // Si recibimos orderItems, crear y guardar orden en DB antes de llamar a Transbank
+    let savedOrder = null;
+    if (orderItems && orderItems.length > 0) {
+      const validatedProducts = [];
+      for (const item of orderItems) {
+        const product = await Product.findById(item._id);
+        if (!product) {
+          return res.status(404).json({ success: false, message: `Producto no encontrado: ${item.name || 'Desconocido'}` });
+        }
+        if (product.stock < item.quantity) {
+          return res.status(400).json({ success: false, message: `Stock insuficiente para ${product.name}. Stock disponible: ${product.stock}` });
+        }
+        validatedProducts.push({
+          product: product._id,
+          quantity: item.quantity,
+          price: item.price || product.price,
+          name: product.name,
+          imageURL: item.imageURL || product.imageURL
+        });
+      }
+
+      // Obtener userId (si existe) o generar temporal
+      let userId;
+      if (shippingInfo && shippingInfo.email) {
+        const existingUser = await User.findOne({ email: shippingInfo.email.toLowerCase() });
+        userId = existingUser?._id || new mongoose.Types.ObjectId();
+      } else {
+        userId = new mongoose.Types.ObjectId();
+      }
+
+      const order = new Order({
+        user: userId,
+        products: validatedProducts,
+        totalAmount: Math.round(finalAmount),
+        shippingInfo: shippingInfo || {},
+        transbank: { buyOrder: finalBuyOrder, sessionId: finalSessionId },
+        status: 'pending'
+      });
+      await order.save();
+      savedOrder = order;
+      console.log('✅ [PAYMENT-TEST] Orden creada en DB con ID:', order._id);
+    }
 
     // Llamar al SDK de Transbank
     const transbankResponse = await transaction.create(
-      buyOrder,
-      sessionId,
-      Math.round(amount), // Usar 'amount' del body
-      returnUrl
+      finalBuyOrder,
+      finalSessionId,
+      Math.round(finalAmount),
+      finalReturnUrl
     );
 
     console.log('✅ [PAYMENT-TEST] Transacción de prueba creada:');
 
-    // Devolver la respuesta de Transbank (url y token)
+    // Si creamos una orden, actualizar token
+    if (savedOrder) {
+      savedOrder.transbank.token = transbankResponse.token;
+      await savedOrder.save();
+    }
+
+    // Devolver la respuesta de Transbank (url y token) con formato compatible
     res.status(200).json({ 
       success: true, 
-      data: transbankResponse 
+      data: {
+        token: transbankResponse.token,
+        url: transbankResponse.url,
+        orderId: savedOrder?._id || null,
+        buyOrder: finalBuyOrder
+      }
     });
 
   } catch (error) {

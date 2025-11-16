@@ -13,7 +13,10 @@ const auth = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.user.id).select("-password");
+    // Soportar ambos formatos de token: { user: { id, ... } } y { id, ... }
+  const userId = decoded?.user?.id || decoded?.id || decoded?._id;
+  console.log(`[TRACE] authMiddleware decoded userId: ${userId}`);
+  const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(401).json({ message: "Token inválido. Usuario no encontrado." });
