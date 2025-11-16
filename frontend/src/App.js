@@ -44,7 +44,8 @@ function App() {
           setAuthToken(token);
           const apiBase = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
           const res = await axios.get(`${apiBase}/auth/user`);
-          setUser(res.data);
+          // El backend retorna { success: true, user: {...} }
+          setUser(res.data.user || res.data);
         }
       } catch (err) {
         console.error('Error loading user:', err.response ? err.response.data : err.message);

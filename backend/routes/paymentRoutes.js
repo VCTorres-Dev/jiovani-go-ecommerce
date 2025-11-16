@@ -3,6 +3,7 @@ const router = express.Router();
 const { 
   initPayment,
   initTestPayment,
+  initGuestPayment,
   confirmPayment, 
   getOrderStatus, 
   getUserOrders,
@@ -30,7 +31,14 @@ router.post('/init', auth, initPayment);
  * @desc    Iniciar proceso de pago SIN autenticación (SOLO TESTING)
  * @access  Public (para testing sin token)
  */
-router.post('/init-test', initTestPayment)
+router.post('/init-test', initTestPayment);
+
+/**
+ * @route   POST /api/payments/init-guest
+ * @desc    Iniciar proceso de pago como invitado (sin autenticación requerida)
+ * @access  Public (para compras de usuarios guest)
+ */
+router.post('/init-guest', initGuestPayment);
 
 /**
  * @route   POST /api/payments/confirm

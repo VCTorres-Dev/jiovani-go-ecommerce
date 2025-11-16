@@ -3,6 +3,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const EmailService = require('../services/emailService');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 /**
  * @desc    Iniciar transacción de pago con Transbank
@@ -1166,9 +1167,175 @@ const initTestPayment = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Iniciar transacción de pago para usuarios guest (sin autenticación)
+ * @route   POST /api/payments/init-guest
+ * @access  Public
+ */
+const initGuestPayment = async (req, res) => {
+  try {
+    console.log('🚀 [GUEST-PAYMENT] Iniciando pago como invitado...');
+    console.log('📥 [GUEST-PAYMENT] Request body:', JSON.stringify(req.body, null, 2));
+    
+    const { orderItems, totalAmount, shippingInfo } = req.body;
+
+    // Validación de datos de entrada
+    if (!orderItems || orderItems.length === 0) {
+      console.log('❌ [GUEST-PAYMENT] Error: No hay artículos en la orden');
+      return res.status(400).json({ 
+        success: false,
+        message: 'No se han proporcionado artículos para la orden' 
+      });
+    }
+
+    if (!shippingInfo || !shippingInfo.name || !shippingInfo.email || !shippingInfo.phone || !shippingInfo.address) {
+      console.log('❌ [GUEST-PAYMENT] Error: Información de envío incompleta');
+      return res.status(400).json({ 
+        success: false,
+        message: 'Información de envío incompleta. Se requiere: nombre, email, teléfono, dirección' 
+      });
+    }
+
+    if (!totalAmount || totalAmount <= 0) {
+      console.log('❌ [GUEST-PAYMENT] Error: Monto total inválido:', totalAmount);
+      return res.status(400).json({ 
+        success: false,
+        message: 'Monto total inválido' 
+      });
+    }
+
+    console.log(`📝 [GUEST-PAYMENT] Validando stock para ${orderItems.length} productos...`);
+
+    // Verificar stock y validar productos
+    const validatedProducts = [];
+    for (const item of orderItems) {
+      const product = await Product.findById(item._id);
+      if (!product) {
+        return res.status(404).json({ 
+          success: false,
+          message: `Producto no encontrado: ${item.name || 'Desconocido'}` 
+        });
+      }
+      if (product.stock < item.quantity) {
+        return res.status(400).json({ 
+          success: false,
+          message: `Stock insuficiente para ${product.name}. Stock disponible: ${product.stock}` 
+        });
+      }
+      const validatedProduct = {
+        product: product._id,
+        quantity: item.quantity,
+        price: item.price,
+        name: product.name,
+        imageURL: item.imageURL || product.imageURL
+      };
+      
+      console.log('✅ [GUEST-PAYMENT] Producto validado:', validatedProduct.name);
+      validatedProducts.push(validatedProduct);
+    }
+
+    // Generar identificadores únicos para Transbank
+    // Para guest users, usar un ObjectId temporal o buscar el usuario por email si existe
+    let userId;
+    const existingUser = await User.findOne({ email: shippingInfo.email.toLowerCase() });
+    if (existingUser) {
+      userId = existingUser._id;
+      console.log('👤 [GUEST-PAYMENT] Usuario existente encontrado:', existingUser.email);
+    } else {
+      // Crear un ObjectId temporal para el guest user
+      userId = new mongoose.Types.ObjectId();
+      console.log('👤 [GUEST-PAYMENT] Usuario invitado (guest)');
+    }
+
+    const buyOrder = Order.generateBuyOrder(userId);
+    const sessionId = Order.generateSessionId();
+    
+    // Configurar URL de retorno
+    const backendUrl = process.env.BACKEND_URL || process.env.RAILWAY_PUBLIC_DOMAIN 
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` 
+      : 'http://localhost:5000';
+    const returnUrl = `${backendUrl}/api/payments/result`;
+
+    console.log(`📋 [GUEST-PAYMENT] Datos de transacción:
+      - Buy Order: ${buyOrder}
+      - Session ID: ${sessionId}
+      - Amount: $${totalAmount.toLocaleString('es-CL')}
+      - Return URL: ${returnUrl}
+      - Email: ${shippingInfo.email}`);
+
+    // Crear orden en la base de datos
+    const order = new Order({
+      user: userId,
+      products: validatedProducts,
+      totalAmount,
+      shippingInfo,
+      transbank: {
+        buyOrder,
+        sessionId
+      },
+      status: 'pending'
+    });
+
+    await order.save();
+    console.log(`✅ [GUEST-PAYMENT] Orden creada en DB con ID: ${order._id}`);
+
+    // Crear transacción con Transbank
+    try {
+      const transbankResponse = await transaction.create(
+        buyOrder,
+        sessionId,
+        Math.round(totalAmount),
+        returnUrl
+      );
+
+      // Actualizar orden con token de Transbank
+      order.transbank.token = transbankResponse.token;
+      await order.save();
+
+      console.log(`✅ [GUEST-PAYMENT] Transacción Transbank creada exitosamente`);
+      console.log(`🔑 Token: ${transbankResponse.token.substring(0, 20)}...`);
+
+      // Respuesta exitosa
+      res.status(200).json({
+        success: true,
+        data: {
+          token: transbankResponse.token,
+          url: transbankResponse.url,
+          orderId: order._id,
+          buyOrder: buyOrder,
+          environment: process.env.TRANSBANK_ENVIRONMENT || 'integration'
+        },
+        message: 'Transacción iniciada exitosamente'
+      });
+
+    } catch (transbankError) {
+      console.error('❌ [GUEST-PAYMENT] Error con Transbank:', transbankError.message);
+      
+      // Actualizar estado de la orden
+      order.status = 'failed';
+      await order.save();
+
+      return res.status(500).json({
+        success: false,
+        message: 'Error al iniciar transacción con Transbank',
+        error: process.env.NODE_ENV === 'development' ? transbankError.message : 'Error interno'
+      });
+    }
+
+  } catch (error) {
+    console.error('❌ [GUEST-PAYMENT] Error general:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Error interno'
+    });
+  }
+};
+
 module.exports = {
   initPayment,
   initTestPayment,
+  initGuestPayment,
   confirmPayment,
   getOrderStatus,
   getUserOrders,
