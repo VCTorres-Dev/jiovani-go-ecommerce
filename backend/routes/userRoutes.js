@@ -8,6 +8,8 @@ const { auth, adminAuth } = require('../middleware/authMiddleware');
 // @access  Private/Admin
 router.get('/', [auth, adminAuth], async (req, res) => {
   try {
+    console.log(`[USERS LIST] Usuario: ${req.user.username}, Rol: ${req.user.role}`);
+    
     const { page = 1, limit = 10, search = '' } = req.query;
     const query = {};
 

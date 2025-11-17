@@ -154,6 +154,9 @@ router.get('/user', auth, requireMongoDB, async (req, res) => {
         });
     }
     
+    // Log temporal para diagnosticar el rol
+    console.log(`[AUTH/USER] Usuario: ${user.username}, Rol en BD: ${user.role}`);
+    
     res.json({
       success: true,
       user: {

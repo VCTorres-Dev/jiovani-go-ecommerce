@@ -34,19 +34,21 @@ const auth = async (req, res, next) => {
   }
 };
 
-const adminAuth = async (req, res, next) => {
-  // Primero autenticar
-  await auth(req, res, () => {
-    // Luego verificar rol admin
-    if (req.user && req.user.role === 'admin') {
-      next();
-    } else {
-      res.status(403).json({ 
-        success: false,
-        message: 'Acceso denegado. Se requiere rol de administrador.' 
-      });
-    }
-  });
+const adminAuth = (req, res, next) => {
+  // Verificar que el middleware 'auth' ya fue ejecutado y adjuntó req.user
+  if (!req.user) {
+    return res.status(401).json({ message: "Acceso denegado. No se proporcionó un token válido." });
+  }
+
+  // Verificar que el usuario tiene rol admin
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ 
+      success: false,
+      message: 'Acceso denegado. Se requiere rol de administrador.' 
+    });
+  }
+
+  next();
 };
 
 module.exports = { auth, adminAuth };
