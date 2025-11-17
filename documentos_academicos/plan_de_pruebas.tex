@@ -1,0 +1,1075 @@
+\documentclass[12pt,a4paper]{article}
+
+% ============================================
+% PAQUETES NECESARIOS
+% ============================================
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{setspace}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+% ============================================
+% CONFIGURACIÓN DE FORMATO ACADÉMICO
+% ============================================
+% Interlineado 1.15
+\setstretch{1.15}
+
+% Párrafos justificados (default en LaTeX)
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+% Configuración de títulos (Arial simulado con sans-serif)
+\renewcommand{\familydefault}{\sfdefault}
+\titleformat{\section}{\normalfont\fontsize{14}{16}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\fontsize{12}{14}\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\fontsize{12}{14}\bfseries}{\thesubsubsection}{1em}{}
+
+% Configuración de encabezado y pie de página
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Plan de Pruebas - JiovaniGo}
+\lhead{INF-524}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Configuración de hipervínculos
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,
+    urlcolor=blue,
+    citecolor=black,
+}
+
+% ============================================
+% INICIO DEL DOCUMENTO
+% ============================================
+\begin{document}
+
+% ============================================
+% PORTADA
+% ============================================
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Large \textbf{UNIVERSIDAD CATÓLICA DEL MAULE}}\\[0.5cm]
+    {\large Facultad de Ciencias de la Ingeniería}\\[0.3cm]
+    {\large Escuela de Ingeniería Civil Informática}\\[2cm]
+
+    \rule{\linewidth}{0.5mm}\\[0.4cm]
+    {\LARGE \textbf{PLAN DE PRUEBAS}}\\[0.2cm]
+    {\Large \textbf{Proyecto: JiovaniGo - Plataforma E-commerce de Perfumes}}\\[0.2cm]
+    \rule{\linewidth}{0.5mm}\\[1.5cm]
+
+    {\large \textbf{Asignatura:} INF-524 - Taller de Desarrollo de Software}\\[0.3cm]
+    {\large \textbf{Semestre:} \textcolor{red}{[COMPLETAR: Ej. Primer Semestre 2024]}}\\[0.3cm]
+    {\large \textbf{Sección:} \textcolor{red}{[COMPLETAR: Ej. Sección 1]}}\\[1.5cm]
+
+    {\large \textbf{Equipo de Desarrollo:}}\\[0.3cm]
+    \textcolor{red}{[COMPLETAR: Nombre Completo - RUT]}\\
+    \textcolor{red}{[COMPLETAR: Si hay más integrantes]}\\[1.5cm]
+
+    {\large \textbf{Docentes:}}\\[0.3cm]
+    Jerman Espíndola Sandoval\\
+    Héctor Tejo Uval\\[1.5cm]
+
+    {\large \textbf{Fecha de Inicio del Proyecto:} \textcolor{red}{[COMPLETAR]}}\\[0.3cm]
+    {\large \textbf{Fecha de Entrega:} \textcolor{red}{[COMPLETAR]}}\\[0.3cm]
+    {\large \textbf{Versión del Documento:} 1.0}\\[2cm]
+
+    \vfill
+    {\large Talca, Chile}\\
+    {\large \textcolor{red}{[COMPLETAR: Mes y Año]}}
+
+\end{titlepage}
+
+% ============================================
+% ÍNDICE DE CONTENIDOS
+% ============================================
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================
+% CONTROL DE VERSIONES
+% ============================================
+\section{Control de Versiones del Documento}
+
+\begin{longtable}{|p{2cm}|p{3cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Versión} & \textbf{Fecha} & \textbf{Autor} & \textbf{Descripción de Cambios} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Versión} & \textbf{Fecha} & \textbf{Autor} & \textbf{Descripción de Cambios} \\
+\hline
+\endhead
+1.0 & \textcolor{red}{[COMPLETAR]} & \textcolor{red}{[COMPLETAR]} & Versión inicial del Plan de Pruebas \\
+\hline
+\end{longtable}
+
+% ============================================
+% 1. INTRODUCCIÓN
+% ============================================
+\section{Introducción}
+
+\subsection{Contexto del Proyecto}
+
+JiovaniGo es una plataforma de comercio electrónico desarrollada para la venta de perfumes de alta gama en el mercado chileno. El sistema implementa una arquitectura monolítica con separación clara entre backend (Node.js/Express) y frontend (React), integrando el sistema de pagos Transbank WebPay Plus para procesamiento seguro de transacciones financieras.
+
+El proyecto abarca las siguientes funcionalidades principales:
+\begin{itemize}
+    \item Sistema de autenticación y autorización basado en JWT con roles (usuario/administrador)
+    \item Catálogo de productos con segmentación por género (dama, varón, unisex)
+    \item Carrito de compras con gestión de estado global
+    \item Proceso de checkout con validación de información de envío
+    \item Integración completa con Transbank WebPay Plus para pagos con tarjetas
+    \item Sistema de órdenes con seguimiento de estados
+    \item Panel administrativo para gestión de productos, usuarios y analíticas
+    \item Sistema de mensajes de contacto
+    \item Envío automatizado de emails transaccionales
+\end{itemize}
+
+\subsection{Objetivos del Plan de Pruebas}
+
+\begin{enumerate}
+    \item \textbf{Objetivo General:} Validar que el sistema JiovaniGo cumple con los requisitos funcionales y no funcionales establecidos, garantizando la calidad del software antes de su entrega final.
+
+    \item \textbf{Objetivos Específicos:}
+    \begin{itemize}
+        \item Verificar el correcto funcionamiento del flujo de autenticación y autorización
+        \item Validar la integridad del proceso de compra desde la selección de productos hasta la confirmación del pago
+        \item Comprobar la correcta integración con Transbank WebPay Plus
+        \item Evaluar la usabilidad de la interfaz de usuario con usuarios reales
+        \item Detectar y documentar defectos para su corrección oportuna
+        \item Medir métricas de calidad del software
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Alcance de las Pruebas}
+
+\textbf{Dentro del Alcance:}
+\begin{itemize}
+    \item Pruebas unitarias de componentes críticos del backend (autenticación, productos, órdenes, pagos)
+    \item Pruebas de integración del flujo de pago con Transbank
+    \item Pruebas de interfaz de usuario en los flujos principales
+    \item Pruebas de usabilidad con 2 usuarios finales
+    \item Pruebas de validación de datos de entrada
+    \item Pruebas de manejo de errores
+\end{itemize}
+
+\textbf{Fuera del Alcance:}
+\begin{itemize}
+    \item Pruebas de carga y rendimiento (requieren infraestructura especializada)
+    \item Pruebas de seguridad penetration testing (requieren especialistas)
+    \item Pruebas en múltiples navegadores (se usará Chrome como referencia)
+    \item Pruebas en dispositivos móviles nativos
+\end{itemize}
+
+% ============================================
+% 2. EQUIPO DE PRUEBAS
+% ============================================
+\section{Equipo de Pruebas e Involucrados}
+
+\subsection{Identificación del Equipo}
+
+\begin{longtable}{|p{4cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Nombre} & \textbf{Rol} & \textbf{Responsabilidades} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Nombre} & \textbf{Rol} & \textbf{Responsabilidades} \\
+\hline
+\endhead
+\textcolor{red}{[COMPLETAR]} & Líder de Pruebas &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Planificar y coordinar actividades de pruebas
+    \item Definir casos de prueba
+    \item Revisar y aprobar resultados
+    \item Gestionar defectos encontrados
+\end{itemize} \\
+\hline
+\textcolor{red}{[COMPLETAR si hay más]} & Tester Manual &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Ejecutar casos de prueba manuales
+    \item Documentar resultados
+    \item Reportar defectos
+\end{itemize} \\
+\hline
+\textcolor{red}{[COMPLETAR si hay más]} & Tester de Automatización &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Implementar pruebas automatizadas
+    \item Configurar herramientas de testing
+    \item Mantener scripts de prueba
+\end{itemize} \\
+\hline
+Jerman Espíndola S. & Docente Supervisor &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Supervisar proceso de pruebas
+    \item Evaluar cumplimiento de estándares
+    \item Retroalimentar resultados
+\end{itemize} \\
+\hline
+Héctor Tejo Uval & Docente Supervisor &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Supervisar proceso de pruebas
+    \item Evaluar cumplimiento de estándares
+    \item Retroalimentar resultados
+\end{itemize} \\
+\hline
+\end{longtable}
+
+% ============================================
+% 3. FUNDAMENTACIÓN Y TIPOS DE PRUEBAS
+% ============================================
+\section{Fundamentación del Tipo de Pruebas}
+
+\subsection{Justificación de Selección}
+
+Se han seleccionado los siguientes tipos de pruebas basándose en las características específicas del proyecto JiovaniGo:
+
+\subsubsection{Pruebas Unitarias}
+\textbf{Justificación:} El backend implementa lógica crítica de negocio en controladores separados (authRoutes.js, paymentController.js, orderController.js). Las pruebas unitarias permiten verificar que cada función individual opere correctamente de forma aislada.
+
+\textbf{Herramienta:} Jest (compatible con Node.js y ampliamente usado en el ecosistema)
+
+\textbf{Cobertura objetivo:} Funciones de autenticación, validación de datos, cálculo de totales, generación de buyOrder.
+
+\subsubsection{Pruebas de Integración}
+\textbf{Justificación:} El sistema integra múltiples componentes externos (MongoDB, Transbank SDK, Nodemailer). Es esencial verificar que la comunicación entre estos componentes funcione correctamente.
+
+\textbf{Enfoque:} API endpoints completos, flujo de pago end-to-end.
+
+\subsubsection{Pruebas de Interfaz de Usuario}
+\textbf{Justificación:} El frontend React maneja estados complejos (CartContext) y flujos críticos (Checkout). Validar la interacción del usuario con la interfaz es esencial.
+
+\textbf{Herramienta:} Cypress (pruebas E2E) o React Testing Library (pruebas de componentes)
+
+\subsubsection{Pruebas de Usabilidad}
+\textbf{Justificación:} Al ser un e-commerce, la experiencia del usuario es determinante para el éxito del negocio. Usuarios reales deben validar que el flujo de compra sea intuitivo.
+
+\textbf{Método:} Test de Usuario con tareas específicas y métricas medibles.
+
+\subsection{Criterios de Éxito}
+
+\begin{longtable}{|p{6cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Criterio} & \textbf{Métrica} & \textbf{Valor Objetivo} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Criterio} & \textbf{Métrica} & \textbf{Valor Objetivo} \\
+\hline
+\endhead
+Pruebas unitarias exitosas & Porcentaje de tests pasados & 100\% \\
+\hline
+Cobertura de código backend & Líneas de código testeadas & $\geq$ 70\% \\
+\hline
+Defectos críticos & Número de bugs bloqueantes & 0 \\
+\hline
+Defectos altos & Número de bugs importantes & $\leq$ 2 \\
+\hline
+Tiempo de respuesta API & Milisegundos promedio & $<$ 500ms \\
+\hline
+Completación de flujo de compra & Usuarios que completan checkout & 100\% (2/2) \\
+\hline
+Satisfacción de usabilidad & Escala de satisfacción (1-5) & $\geq$ 4.0 \\
+\hline
+Errores de validación manejados & Porcentaje de casos edge cubiertos & $\geq$ 90\% \\
+\hline
+\end{longtable}
+
+\subsection{Métricas de Calidad}
+
+\begin{itemize}
+    \item \textbf{Densidad de Defectos:} Número de defectos / Líneas de código (KLOC)
+    \item \textbf{Eficiencia de Remoción de Defectos:} Defectos encontrados en pruebas / Total de defectos
+    \item \textbf{Cobertura de Requisitos:} Requisitos probados / Total de requisitos
+    \item \textbf{Tasa de Éxito de Pruebas:} Pruebas pasadas / Total de pruebas ejecutadas
+    \item \textbf{Tiempo Medio de Resolución:} Promedio de días para resolver un defecto
+\end{itemize}
+
+% ============================================
+% 4. REQUISITOS DEL ENTORNO
+% ============================================
+\section{Requisitos del Entorno de Pruebas}
+
+\subsection{Requisitos de Hardware}
+
+\begin{itemize}
+    \item \textbf{Computador de desarrollo:}
+    \begin{itemize}
+        \item Procesador: Intel Core i5 o superior / AMD Ryzen 5 o superior
+        \item RAM: Mínimo 8 GB (recomendado 16 GB)
+        \item Almacenamiento: 10 GB libres para proyecto y dependencias
+        \item Conexión a Internet: Requerida para MongoDB Atlas y Transbank
+    \end{itemize}
+\end{itemize}
+
+\subsection{Requisitos de Software}
+
+\begin{longtable}{|p{4cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Software} & \textbf{Versión} & \textbf{Propósito} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Software} & \textbf{Versión} & \textbf{Propósito} \\
+\hline
+\endhead
+Node.js & $\geq$ 16.x LTS & Runtime para backend y herramientas \\
+\hline
+npm & $\geq$ 8.x & Gestión de dependencias \\
+\hline
+MongoDB & 6.x (Atlas) & Base de datos (cloud) \\
+\hline
+Google Chrome & Última versión & Navegador para pruebas de UI \\
+\hline
+Git & $\geq$ 2.x & Control de versiones \\
+\hline
+Jest & 29.x & Framework de pruebas unitarias \\
+\hline
+Cypress & 13.x & Framework de pruebas E2E \\
+\hline
+VS Code o similar & Última versión & Editor de código \\
+\hline
+\end{longtable}
+
+\subsection{Configuración Previa}
+
+\begin{enumerate}
+    \item \textbf{Clonar repositorio:}
+    \begin{verbatim}
+    git clone [URL_REPOSITORIO]
+    cd jiovani-go-ecommerce
+    \end{verbatim}
+
+    \item \textbf{Instalar dependencias:}
+    \begin{verbatim}
+    npm run install:all
+    \end{verbatim}
+
+    \item \textbf{Configurar variables de entorno:}
+
+    Crear archivo \texttt{backend/.env} con:
+    \begin{verbatim}
+    MONGODB_URI=mongodb+srv://[usuario]:[password]@cluster.mongodb.net/dejoaromas
+    JWT_SECRET=[secreto_seguro]
+    PORT=5000
+    NODE_ENV=development
+    TRANSBANK_COMMERCE_CODE=597055555532
+    TRANSBANK_API_KEY=579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C
+    TRANSBANK_ENV=integration
+    EMAIL_ENABLED=false
+    \end{verbatim}
+
+    Crear archivo \texttt{frontend/.env.development} con:
+    \begin{verbatim}
+    REACT_APP_API_URL=http://localhost:5000/api
+    \end{verbatim}
+
+    \item \textbf{Verificar conexión a base de datos:}
+    \begin{verbatim}
+    cd backend
+    node verify-mongodb.js
+    \end{verbatim}
+
+    \item \textbf{Iniciar servidores:}
+    \begin{verbatim}
+    # Terminal 1 - Backend
+    cd backend && npm run dev
+
+    # Terminal 2 - Frontend
+    cd frontend && npm start
+    \end{verbatim}
+
+    \item \textbf{Verificar funcionamiento:}
+    \begin{itemize}
+        \item Backend: \url{http://localhost:5000} debe retornar JSON con mensaje
+        \item Frontend: \url{http://localhost:3000} debe mostrar página de inicio
+    \end{itemize}
+\end{enumerate}
+
+% ============================================
+% 5. CASOS DE PRUEBA
+% ============================================
+\section{Casos de Prueba y Resultados Esperados}
+
+\subsection{Pruebas de Autenticación}
+
+\begin{longtable}{|p{1cm}|p{3cm}|p{4cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{ID} & \textbf{Caso de Prueba} & \textbf{Pasos} & \textbf{Resultado Esperado} & \textbf{Criticidad} \\
+\hline
+\endfirsthead
+\hline
+\textbf{ID} & \textbf{Caso de Prueba} & \textbf{Pasos} & \textbf{Resultado Esperado} & \textbf{Criticidad} \\
+\hline
+\endhead
+AU-01 & Registro exitoso &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/auth/register
+    \item Body: username, email, password válidos
+\end{enumerate} &
+Status 200, JWT token retornado, usuario creado en BD & Alta \\
+\hline
+AU-02 & Registro con email duplicado &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/auth/register
+    \item Email ya existente en BD
+\end{enumerate} &
+Status 400, mensaje "El usuario ya existe" & Alta \\
+\hline
+AU-03 & Login exitoso &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/auth/login
+    \item Credenciales válidas
+\end{enumerate} &
+Status 200, JWT token con 30 días expiración, datos de usuario & Alta \\
+\hline
+AU-04 & Login con password incorrecto &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/auth/login
+    \item Email correcto, password incorrecto
+\end{enumerate} &
+Status 400, mensaje "Credenciales inválidas" & Alta \\
+\hline
+AU-05 & Acceso a ruta protegida sin token &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item GET /api/auth/user
+    \item Sin header Authorization
+\end{enumerate} &
+Status 401, mensaje "Acceso denegado" & Alta \\
+\hline
+AU-06 & Acceso a ruta admin sin rol &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/products
+    \item Token de usuario normal
+\end{enumerate} &
+Status 403, mensaje "Se requiere rol de administrador" & Alta \\
+\hline
+\end{longtable}
+
+\subsection{Pruebas de Productos}
+
+\begin{longtable}{|p{1cm}|p{3cm}|p{4cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{ID} & \textbf{Caso de Prueba} & \textbf{Pasos} & \textbf{Resultado Esperado} & \textbf{Criticidad} \\
+\hline
+\endfirsthead
+PR-01 & Listar productos &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item GET /api/products
+\end{enumerate} &
+Status 200, array de productos con paginación & Alta \\
+\hline
+PR-02 & Filtrar por género dama &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item GET /api/products?gender=dama
+\end{enumerate} &
+Solo productos con gender="dama" & Media \\
+\hline
+PR-03 & Búsqueda por nombre &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item GET /api/products?search=perfume
+\end{enumerate} &
+Productos que contengan "perfume" en nombre o descripción & Media \\
+\hline
+PR-04 & Productos sin stock excluidos &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item GET /api/products
+    \item Sin parámetro includeOutOfStock
+\end{enumerate} &
+Ningún producto con stock=0 & Alta \\
+\hline
+PR-05 & Crear producto (admin) &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/products
+    \item Token admin + datos válidos
+\end{enumerate} &
+Status 201, producto creado con \_id & Alta \\
+\hline
+\end{longtable}
+
+\subsection{Pruebas de Pagos (Crítico)}
+
+\begin{longtable}{|p{1cm}|p{3cm}|p{4cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{ID} & \textbf{Caso de Prueba} & \textbf{Pasos} & \textbf{Resultado Esperado} & \textbf{Criticidad} \\
+\hline
+\endfirsthead
+PA-01 & Iniciar pago con datos válidos &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/init-guest
+    \item orderItems, totalAmount, shippingInfo completos
+\end{enumerate} &
+Status 200, token y URL de Transbank, orden creada en BD con status "pending" & Crítica \\
+\hline
+PA-02 & Iniciar pago sin stock &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/init-guest
+    \item Producto con stock insuficiente
+\end{enumerate} &
+Status 400, mensaje "Stock insuficiente para [producto]" & Crítica \\
+\hline
+PA-03 & Confirmar pago exitoso &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/confirm
+    \item token\_ws válido
+\end{enumerate} &
+Status 200, orden status="completed", stock descontado, responseCode=0 & Crítica \\
+\hline
+PA-04 & Confirmar pago rechazado &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/confirm
+    \item token\_ws de transacción rechazada
+\end{enumerate} &
+Status 200 (procesado), success=false, orden status="failed", stock NO descontado & Crítica \\
+\hline
+PA-05 & Manejo de timeout &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/confirm
+    \item Solo TBK\_ORDEN\_COMPRA y TBK\_ID\_SESION
+\end{enumerate} &
+Status 200, orden status="timeout", mensaje explicativo & Alta \\
+\hline
+PA-06 & Manejo de cancelación &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/confirm
+    \item TBK\_TOKEN presente
+\end{enumerate} &
+Status 200, orden status="cancelled", mensaje "Pago cancelado por el usuario" & Alta \\
+\hline
+PA-07 & Prevención de doble-commit &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item POST /api/payments/confirm dos veces
+    \item Mismo token\_ws
+\end{enumerate} &
+Segunda llamada retorna warning "ALREADY\_PROCESSED", stock no se descuenta dos veces & Crítica \\
+\hline
+PA-08 & Validación de buyOrder único &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Crear dos órdenes
+    \item Verificar buyOrder generado
+\end{enumerate} &
+buyOrder único con máximo 26 caracteres, formato ORD[timestamp][hash][random] & Alta \\
+\hline
+\end{longtable}
+
+\subsection{Pruebas de Interfaz de Usuario}
+
+\begin{longtable}{|p{1cm}|p{3cm}|p{4cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{ID} & \textbf{Caso de Prueba} & \textbf{Pasos} & \textbf{Resultado Esperado} & \textbf{Criticidad} \\
+\hline
+\endfirsthead
+UI-01 & Agregar producto al carrito &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Navegar a catálogo
+    \item Click en "Agregar al carrito"
+\end{enumerate} &
+Producto aparece en sidebar, contador se incrementa & Alta \\
+\hline
+UI-02 & Modificar cantidad en carrito &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Abrir carrito
+    \item Click en botón +/-
+\end{enumerate} &
+Cantidad se actualiza, total recalculado correctamente & Alta \\
+\hline
+UI-03 & Abrir modal de checkout &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Con items en carrito
+    \item Click "Finalizar Compra"
+\end{enumerate} &
+Modal se abre, formulario de envío visible, resumen de orden correcto & Alta \\
+\hline
+UI-04 & Validación de campos de envío &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Dejar campos vacíos
+    \item Click "Pagar"
+\end{enumerate} &
+Mensajes de error específicos por campo, no se envía formulario & Alta \\
+\hline
+UI-05 & Validación de email &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Ingresar email inválido
+    \item Ejemplo: "test@"
+\end{enumerate} &
+Mensaje "Email debe tener formato válido" & Media \\
+\hline
+UI-06 & Validación de teléfono chileno &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Ingresar teléfono inválido
+    \item Ejemplo: "123"
+\end{enumerate} &
+Mensaje "Teléfono debe tener formato chileno válido" & Media \\
+\hline
+UI-07 & Selector de regiones &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Abrir dropdown de región
+\end{enumerate} &
+16 regiones de Chile disponibles, desde "Arica y Parinacota" hasta "Magallanes" & Media \\
+\hline
+UI-08 & Estado de loading en pago &
+\begin{enumerate}[leftmargin=*,nosep]
+    \item Completar formulario
+    \item Click "Pagar"
+\end{enumerate} &
+Botón muestra spinner, texto "Procesando...", botones deshabilitados & Media \\
+\hline
+\end{longtable}
+
+% ============================================
+% 6. GESTIÓN DE DEFECTOS
+% ============================================
+\section{Gestión de Defectos}
+
+\subsection{Proceso de Reporte de Defectos}
+
+Cuando se descubra un defecto durante las pruebas, se seguirá el siguiente proceso estructurado:
+
+\begin{enumerate}
+    \item \textbf{Identificación:} El tester detecta comportamiento inesperado
+    \item \textbf{Documentación:} Se completa el template de reporte de defecto
+    \item \textbf{Clasificación:} Se asigna severidad según impacto
+    \item \textbf{Asignación:} Se asigna responsable de corrección
+    \item \textbf{Resolución:} Desarrollador corrige el defecto
+    \item \textbf{Verificación:} Tester verifica que la corrección funcione
+    \item \textbf{Cierre:} Se documenta la solución y se cierra el ticket
+\end{enumerate}
+
+\subsection{Clasificación de Severidad}
+
+\begin{longtable}{|p{3cm}|p{5cm}|p{6cm}|}
+\hline
+\textbf{Severidad} & \textbf{Descripción} & \textbf{Ejemplo en JiovaniGo} \\
+\hline
+\endfirsthead
+\textbf{CRÍTICO} & Bloquea funcionalidad principal, impide uso del sistema &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Pago se procesa pero stock no se descuenta
+    \item Usuario no puede hacer login
+    \item Orden se crea duplicada
+\end{itemize} \\
+\hline
+\textbf{ALTO} & Afecta funcionalidad importante pero hay workaround &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Filtro de búsqueda no funciona pero se puede navegar
+    \item Email no se envía pero pago sí se procesa
+    \item Imagen de producto no carga
+\end{itemize} \\
+\hline
+\textbf{MEDIO} & Bug visual o de UX que no bloquea &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Formato de precio incorrecto
+    \item Mensaje de error poco claro
+    \item Diseño descuadrado en móvil
+\end{itemize} \\
+\hline
+\textbf{BAJO} & Mejora cosmética, no afecta funcionalidad &
+\begin{itemize}[leftmargin=*,nosep]
+    \item Typo en texto
+    \item Color no coincide con diseño
+    \item Animación no fluida
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\subsection{Template de Reporte de Defecto}
+
+\begin{verbatim}
+==============================================
+REPORTE DE DEFECTO
+==============================================
+ID: DEF-[número secuencial]
+Fecha de descubrimiento: [DD/MM/YYYY]
+Reportado por: [Nombre del tester]
+Severidad: [CRÍTICO | ALTO | MEDIO | BAJO]
+Estado: [NUEVO | ASIGNADO | EN_PROGRESO | RESUELTO | VERIFICADO | CERRADO]
+
+TÍTULO: [Descripción breve del defecto]
+
+DESCRIPCIÓN DETALLADA:
+[Explicación completa del comportamiento incorrecto]
+
+PASOS PARA REPRODUCIR:
+1. [Paso 1]
+2. [Paso 2]
+3. [Paso 3]
+
+RESULTADO ESPERADO:
+[Lo que debería suceder]
+
+RESULTADO ACTUAL:
+[Lo que realmente sucede]
+
+EVIDENCIA:
+[Screenshots, logs, URLs]
+
+ENTORNO:
+- Navegador: Chrome [versión]
+- Sistema Operativo: [Windows/Mac/Linux]
+- URL: [localhost:3000 o producción]
+
+ASIGNADO A: [Nombre del desarrollador]
+FECHA DE RESOLUCIÓN: [DD/MM/YYYY]
+SOLUCIÓN IMPLEMENTADA: [Descripción de la corrección]
+==============================================
+\end{verbatim}
+
+\subsection{Flujo de Estados de Defectos}
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm, auto,
+    block/.style={rectangle, draw, fill=blue!20, text width=2.5cm, text centered, rounded corners, minimum height=1cm},
+    line/.style={draw, -latex}]
+
+    \node [block] (nuevo) {NUEVO};
+    \node [block, right of=nuevo, xshift=2cm] (asignado) {ASIGNADO};
+    \node [block, right of=asignado, xshift=2cm] (progreso) {EN PROGRESO};
+    \node [block, below of=progreso, yshift=-1cm] (resuelto) {RESUELTO};
+    \node [block, left of=resuelto, xshift=-2cm] (verificado) {VERIFICADO};
+    \node [block, left of=verificado, xshift=-2cm] (cerrado) {CERRADO};
+    \node [block, below of=asignado, yshift=-1cm] (reabierto) {REABIERTO};
+
+    \path [line] (nuevo) -- (asignado);
+    \path [line] (asignado) -- (progreso);
+    \path [line] (progreso) -- (resuelto);
+    \path [line] (resuelto) -- (verificado);
+    \path [line] (verificado) -- (cerrado);
+    \path [line] (verificado) -- (reabierto);
+    \path [line] (reabierto) -- (progreso);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Descripción del flujo:}
+\begin{itemize}
+    \item \textbf{NUEVO:} Defecto recién reportado, pendiente de revisión
+    \item \textbf{ASIGNADO:} Asignado a un desarrollador para corrección
+    \item \textbf{EN PROGRESO:} Desarrollador trabajando en la solución
+    \item \textbf{RESUELTO:} Corrección implementada, pendiente verificación
+    \item \textbf{VERIFICADO:} Tester confirma que el defecto está corregido
+    \item \textbf{CERRADO:} Defecto definitivamente solucionado
+    \item \textbf{REABIERTO:} Verificación fallida, vuelve a desarrollo
+\end{itemize}
+
+% ============================================
+% 7. TEST DE USABILIDAD
+% ============================================
+\section{Test de Usabilidad}
+
+\subsection{Modelo de Test de Usuario - JiovaniGo}
+
+\subsubsection{Información del Participante}
+
+\begin{verbatim}
+DATOS DEL USUARIO
+=================
+Identificador: Usuario_[1 o 2]
+Edad: _____ años
+Género: [Femenino / Masculino / Otro]
+Ocupación: _____________________
+Experiencia con compras online: [Ninguna / Poca / Moderada / Experto]
+Frecuencia de compras online: [Nunca / Mensual / Semanal / Diario]
+Dispositivo usado para el test: [PC / Laptop / Tablet]
+Navegador: _____________________
+Fecha del test: ___/___/______
+Hora de inicio: _____
+Hora de finalización: _____
+\end{verbatim}
+
+\subsubsection{Escenario de Contexto}
+
+\textit{Eres un cliente interesado en comprar perfumes de alta gama. Has escuchado hablar de JiovaniGo y decides visitar su tienda online para explorar su catálogo y posiblemente realizar una compra.}
+
+\subsubsection{Tareas a Realizar}
+
+\textbf{TAREA 1: Registro en la plataforma}
+
+\textit{Instrucción: Créate una cuenta nueva en la plataforma.}
+
+\begin{itemize}
+    \item Tiempo estimado: 2 minutos
+    \item Tiempo real: \_\_\_\_ minutos
+    \item Completada: [Sí / No / Parcial]
+    \item Errores cometidos: \_\_\_\_
+    \item Dificultad percibida (1-5): \_\_\_\_
+    \item Observaciones: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
+
+\textbf{TAREA 2: Explorar catálogo de perfumes para dama}
+
+\textit{Instrucción: Navega al catálogo de perfumes para dama y explora al menos 3 productos diferentes.}
+
+\begin{itemize}
+    \item Tiempo estimado: 3 minutos
+    \item Tiempo real: \_\_\_\_ minutos
+    \item Completada: [Sí / No / Parcial]
+    \item Errores cometidos: \_\_\_\_
+    \item Dificultad percibida (1-5): \_\_\_\_
+    \item ¿Encontró la navegación intuitiva?: [Sí / No]
+    \item Observaciones: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
+
+\textbf{TAREA 3: Agregar producto al carrito}
+
+\textit{Instrucción: Selecciona un perfume que te guste y agrégalo al carrito de compras.}
+
+\begin{itemize}
+    \item Tiempo estimado: 1 minuto
+    \item Tiempo real: \_\_\_\_ minutos
+    \item Completada: [Sí / No / Parcial]
+    \item Errores cometidos: \_\_\_\_
+    \item Dificultad percibida (1-5): \_\_\_\_
+    \item ¿El botón de agregar fue visible?: [Sí / No]
+    \item ¿Recibió confirmación visual?: [Sí / No]
+    \item Observaciones: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
+
+\textbf{TAREA 4: Revisar carrito y modificar cantidad}
+
+\textit{Instrucción: Abre el carrito, revisa los productos y modifica la cantidad de alguno.}
+
+\begin{itemize}
+    \item Tiempo estimado: 2 minutos
+    \item Tiempo real: \_\_\_\_ minutos
+    \item Completada: [Sí / No / Parcial]
+    \item Errores cometidos: \_\_\_\_
+    \item Dificultad percibida (1-5): \_\_\_\_
+    \item ¿El total se actualizó correctamente?: [Sí / No]
+    \item Observaciones: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
+
+\textbf{TAREA 5: Iniciar proceso de checkout}
+
+\textit{Instrucción: Procede al checkout y completa el formulario de información de envío (no es necesario pagar realmente).}
+
+\begin{itemize}
+    \item Tiempo estimado: 4 minutos
+    \item Tiempo real: \_\_\_\_ minutos
+    \item Completada: [Sí / No / Parcial]
+    \item Errores cometidos: \_\_\_\_
+    \item Dificultad percibida (1-5): \_\_\_\_
+    \item ¿Los campos fueron claros?: [Sí / No]
+    \item ¿La validación fue útil?: [Sí / No]
+    \item ¿Confía en la seguridad del sitio?: [Sí / No / Parcialmente]
+    \item Observaciones: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
+
+\textbf{TAREA 6: Encontrar información de contacto}
+
+\textit{Instrucción: Encuentra la página de contacto y localiza el formulario para enviar un mensaje.}
+
+\begin{itemize}
+    \item Tiempo estimado: 1 minuto
+    \item Tiempo real: \_\_\_\_ minutos
+    \item Completada: [Sí / No / Parcial]
+    \item Errores cometidos: \_\_\_\_
+    \item Dificultad percibida (1-5): \_\_\_\_
+    \item Observaciones: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
+
+\subsubsection{Cuestionario Post-Test}
+
+\textbf{Escala de Usabilidad del Sistema (SUS - System Usability Scale)}
+
+Marque del 1 al 5, donde: 1 = Totalmente en desacuerdo, 5 = Totalmente de acuerdo
+
+\begin{enumerate}
+    \item Creo que usaría este sitio frecuentemente: \_\_\_
+    \item Encontré el sitio innecesariamente complejo: \_\_\_
+    \item Pensé que el sitio era fácil de usar: \_\_\_
+    \item Creo que necesitaría ayuda técnica para usar este sitio: \_\_\_
+    \item Encontré que las funciones estaban bien integradas: \_\_\_
+    \item Pensé que había demasiada inconsistencia en el sitio: \_\_\_
+    \item Imagino que la mayoría de personas aprenderían a usar este sitio rápidamente: \_\_\_
+    \item Encontré el sitio muy difícil de navegar: \_\_\_
+    \item Me sentí muy confiado usando el sitio: \_\_\_
+    \item Necesité aprender muchas cosas antes de poder usar el sitio: \_\_\_
+\end{enumerate}
+
+\textbf{Preguntas Abiertas:}
+
+\begin{enumerate}
+    \item ¿Qué fue lo que más le gustó del sitio?
+
+    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+    \item ¿Qué fue lo más confuso o frustrante?
+
+    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+    \item ¿Compraría en esta tienda online? ¿Por qué?
+
+    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+    \item ¿Qué mejoraría del sitio?
+
+    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+    \item ¿Recomendaría este sitio a otras personas? [Sí / No / Tal vez]
+
+    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{enumerate}
+
+\subsection{Aplicación a Usuario 1}
+
+\textcolor{red}{[COMPLETAR: Llenar el formulario anterior con los datos reales del primer usuario que realice el test]}
+
+\subsection{Aplicación a Usuario 2}
+
+\textcolor{red}{[COMPLETAR: Llenar el formulario anterior con los datos reales del segundo usuario que realice el test]}
+
+\subsection{Análisis de Resultados de Usabilidad}
+
+\textcolor{red}{[COMPLETAR después de aplicar los tests:}
+\begin{itemize}
+    \item Comparación de tiempos de completación entre usuarios
+    \item Problemas comunes identificados
+    \item Puntuación SUS promedio
+    \item Recomendaciones de mejora basadas en hallazgos
+\end{itemize}
+\textcolor{red}{]}
+
+% ============================================
+% 8. EJECUCIÓN DE PRUEBAS
+% ============================================
+\section{Ejecución de Pruebas}
+
+\subsection{Pruebas Manuales Ejecutadas}
+
+\textcolor{red}{[COMPLETAR: Documentar aquí la ejecución real de los casos de prueba]}
+
+\begin{longtable}{|p{1.5cm}|p{2.5cm}|p{2cm}|p{3cm}|p{4cm}|}
+\hline
+\textbf{ID Caso} & \textbf{Fecha Ejecución} & \textbf{Resultado} & \textbf{Defectos Encontrados} & \textbf{Evidencia} \\
+\hline
+\endfirsthead
+AU-01 & \textcolor{red}{[FECHA]} & \textcolor{red}{[PASS/FAIL]} & \textcolor{red}{[IDs de defectos]} & \textcolor{red}{[Screenshot/log]} \\
+\hline
+AU-02 & & & & \\
+\hline
+AU-03 & & & & \\
+\hline
+\multicolumn{5}{|c|}{... continuar con todos los casos ...} \\
+\hline
+\end{longtable}
+
+\subsection{Pruebas Automatizadas}
+
+\textcolor{red}{[COMPLETAR: Documentar configuración y resultados de Jest y Cypress]}
+
+\subsubsection{Configuración de Jest (Backend)}
+
+\begin{verbatim}
+# Instalación
+cd backend
+npm install --save-dev jest @types/jest supertest
+
+# Configuración en package.json
+"scripts": {
+  "test": "jest --coverage",
+  "test:watch": "jest --watch"
+}
+
+# Ejecución
+npm test
+\end{verbatim}
+
+\subsubsection{Reporte de Cobertura}
+
+\textcolor{red}{[COMPLETAR: Insertar screenshot del reporte de cobertura de Jest]}
+
+\begin{verbatim}
+---------------------------|---------|----------|---------|---------|
+File                       | % Stmts | % Branch | % Funcs | % Lines |
+---------------------------|---------|----------|---------|---------|
+All files                  |   XX.XX |    XX.XX |   XX.XX |   XX.XX |
+ controllers/              |   XX.XX |    XX.XX |   XX.XX |   XX.XX |
+  authRoutes.js            |   XX.XX |    XX.XX |   XX.XX |   XX.XX |
+  paymentController.js     |   XX.XX |    XX.XX |   XX.XX |   XX.XX |
+  orderController.js       |   XX.XX |    XX.XX |   XX.XX |   XX.XX |
+---------------------------|---------|----------|---------|---------|
+\end{verbatim}
+
+\subsubsection{Configuración de Cypress (Frontend)}
+
+\begin{verbatim}
+# Instalación
+cd frontend
+npm install --save-dev cypress
+
+# Ejecución
+npx cypress open
+\end{verbatim}
+
+\subsubsection{Resultados de Tests Automatizados}
+
+\textcolor{red}{[COMPLETAR: Insertar screenshots de Cypress test runner]}
+
+% ============================================
+% 9. RESUMEN Y CONCLUSIONES
+% ============================================
+\section{Resumen de Resultados}
+
+\subsection{Métricas Finales}
+
+\begin{longtable}{|p{6cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Métrica} & \textbf{Valor Objetivo} & \textbf{Valor Obtenido} \\
+\hline
+\endfirsthead
+Pruebas unitarias pasadas & 100\% & \textcolor{red}{[COMPLETAR]} \\
+\hline
+Cobertura de código & $\geq$ 70\% & \textcolor{red}{[COMPLETAR]} \\
+\hline
+Defectos críticos & 0 & \textcolor{red}{[COMPLETAR]} \\
+\hline
+Defectos altos & $\leq$ 2 & \textcolor{red}{[COMPLETAR]} \\
+\hline
+Satisfacción de usabilidad & $\geq$ 4.0 & \textcolor{red}{[COMPLETAR]} \\
+\hline
+Funcionalidades implementadas & 50\% & \textcolor{red}{[COMPLETAR: Debería ser >90\%]} \\
+\hline
+\end{longtable}
+
+\subsection{Conclusiones}
+
+\textcolor{red}{[COMPLETAR: Redactar conclusiones basadas en los resultados reales de las pruebas]}
+
+\subsection{Lecciones Aprendidas}
+
+\textcolor{red}{[COMPLETAR: Documentar qué se aprendió durante el proceso de pruebas]}
+
+% ============================================
+% ANEXOS
+% ============================================
+\appendix
+\section{Anexo A: Capturas de Pantalla}
+\textcolor{red}{[COMPLETAR: Incluir screenshots de evidencia]}
+
+\section{Anexo B: Logs de Ejecución}
+\textcolor{red}{[COMPLETAR: Incluir logs relevantes]}
+
+\section{Anexo C: Código de Pruebas Automatizadas}
+\textcolor{red}{[COMPLETAR: Incluir código fuente de los tests]}
+
+% ============================================
+% FIN DEL DOCUMENTO
+% ============================================
+\end{document}
