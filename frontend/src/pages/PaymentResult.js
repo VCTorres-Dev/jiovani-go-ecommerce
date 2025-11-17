@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { confirmPayment, getOrderStatus } from '../services/paymentService';
 import { formatPriceCLP } from '../utils/formatters';
@@ -21,9 +21,15 @@ const PaymentResult = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const processedRef = useRef(false); // Referencia para evitar doble ejecución
 
   useEffect(() => {
+    // Evitar doble ejecución (React StrictMode monta el componente 2 veces en DEV)
+    if (processedRef.current) return;
+
     const processPaymentResult = async () => {
+      // Marcar como procesado inmediatamente para prevenir re-entradas
+      processedRef.current = true;
       try {
         const urlParams = new URLSearchParams(location.search);
         

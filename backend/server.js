@@ -47,6 +47,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+// Parse URL-encoded bodies (as sent by HTML forms and some providers)
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Conectar a MongoDB

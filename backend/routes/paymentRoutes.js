@@ -54,20 +54,37 @@ router.post('/confirm', confirmPayment);
  * @access  Public (Transbank redirige el navegador del usuario aquí)
  * @note    Transbank envía los parámetros de retorno y redirigimos al frontend con ellos
  */
-router.get('/result', (req, res) => {
-  console.log('🔄 [RESULT] Recibiendo retorno de Transbank...');
-  console.log('📥 [RESULT] Query params:', req.query);
+/**
+ * @route   GET/POST /api/payments/result
+ * @desc    Recibe el retorno de Transbank y redirige al frontend
+ * @access  Public
+ */
+const handleTransbankResult = (req, res) => {
+  console.log(`🔄 [RESULT] Recibiendo retorno de Transbank (${req.method})...`);
+  
+  // Combinar datos de query (GET) y body (POST)
+  // Transbank suele enviar token_ws en el body cuando es POST
+  const params = { ...req.query, ...req.body };
+  
+  console.log('📥 [RESULT] Datos recibidos:', params);
   
   // Construir URL del frontend
+  // Usar URL de entorno o fallback a localhost
   const frontendUrl = process.env.FRONTEND_URL_REAL || 'http://localhost:3000';
-  const params = new URLSearchParams(req.query).toString();
-  const redirectUrl = `${frontendUrl}/payment/result?${params}`;
   
-  console.log(`🚀 [RESULT] Redirigiendo a: ${redirectUrl}`);
+  // Convertir objeto a query string
+  const queryString = new URLSearchParams(params).toString();
+  const redirectUrl = `${frontendUrl}/payment/result?${queryString}`;
   
-  // Redirigir al frontend con los parámetros
+  console.log(`🚀 [RESULT] Redirigiendo al frontend: ${redirectUrl}`);
+  
+  // Redirigir
   res.redirect(redirectUrl);
-});
+};
+
+// Aceptar tanto GET como POST para el retorno
+router.get('/result', handleTransbankResult);
+router.post('/result', handleTransbankResult);
 
 /**
  * @route   GET /api/payments/order/:id

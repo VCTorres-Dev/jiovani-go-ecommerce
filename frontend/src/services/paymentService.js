@@ -117,7 +117,14 @@ export const confirmPayment = async (tokenOrPayload, additionalParams = {}) => {
       hasSessionId: !!payload.TBK_ID_SESION
     });
 
-    const response = await axios.post(`${PAYMENTS_API_URL}/confirm`, payload);
+    // CAMBIO: Forzar headers explícitos para asegurar que el backend reciba el body correctamente
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const response = await axios.post(`${PAYMENTS_API_URL}/confirm`, payload, config);
 
     console.log('✅ Pago confirmado:', {
       success: response.data.success,
