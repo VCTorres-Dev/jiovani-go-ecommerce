@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const https = require("https");
 const querystring = require("querystring");
 
-// En production (Railway), las variables de entorno ya estÃ¡n disponibles
+// En production (Railway), las variables de entorno ya están disponibles
 // En desarrollo local, crear archivo .env manualmente
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -13,7 +13,6 @@ if (process.env.NODE_ENV !== "production") {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 // Middleware
 const allowedOrigins = [
   "http://localhost:3000", 
@@ -36,8 +35,6 @@ if (process.env.FRONTEND_URL_REAL) {
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Permitir peticiones sin 'origin' (como las de Postman o apps mÃ³viles) o si el origen estÃ¡ en la lista blanca
-    console.log('[CORS DEBUG] Origin received:', origin);
     const normalized = origin ? origin.replace(/\/$/, '') : origin;
     if (!origin || allowedOrigins.includes(normalized)) {
       callback(null, true);
@@ -45,24 +42,14 @@ const corsOptions = {
       callback(new Error("No permitido por CORS"));
     }
   },
-  optionsSuccessStatus: 200, // Para navegadores antiguos
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static("public")); // Servir archivos estÃ¡ticos desde la carpeta 'public'
+app.use(express.static("public"));
 
-// TRACER: Middleware para registrar todas las solicitudes entrantes
-app.use((req, res, next) => {
-  console.log(
-    `[INCOMING REQUEST] ${new Date().toISOString()} - ${req.method} ${
-      req.originalUrl
-    }`
-  );
-  next();
-});
-
-// Conectar a MongoDB y esperar la conexiÃ³n
+// Conectar a MongoDB
 let mongoConnected = false;
 
 const connectMongoDB = async () => {
@@ -73,46 +60,40 @@ const connectMongoDB = async () => {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     });
-    console.log("âœ… MongoDB conectado exitosamente");
+    console.log("MongoDB conectado exitosamente");
     mongoConnected = true;
   } catch (err) {
-    console.log("âš ï¸ Advertencia: MongoDB no disponible:", err.message);
-    console.log("âš ï¸ Los endpoints de productos y autenticaciÃ³n no funcionarÃ¡n sin MongoDB");
+    console.log("Advertencia: MongoDB no disponible:", err.message);
     mongoConnected = false;
   }
 };
 
-// Iniciar conexiÃ³n
+// Iniciar conexion
 connectMongoDB();
 
-// Rutas bÃ¡sicas
+// Rutas basicas
 app.get("/", (req, res) => {
   res.json({ message: "API de Jiovanni Go funcionando correctamente" });
 });
 
-
-// ============================================================
 // MOCK ENDPOINT - Para testing SIN credenciales reales
-// ============================================================
 app.post("/api/payments/init-mock", (req, res) => {
   try {
-    console.log('ðŸŽ­ [MOCK TRANSBANK] Iniciando transacciÃ³n MOCK (sin credenciales reales)...');
-    console.log('ðŸ“¥ Body recibido:', JSON.stringify(req.body, null, 2));
+    console.log('[MOCK TRANSBANK] Iniciando transaccion MOCK...');
+    console.log('Body recibido:', JSON.stringify(req.body, null, 2));
     
     const { amount, buyOrder, sessionId, returnUrl, userEmail } = req.body;
     
-    // ValidaciÃ³n
+    // Validacion
     if (!amount || amount <= 0) {
-      console.log('âŒ Amount invÃ¡lido:', amount);
       return res.status(400).json({ 
         success: false, 
-        message: 'Amount invÃ¡lido',
+        message: 'Amount invalido',
         received: amount
       });
     }
     
     if (!buyOrder) {
-      console.log('âŒ buyOrder faltante');
       return res.status(400).json({ 
         success: false, 
         message: 'buyOrder es requerido' 
@@ -120,7 +101,6 @@ app.post("/api/payments/init-mock", (req, res) => {
     }
     
     if (!returnUrl) {
-      console.log('âŒ returnUrl faltante');
       return res.status(400).json({ 
         success: false, 
         message: 'returnUrl es requerido' 
@@ -134,26 +114,25 @@ app.post("/api/payments/init-mock", (req, res) => {
     const host = 'webpay3gint.transbank.cl'; // TEST environment
     const redirectUrl = `https://${host}/webpay/v1.3/${mockToken}`;
     
-    console.log('âœ… [MOCK] Token generado:', mockToken);
-    console.log('âœ… [MOCK] Redirect URL:', redirectUrl);
+    console.log('[MOCK] Token generado:', mockToken);
+    console.log('[MOCK] Redirect URL:', redirectUrl);
     
-    // Responder con formato idÃ©ntico a Transbank REAL
+    // Responder con formato identico a Transbank REAL
     res.json({
       success: true,
-      message: 'TransacciÃ³n iniciada correctamente (MOCK - sin credenciales reales)',
+      message: 'Transaccion iniciada correctamente (MOCK)',
       data: {
         url: redirectUrl,
         token: mockToken,
         transactionId: buyOrder,
         userEmail: userEmail,
         amount: amount,
-        environment: 'mock-integration',
-        info: 'Este es un token MOCK. Para producciÃ³n, obtÃ©n credenciales reales en https://publico.transbank.cl'
+        environment: 'mock-integration'
       }
     });
     
   } catch (error) {
-    console.error('âŒ [MOCK] Error:', error);
+    console.error('[MOCK] Error:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error en endpoint MOCK de pago',
@@ -162,12 +141,10 @@ app.post("/api/payments/init-mock", (req, res) => {
   }
 });
 
-// ============================================================
-// MOCK CONFIRM ENDPOINT - Confirmar pago MOCK
-// ============================================================
+// MOCK CONFIRM ENDPOINT
 app.post("/api/payments/confirm-mock", (req, res) => {
   try {
-    console.log('ðŸŽ­ [MOCK CONFIRM] Confirmando transacciÃ³n MOCK...');
+    console.log('[MOCK CONFIRM] Confirmando transaccion MOCK...');
     const { token } = req.body;
     
     if (!token) {
@@ -177,7 +154,7 @@ app.post("/api/payments/confirm-mock", (req, res) => {
       });
     }
     
-    console.log('âœ… [MOCK CONFIRM] Token validado:', token);
+    console.log('[MOCK CONFIRM] Token validado:', token);
     
     // Simular respuesta real de Transbank
     res.json({
@@ -186,24 +163,21 @@ app.post("/api/payments/confirm-mock", (req, res) => {
       data: {
         accountingDate: new Date().toISOString().split('T')[0],
         transactionDate: new Date().toISOString(),
-        vci: 'TSY', // TSY = tarjeta sin verificaciÃ³n (MOCK)
+        vci: 'TSY',
         status: 'AUTHORIZED',
         amount: 10000,
         buyOrder: 'order-test-123',
         cardNumber: '****6623',
         authorizationCode: 'MOCKAUTH123456',
         responseCode: '0',
-        responseDescription: 'TransacciÃ³n autorizada',
+        responseDescription: 'Transaccion autorizada',
         token: token,
-        installmentsAmount: '0',
-        installmentsNumber: '1',
-        transactionVerificationNumber: 'MOCK12345',
         isMock: true
       }
     });
     
   } catch (error) {
-    console.error('âŒ [MOCK CONFIRM] Error:', error);
+    console.error('[MOCK CONFIRM] Error:', error);
     res.status(500).json({
       success: false,
       message: 'Error confirmando pago MOCK',
@@ -212,10 +186,10 @@ app.post("/api/payments/confirm-mock", (req, res) => {
   }
 });
 
-// CONFIRMATION ENDPOINT - Confirmar pago despuÃ©s que usuario retorna de Transbank
+// CONFIRMATION ENDPOINT - Confirmar pago después que usuario retorna de Transbank
 app.post("/api/payments/confirm", (req, res) => {
   try {
-    console.log('ðŸ” [TRANSBANK CONFIRM] Confirmando transacciÃ³n...');
+    console.log('[TRANSBANK CONFIRM] Confirmando transaccion...');
     const { token } = req.body;
     
     if (!token) {
@@ -262,7 +236,7 @@ app.post("/api/payments/confirm", (req, res) => {
           const result = JSON.parse(data);
           
           if (response.statusCode === 200) {
-            console.log('âœ… [TRANSBANK CONFIRM] Pago confirmado');
+            console.log('[TRANSBANK CONFIRM] Pago confirmado');
             
             res.json({
               success: true,
@@ -278,15 +252,15 @@ app.post("/api/payments/confirm", (req, res) => {
               }
             });
           } else {
-            console.error('âŒ [TRANSBANK CONFIRM] Error:', result);
+            console.error('[TRANSBANK CONFIRM] Error:', result);
             res.status(response.statusCode).json({
               success: false,
-              message: 'Error confirmando transacciÃ³n',
+              message: 'Error confirmando transaccion',
               error: result.detail || result.message
             });
           }
         } catch (parseError) {
-          console.error('âŒ [TRANSBANK CONFIRM] Error parsing response:', parseError);
+          console.error('[TRANSBANK CONFIRM] Error parsing response:', parseError);
           res.status(500).json({
             success: false,
             message: 'Error procesando respuesta de Transbank',
@@ -297,10 +271,10 @@ app.post("/api/payments/confirm", (req, res) => {
     });
     
     request.on('error', (error) => {
-      console.error('âŒ [TRANSBANK CONFIRM] Error en request:', error);
+      console.error('[TRANSBANK CONFIRM] Error en request:', error);
       res.status(500).json({
         success: false,
-        message: 'Error comunicÃ¡ndose con Transbank',
+        message: 'Error comunicandose con Transbank',
         error: error.message
       });
     });
@@ -309,17 +283,17 @@ app.post("/api/payments/confirm", (req, res) => {
     request.end();
     
   } catch (error) {
-    console.error('âŒ [TRANSBANK CONFIRM] Error:', error);
+    console.error('[TRANSBANK CONFIRM] Error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error en confirmaciÃ³n',
+      message: 'Error en confirmacion',
       error: error.message
     });
   }
 });
 
 // ============================================================
-// MIDDLEWARE: Validar que MongoDB estÃ© conectado
+// MIDDLEWARE: Validar que MongoDB esté conectado
 // ============================================================
 const requireMongoDB = (req, res, next) => {
   if (!mongoConnected || mongoose.connection.readyState !== 1) {
@@ -344,12 +318,12 @@ app.get("/api/products", requireMongoDB, async (req, res) => {
     // Construir query MongoDB
     const query = {};
     
-    // Filtrar por gÃ©nero (case-insensitive)
+    // Filtrar por genero (case-insensitive)
     if (gender && gender !== 'undefined' && gender !== '') {
       query.gender = { $regex: new RegExp(`^${gender}$`, 'i') };
     }
     
-    // Filtrar por bÃºsqueda
+    // Filtrar por busqueda
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
@@ -385,26 +359,53 @@ app.get("/api/products", requireMongoDB, async (req, res) => {
 // ============================================================
 // IMPORTAR Y USAR RUTAS
 // ============================================================
-try {
-  const analyticsRoutes = require("./routes/analyticsRoutes"); 
-  const orderRoutes = require("./routes/orderRoutes"); 
-  const messageRoutes = require('./routes/messageRoutes'); 
-  const paymentRoutes = require('./routes/paymentRoutes');
-  const userRoutes = require("./routes/userRoutes");
-  const authRoutes = require("./routes/authRoutes"); // <--- AÃ‘ADIDO
 
-  app.use("/api/analytics", analyticsRoutes); 
-  app.use("/api/orders", orderRoutes); 
-  app.use("/api/messages", messageRoutes); 
-  app.use("/api/payments", paymentRoutes);
-  app.use("/api/users", userRoutes);
-  app.use("/api/auth", authRoutes); // <--- AÃ‘ADIDO
-  console.log("âœ… Todas las rutas cargadas exitosamente");
-  console.log("âœ… USANDO MONGODB REAL: Usuarios y productos se cargan desde MongoDB Atlas");
+// Cargar authRoutes primero (no depende de Transbank)
+let authRoutes = null;
+try {
+  authRoutes = require("./routes/authRoutes");
 } catch (error) {
-  console.warn("âš ï¸ No se pudieron cargar algunas rutas:", error.message);
-  console.log("ðŸ’¡ Las rutas pueden no estar disponibles en este ambiente");
-} 
+  console.error("[ERROR] authRoutes:", error.message);
+}
+
+// Cargar rutas estandar
+let analyticsRoutes, orderRoutes, messageRoutes, userRoutes;
+try {
+  analyticsRoutes = require("./routes/analyticsRoutes"); 
+  orderRoutes = require("./routes/orderRoutes"); 
+  messageRoutes = require('./routes/messageRoutes'); 
+  userRoutes = require("./routes/userRoutes");
+} catch (error) {
+  console.error("[ERROR] Rutas estandar:", error.message);
+}
+
+// Cargar paymentRoutes (puede fallar si Transbank no está configurado)
+let paymentRoutes = null;
+try {
+  paymentRoutes = require('./routes/paymentRoutes');
+} catch (error) {
+  console.warn("[WARN] paymentRoutes no disponible:", error.message);
+}
+
+// Registrar todas las rutas que se cargaron exitosamente
+if (authRoutes) {
+  app.use("/api/auth", authRoutes);
+}
+if (analyticsRoutes) {
+  app.use("/api/analytics", analyticsRoutes);
+}
+if (orderRoutes) {
+  app.use("/api/orders", orderRoutes);
+}
+if (messageRoutes) {
+  app.use("/api/messages", messageRoutes);
+}
+if (userRoutes) {
+  app.use("/api/users", userRoutes);
+}
+if (paymentRoutes) {
+  app.use("/api/payments", paymentRoutes);
+}
 
 // Manejo de errores 404
 app.use("*", (req, res) => {
@@ -413,6 +414,6 @@ app.use("*", (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor ejecutÃ¡ndose en puerto ${PORT}`);
+  console.log(`Servidor ejecutandose en puerto ${PORT}`);
   console.log(`Accede a: http://localhost:${PORT}`);
 });

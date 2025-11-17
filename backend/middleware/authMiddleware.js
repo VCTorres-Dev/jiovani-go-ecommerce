@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const auth = async (req, res, next) => {
-  console.log(`[TRACE] authMiddleware se está ejecutando para la ruta: ${req.originalUrl}`);
   const authHeader = req.header("Authorization");
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -14,9 +13,8 @@ const auth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // Soportar ambos formatos de token: { user: { id, ... } } y { id, ... }
-  const userId = decoded?.user?.id || decoded?.id || decoded?._id;
-  console.log(`[TRACE] authMiddleware decoded userId: ${userId}`);
-  const user = await User.findById(userId).select("-password");
+    const userId = decoded?.user?.id || decoded?.id || decoded?._id;
+    const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(401).json({ message: "Token inválido. Usuario no encontrado." });
