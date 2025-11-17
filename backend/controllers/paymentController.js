@@ -233,9 +233,10 @@ const confirmPayment = async (req, res) => {
       const order = await Order.findOne({ 'transbank.buyOrder': TBK_ORDEN_COMPRA });
       
       if (order) {
-        order.status = 'failed';
+        order.status = 'timeout';
         order.transbank.timeoutExpired = true;
         order.transbank.responseCode = -1; // Código personalizado para timeout
+        order.transbank.status = 'TIMEOUT';
         await order.save();
         
         console.log('✅ [CONFIRM] Orden marcada como timeout');
@@ -243,9 +244,14 @@ const confirmPayment = async (req, res) => {
 
       return res.status(200).json({
         success: false,
-        message: 'Transacción cancelada por timeout',
-        reason: 'TIMEOUT',
-        buyOrder: TBK_ORDEN_COMPRA
+        data: {
+          orderId: order?._id,
+          status: 'timeout',
+          responseCode: -1,
+          buyOrder: TBK_ORDEN_COMPRA
+        },
+        message: 'Transacción cancelada por timeout. El formulario de pago expiró sin ser completado.',
+        reason: 'TIMEOUT'
       });
     }
 
@@ -275,6 +281,8 @@ const confirmPayment = async (req, res) => {
           console.log('⚠️ [CONFIRM] No se pudo consultar estado, marcando como cancelado');
           order.status = 'cancelled';
           order.transbank.cancelledByUser = true;
+          order.transbank.status = 'CANCELLED';
+          order.transbank.responseCode = -2;
           await order.save();
         }
         
@@ -283,9 +291,14 @@ const confirmPayment = async (req, res) => {
 
       return res.status(200).json({
         success: false,
-        message: 'Transacción cancelada por el usuario',
-        reason: 'USER_CANCELLED',
-        buyOrder: TBK_ORDEN_COMPRA
+        data: {
+          orderId: order?._id,
+          status: 'cancelled',
+          responseCode: -2,
+          buyOrder: TBK_ORDEN_COMPRA
+        },
+        message: 'Pago cancelado por el usuario. Presionaste el botón "Anular compra" en el formulario de Transbank.',
+        reason: 'USER_CANCELLED'
       });
     }
 
@@ -438,7 +451,7 @@ const confirmPayment = async (req, res) => {
       if (isApproved) {
         order.status = 'completed';
         
-        console.log('💳 [CONFIRM] Pago APROBADO, descontando stock...');
+        console.log('✅ [CONFIRM] Pago APROBADO, descontando stock...');
         
         // Descontar stock de los productos
         for (const item of order.products) {
@@ -472,17 +485,21 @@ const confirmPayment = async (req, res) => {
         success: isApproved,
         data: {
           orderId: order._id,
+          status: order.status,
           authorizationCode: transbankResponse.authorization_code,
           amount: transbankResponse.amount,
           responseCode: transbankResponse.response_code,
-          status: transbankResponse.status,
+          transbankStatus: transbankResponse.status,
           paymentType: transbankResponse.payment_type_code,
           installments: transbankResponse.installments_number,
           cardNumber: transbankResponse.card_detail?.card_number,
           transactionDate: transbankResponse.transaction_date,
+          vci: transbankResponse.vci,
           email: isApproved ? order.emailResult : null
         },
-        message: isApproved ? 'Pago confirmado exitosamente' : 'Pago rechazado'
+        message: isApproved 
+          ? '✅ Pago completado exitosamente. Tu compra ha sido procesada y recibirás un email de confirmación.'
+          : `❌ Pago rechazado (Código: ${transbankResponse.response_code}). Por favor intenta con otra tarjeta o contacta con tu banco.`
       });
 
     } catch (transbankError) {

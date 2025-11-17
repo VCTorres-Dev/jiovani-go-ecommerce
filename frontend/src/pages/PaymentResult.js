@@ -82,43 +82,76 @@ const PaymentResult = () => {
     }
   };
 
-  const getStatusMessage = (status, isSimulation = false) => {
+  const getStatusMessage = (status, paymentData = {}, isSimulation = false) => {
     const simulationText = isSimulation ? ' (Simulado)' : '';
+    const authCode = paymentData.authorizationCode || 'N/A';
+    const respCode = paymentData.responseCode !== undefined ? paymentData.responseCode : 'N/A';
     
     switch (status) {
       case 'completed':
         return {
           title: `¡Pago Completado con Éxito!${simulationText}`,
+          subtitle: `Código de Autorización: ${authCode}`,
           message: isSimulation 
             ? 'Tu pago simulado ha sido procesado correctamente. En producción recibirás un email de confirmación.'
-            : 'Tu pago ha sido procesado exitosamente. Recibirás un email de confirmación con todos los detalles.',
+            : '✅ Tu pago ha sido procesado exitosamente y tu compra está confirmada.\n\n📧 Recibirás un email de confirmación en breve con todos los detalles de tu pedido.\n\n📦 El tiempo de entrega dependerá de tu ubicación y el método de envío seleccionado.',
           color: 'text-green-600',
           bgColor: 'bg-green-50',
-          borderColor: 'border-green-200'
+          borderColor: 'border-green-200',
+          icon: 'success'
         };
+      
       case 'failed':
         return {
-          title: `Pago No Procesado${simulationText}`,
-          message: 'No se pudo completar tu pago. Por favor intenta nuevamente o contacta con nuestro equipo de soporte.',
+          title: `Pago Rechazado${simulationText}`,
+          subtitle: `Código de Error: ${respCode}`,
+          message: `❌ Tu pago fue rechazado por el banco o sistema de Transbank (Código: ${respCode}).\n\nPosibles causas:\n• Datos de tarjeta incorrectos\n• Fondos insuficientes en la cuenta\n• Tarjeta expirada o no habilitada para compras online\n• Límite de transacciones diarias excedido\n• Contacta con tu banco para más detalles\n\n🔄 Puedes intentar nuevamente con otra tarjeta.`,
           color: 'text-red-600',
           bgColor: 'bg-red-50',
-          borderColor: 'border-red-200'
+          borderColor: 'border-red-200',
+          icon: 'error'
         };
+      
+      case 'cancelled':
+        return {
+          title: `Pago Cancelado${simulationText}`,
+          subtitle: 'Por el usuario',
+          message: '❌ Cancelaste el proceso de pago desde el formulario de Transbank.\n\nTu orden no fue procesada y tu tarjeta no fue cobrada.\n\n🔄 Puedes intentar nuevamente cuando lo desees. Tu carrito aún contiene los productos.',
+          color: 'text-gray-600',
+          bgColor: 'bg-gray-50',
+          borderColor: 'border-gray-200',
+          icon: 'cancelled'
+        };
+      
+      case 'timeout':
+        return {
+          title: `Pago Expirado${simulationText}`,
+          subtitle: 'Tiempo límite excedido',
+          message: '⏱️ El formulario de pago expiró sin ser completado.\n\nEl tiempo para ingresar los datos de la tarjeta es limitado:\n• 4 minutos en producción\n• 10 minutos en modo prueba\n\n🔄 Puedes intentar nuevamente. Tu carrito aún contiene los productos.',
+          color: 'text-orange-600',
+          bgColor: 'bg-orange-50',
+          borderColor: 'border-orange-200',
+          icon: 'timeout'
+        };
+      
       case 'processing':
         return {
           title: `Pago en Proceso${simulationText}`,
-          message: 'Tu pago está siendo verificado. Te notificaremos una vez que se complete la transacción.',
+          message: '⏳ Tu pago está siendo verificado por el banco.\n\nEsto puede tomar unos minutos. Por favor no cierres esta ventana.\n\n📧 Te notificaremos por email una vez que se complete la transacción.',
           color: 'text-yellow-600',
           bgColor: 'bg-yellow-50',
-          borderColor: 'border-yellow-200'
+          borderColor: 'border-yellow-200',
+          icon: 'processing'
         };
+      
       default:
         return {
           title: 'Estado de Pago',
           message: 'Verificando el estado de tu transacción...',
           color: 'text-gray-600',
           bgColor: 'bg-gray-50',
-          borderColor: 'border-gray-200'
+          borderColor: 'border-gray-200',
+          icon: 'pending'
         };
     }
   };
@@ -193,7 +226,14 @@ const PaymentResult = () => {
     );
   }
 
-  const statusInfo = getStatusMessage(order?.status, paymentStatus?.data?.isSimulation);
+  const statusInfo = getStatusMessage(
+    order?.status, 
+    {
+      authorizationCode: paymentStatus?.data?.authorizationCode,
+      responseCode: paymentStatus?.data?.responseCode
+    },
+    paymentStatus?.data?.isSimulation
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -208,12 +248,56 @@ const PaymentResult = () => {
             <h1 className={`text-4xl font-extrabold ${statusInfo.color} mb-4 font-['Playfair_Display']`}>
               {statusInfo.title}
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">{statusInfo.message}</p>
+            {statusInfo.subtitle && (
+              <p className="text-lg font-semibold text-gray-700 mb-4">{statusInfo.subtitle}</p>
+            )}
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed whitespace-pre-line">{statusInfo.message}</p>
             {paymentStatus?.data?.isSimulation && (
               <div className="mt-6 inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 border border-blue-200">
                 <ClockIcon className="w-4 h-4 mr-2" />
                 Modo Simulación
               </div>
+            )}
+          </div>
+          
+          {/* Botones de acción según estado del pago */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center px-4">
+            {(order?.status === 'completed') && (
+              <>
+                <button
+                  onClick={() => navigate('/catalogo-dama')}
+                  className="px-8 py-3 bg-gold-600 hover:bg-gold-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <ShoppingBagIcon className="w-5 h-5" />
+                  Seguir Comprando
+                </button>
+                <button
+                  onClick={() => navigate('/catalogo-dama')}
+                  className="px-8 py-3 border-2 border-gold-600 text-gold-600 hover:bg-gold-50 font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <ArrowRightIcon className="w-5 h-5" />
+                  Ver Catálogo
+                </button>
+              </>
+            )}
+            
+            {(order?.status === 'failed' || order?.status === 'timeout' || order?.status === 'cancelled') && (
+              <>
+                <button
+                  onClick={() => window.history.back()}
+                  className="px-8 py-3 bg-gold-600 hover:bg-gold-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <ArrowRightIcon className="w-5 h-5 transform rotate-180" />
+                  Intentar Nuevamente
+                </button>
+                <button
+                  onClick={() => navigate('/catalogo-dama')}
+                  className="px-8 py-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <ShoppingBagIcon className="w-5 h-5" />
+                  Continuar Comprando
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -315,8 +399,8 @@ const PaymentResult = () => {
               </div>
             )}
 
-            {/* Comprobante de compra - Refinado */}
-            {paymentStatus?.data?.email?.previewURL && (
+            {/* Comprobante de compra - Solo si pago fue exitoso */}
+            {order?.status === 'completed' && paymentStatus?.data?.email?.previewURL && (
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
                 <div className="bg-gray-50 px-8 py-6 border-b border-gray-200">
                   <div className="flex items-center gap-3">
@@ -362,7 +446,8 @@ const PaymentResult = () => {
             )}
           </div>
 
-          {/* Columna lateral - Información de envío y acciones */}
+          {/* Columna lateral - Información de envío y acciones (solo si pago exitoso) */}
+          {order?.status === 'completed' && (
           <div className="space-y-8">
             
             {/* Información de envío */}
@@ -441,6 +526,7 @@ const PaymentResult = () => {
               </button>
             </div>
           </div>
+          )}
         </div>
 
         {/* Lista de productos comprados */}
