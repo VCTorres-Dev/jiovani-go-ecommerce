@@ -6,7 +6,14 @@ const API_URL = `${API_BASE}/users`;
 // Obtener todos los usuarios con paginación y búsqueda
 export const getUsers = async (params = {}) => {
   try {
-    const response = await axios.get(API_URL, { params });
+    const response = await axios.get(API_URL, { 
+      params,
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error.response ? error.response.data : error.message);

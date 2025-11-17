@@ -360,10 +360,13 @@ app.get("/api/products", requireMongoDB, async (req, res) => {
 // IMPORTAR Y USAR RUTAS
 // ============================================================
 
+console.log('[SERVER] Iniciando carga de rutas...');
+
 // Cargar authRoutes primero (no depende de Transbank)
 let authRoutes = null;
 try {
   authRoutes = require("./routes/authRoutes");
+  console.log("[OK] authRoutes cargado:", authRoutes ? "✅ Existe" : "❌ No existe");
 } catch (error) {
   console.error("[ERROR] authRoutes:", error.message);
 }
@@ -371,10 +374,17 @@ try {
 // Cargar rutas estandar
 let analyticsRoutes, orderRoutes, messageRoutes, userRoutes;
 try {
-  analyticsRoutes = require("./routes/analyticsRoutes"); 
-  orderRoutes = require("./routes/orderRoutes"); 
-  messageRoutes = require('./routes/messageRoutes'); 
+  analyticsRoutes = require("./routes/analyticsRoutes");
+  console.log("[OK] analyticsRoutes cargado:", analyticsRoutes ? "✅" : "❌");
+  
+  orderRoutes = require("./routes/orderRoutes");
+  console.log("[OK] orderRoutes cargado:", orderRoutes ? "✅" : "❌");
+  
+  messageRoutes = require('./routes/messageRoutes');
+  console.log("[OK] messageRoutes cargado:", messageRoutes ? "✅" : "❌");
+  
   userRoutes = require("./routes/userRoutes");
+  console.log("[OK] userRoutes cargado:", userRoutes ? "✅" : "❌");
 } catch (error) {
   console.error("[ERROR] Rutas estandar:", error.message);
 }
@@ -383,28 +393,39 @@ try {
 let paymentRoutes = null;
 try {
   paymentRoutes = require('./routes/paymentRoutes');
+  console.log("[OK] paymentRoutes cargado:", paymentRoutes ? "✅" : "❌");
 } catch (error) {
   console.warn("[WARN] paymentRoutes no disponible:", error.message);
 }
 
 // Registrar todas las rutas que se cargaron exitosamente
+console.log('[SERVER] Registrando rutas en Express...');
+
 if (authRoutes) {
   app.use("/api/auth", authRoutes);
+  console.log("  ✅ /api/auth registrado");
 }
 if (analyticsRoutes) {
   app.use("/api/analytics", analyticsRoutes);
+  console.log("  ✅ /api/analytics registrado");
 }
 if (orderRoutes) {
   app.use("/api/orders", orderRoutes);
+  console.log("  ✅ /api/orders registrado");
 }
 if (messageRoutes) {
   app.use("/api/messages", messageRoutes);
+  console.log("  ✅ /api/messages registrado");
 }
 if (userRoutes) {
   app.use("/api/users", userRoutes);
+  console.log("  ✅ /api/users registrado");
+} else {
+  console.log("  ❌ /api/users NO se pudo registrar (userRoutes es null)");
 }
 if (paymentRoutes) {
   app.use("/api/payments", paymentRoutes);
+  console.log("  ✅ /api/payments registrado");
 }
 
 // Manejo de errores 404
