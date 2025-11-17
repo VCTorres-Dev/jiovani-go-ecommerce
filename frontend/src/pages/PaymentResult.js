@@ -26,41 +26,94 @@ const PaymentResult = () => {
     const processPaymentResult = async () => {
       try {
         const urlParams = new URLSearchParams(location.search);
-        const token = urlParams.get('token_ws');
+        
+        // Extraer TODOS los parámetros posibles que Transbank puede enviar
+        const token_ws = urlParams.get('token_ws');           // Flujo normal
+        const TBK_TOKEN = urlParams.get('TBK_TOKEN');         // Usuario canceló
+        const TBK_ORDEN_COMPRA = urlParams.get('TBK_ORDEN_COMPRA'); // Timeout
+        const TBK_ID_SESION = urlParams.get('TBK_ID_SESION'); // Timeout
         const orderId = urlParams.get('order');
 
-        console.log('🔄 Procesando resultado de pago...', { token: token?.substring(0, 20), orderId });
+        console.log('🔄 Procesando resultado de pago...', {
+          token_ws: token_ws?.substring(0, 20),
+          TBK_TOKEN: TBK_TOKEN?.substring(0, 20),
+          TBK_ORDEN_COMPRA,
+          TBK_ID_SESION,
+          orderId,
+          allParams: Object.fromEntries(urlParams)
+        });
 
-        if (!token) {
-          setError('Token de transacción no encontrado en la URL');
+        // Determinar qué enviar al backend según los parámetros recibidos
+        let confirmPayload = {};
+        
+        // Caso 1: Flujo normal (éxito o rechazo)
+        if (token_ws) {
+          confirmPayload = { token_ws };
+          console.log('✅ Flujo normal detectado (token_ws presente)');
+        }
+        // Caso 2: Usuario canceló
+        else if (TBK_TOKEN && TBK_ORDEN_COMPRA && TBK_ID_SESION) {
+          confirmPayload = { TBK_TOKEN, TBK_ORDEN_COMPRA, TBK_ID_SESION };
+          console.log('❌ Cancelación detectada (TBK_TOKEN presente)');
+        }
+        // Caso 3: Timeout (no hay tokens)
+        else if (TBK_ORDEN_COMPRA && TBK_ID_SESION && !token_ws && !TBK_TOKEN) {
+          confirmPayload = { TBK_ORDEN_COMPRA, TBK_ID_SESION };
+          console.log('⏱️ Timeout detectado (sin tokens)');
+        }
+        // Caso 4: Fallback - solo orden
+        else if (orderId) {
+          console.log('📋 Solo orden ID disponible, consultando estado...');
+          confirmPayload = { order: orderId };
+        }
+        else {
+          console.log('❌ No se recibieron parámetros válidos de Transbank');
+          setError('No se recibieron parámetros de la transacción. Transbank no completó el retorno.');
           setLoading(false);
           return;
         }
 
         // Confirmar el pago con nuestro backend
-        console.log('💳 Confirmando pago...');
-        const confirmResult = await confirmPayment(token);
+        console.log('💳 Confirmando pago con payload:', confirmPayload);
+        const confirmResult = await confirmPayment(confirmPayload);
         setPaymentStatus(confirmResult);
 
-        if (confirmResult.success && confirmResult.data.orderId) {
-          // Obtener los detalles completos de la orden
-          console.log('📋 Obteniendo detalles de la orden...');
-          const orderDetails = await getOrderStatus(confirmResult.data.orderId);
-          setOrder(orderDetails);
-          
-          // Mostrar mensaje apropiado
-          if (confirmResult.success) {
-            toast.success(confirmResult.message);
-          } else {
-            toast.warning(confirmResult.message || 'El pago fue procesado pero hubo problemas con la confirmación');
+        console.log('📊 Resultado de confirmación:', {
+          success: confirmResult.success,
+          hasOrderId: !!confirmResult.data?.orderId,
+          status: confirmResult.data?.status,
+          message: confirmResult.message
+        });
+
+        // IMPORTANTE: Cargar orden incluso si NO es success: true
+        // (puede ser cancelled, timeout, o failed - todos válidos)
+        if (confirmResult.data?.orderId) {
+          try {
+            console.log('📋 Obteniendo detalles de la orden...');
+            const orderDetails = await getOrderStatus(confirmResult.data.orderId);
+            setOrder(orderDetails);
+            
+            // Mostrar toast apropiado
+            if (confirmResult.success) {
+              toast.success('✅ ' + (confirmResult.message || 'Pago completado exitosamente'));
+            } else {
+              // Para cancelled, timeout, failed - no es "error", es un estado válido
+              toast.info(confirmResult.message || 'Transacción procesada');
+            }
+          } catch (orderError) {
+            console.error('⚠️ Error obteniendo detalles de orden, pero continuamos:', orderError);
+            // Aún así mostrar la pantalla de resultado aunque no podamos cargar todos los detalles
+            setOrder({ _id: confirmResult.data.orderId, status: confirmResult.data.status });
           }
         } else {
+          // Sin orderId es un error real
+          console.error('❌ Sin orderId en respuesta:', confirmResult);
           setError(confirmResult.message || 'No se pudo confirmar el pago');
         }
 
       } catch (err) {
         console.error('❌ Error procesando resultado de pago:', err);
-        setError('Error al procesar el resultado del pago. Por favor contacta con soporte.');
+        setError(err.message || 'Error al procesar el resultado del pago. Por favor contacta con soporte.');
       } finally {
         setLoading(false);
       }

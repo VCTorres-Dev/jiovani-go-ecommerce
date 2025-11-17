@@ -70,25 +70,69 @@ export const initPayment = async (orderData) => {
 
 /**
  * Confirmar pago (usado internamente por el sistema)
- * @param {string} token - Token de Transbank
+ * Soporta múltiples formas de parámetros según lo que Transbank devuelve:
+ * - token_ws: Flujo normal (éxito o rechazo)
+ * - TBK_TOKEN: Usuario canceló
+ * - TBK_ORDEN_COMPRA + TBK_ID_SESION: Timeout
+ * 
+ * @param {string|object} tokenOrPayload - Token string O payload con parámetros
+ * @param {object} additionalParams - Parámetros adicionales (TBK_ORDEN_COMPRA, etc)
  * @returns {Promise<Object>} Resultado de la confirmación
  */
-export const confirmPayment = async (token) => {
+export const confirmPayment = async (tokenOrPayload, additionalParams = {}) => {
   try {
-    console.log('🔄 Confirmando pago con token:', token.substring(0, 20) + '...');
+    let payload = {};
 
-    const response = await axios.post(`${PAYMENTS_API_URL}/confirm`, {
-      token_ws: token
+    // Caso 1: Parámetro único (token string)
+    if (typeof tokenOrPayload === 'string') {
+      // Si es un token de Transbank, determinar si es token_ws o TBK_TOKEN
+      if (tokenOrPayload && tokenOrPayload.length > 10) {
+        payload.token_ws = tokenOrPayload;
+        console.log('🔄 Confirmando pago con token_ws:', tokenOrPayload.substring(0, 20) + '...');
+      } else {
+        console.log('❌ Token inválido recibido:', tokenOrPayload);
+        throw new Error('Token inválido');
+      }
+    }
+    // Caso 2: Parámetro es un objeto (payload completo)
+    else if (typeof tokenOrPayload === 'object' && tokenOrPayload !== null) {
+      payload = tokenOrPayload;
+      console.log('🔄 Confirmando pago con payload:', Object.keys(payload).join(', '));
+    }
+    
+    // Agregar parámetros adicionales si existen
+    if (Object.keys(additionalParams).length > 0) {
+      payload = { ...payload, ...additionalParams };
+    }
+
+    // Validar que haya al menos un parámetro
+    if (Object.keys(payload).length === 0) {
+      throw new Error('No se proporcionaron parámetros para confirmar el pago');
+    }
+
+    console.log('📤 Enviando confirmación al backend:', {
+      hasTokenWs: !!payload.token_ws,
+      hasTBKToken: !!payload.TBK_TOKEN,
+      hasBuyOrder: !!payload.TBK_ORDEN_COMPRA,
+      hasSessionId: !!payload.TBK_ID_SESION
     });
+
+    const response = await axios.post(`${PAYMENTS_API_URL}/confirm`, payload);
 
     console.log('✅ Pago confirmado:', {
       success: response.data.success,
-      orderId: response.data.data.orderId
+      orderId: response.data.data?.orderId,
+      status: response.data.data?.status,
+      reason: response.data.reason
     });
 
     return response.data;
   } catch (error) {
-    console.error('❌ Error confirmando pago:', error.response ? error.response.data : error.message);
+    console.error('❌ Error confirmando pago:', {
+      message: error.response?.data?.message || error.message,
+      status: error.response?.status,
+      data: error.response?.data
+    });
     throw new Error(error.response?.data?.message || 'Error al confirmar el pago');
   }
 };
