@@ -34,7 +34,7 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:e2e": "cypress run"
+    "test:e2e": "start-server-and-test start http://localhost:3000 cypress:run"
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +58,7 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.5",
     "tailwindcss": "^3.4.17",
-    "cypress": "^13.6.4"
+    "cypress": "^13.6.4",
+    "start-server-and-test": "^2.0.3"
   }
 }
