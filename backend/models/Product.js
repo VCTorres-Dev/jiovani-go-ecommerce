@@ -16,6 +16,7 @@ const ProductSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
+    min: [0, 'El precio no puede ser negativo'],
   },
     rating: {
     type: Number,
@@ -36,6 +37,7 @@ const ProductSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
+    min: [0, 'El stock no puede ser negativo'],
   },
   isFeatured: {
     type: Boolean,

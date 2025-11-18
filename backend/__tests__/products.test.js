@@ -34,17 +34,18 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   // Crear admin y user para tests
+  // NO hashear manualmente - el modelo User lo hace automáticamente
   const admin = await User.create({
     username: 'admin',
     email: 'admin@test.com',
-    password: await bcrypt.hash('admin123', 10),
+    password: 'admin123',
     role: 'admin'
   });
 
   const user = await User.create({
     username: 'user',
     email: 'user@test.com',
-    password: await bcrypt.hash('user123', 10),
+    password: 'user123',
     role: 'user'
   });
 

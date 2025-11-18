@@ -84,10 +84,11 @@ beforeEach(async () => {
   });
 
   // Crear usuario de prueba
+  // NO hashear manualmente - el modelo User lo hace automáticamente
   testUser = await User.create({
     username: 'paymentuser',
     email: 'payment@test.com',
-    password: await bcrypt.hash('password123', 10),
+    password: 'password123',
     role: 'user'
   });
 
@@ -239,6 +240,7 @@ describe('Pagos - Confirmación', () => {
   beforeEach(async () => {
     // Crear orden pendiente
     pendingOrder = await Order.create({
+      user: testUser._id, // Campo requerido por el modelo Order
       products: [{
         product: testProduct._id,
         quantity: 2,

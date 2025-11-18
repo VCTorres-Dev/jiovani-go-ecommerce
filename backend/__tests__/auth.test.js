@@ -67,10 +67,11 @@ describe('Autenticación - Registro', () => {
 
   test('AU-02: Registro falla con email duplicado', async () => {
     // Crear usuario existente
+    // NO hashear manualmente - el modelo User lo hace automáticamente
     await User.create({
       username: 'existing',
       email: 'existing@example.com',
-      password: await bcrypt.hash('password123', 10)
+      password: 'password123'
     });
 
     const userData = {
@@ -105,11 +106,11 @@ describe('Autenticación - Registro', () => {
 describe('Autenticación - Login', () => {
   beforeEach(async () => {
     // Crear usuario para tests de login
-    const hashedPassword = await bcrypt.hash('correctpassword', 10);
+    // NO hashear manualmente - el modelo User lo hace automáticamente
     await User.create({
       username: 'logintest',
       email: 'login@example.com',
-      password: hashedPassword,
+      password: 'correctpassword',
       role: 'user'
     });
   });
@@ -169,10 +170,11 @@ describe('Autenticación - Middleware', () => {
 
   beforeEach(async () => {
     // Usuario normal
+    // NO hashear manualmente - el modelo User lo hace automáticamente
     const user = await User.create({
       username: 'normaluser',
       email: 'user@example.com',
-      password: await bcrypt.hash('password123', 10),
+      password: 'password123',
       role: 'user'
     });
 
@@ -180,7 +182,7 @@ describe('Autenticación - Middleware', () => {
     const admin = await User.create({
       username: 'adminuser',
       email: 'admin@example.com',
-      password: await bcrypt.hash('password123', 10),
+      password: 'password123',
       role: 'admin'
     });
 
@@ -212,7 +214,7 @@ describe('Autenticación - Middleware', () => {
       .set('Authorization', `Bearer ${validToken}`)
       .expect(200);
 
-    expect(response.body).toHaveProperty('email', 'user@example.com');
+    expect(response.body.user).toHaveProperty('email', 'user@example.com');
   });
 
   test('AU-09: Token expirado es rechazado', async () => {
