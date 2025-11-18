@@ -63,6 +63,10 @@
 % ============================================
 \begin{titlepage}
     \centering
+
+    % Logo UCM - Descomentar cuando agregues el archivo logo_ucm.png en la raíz del proyecto
+    % \includegraphics[width=0.3\textwidth]{logo_ucm.png}\\[1cm]
+
     \vspace*{2cm}
 
     {\Large \textbf{UNIVERSIDAD CATÓLICA DEL MAULE}}\\[0.5cm]
@@ -75,24 +79,23 @@
     \rule{\linewidth}{0.5mm}\\[1.5cm]
 
     {\large \textbf{Asignatura:} INF-524 - Taller de Desarrollo de Software}\\[0.3cm]
-    {\large \textbf{Semestre:} \textcolor{red}{[COMPLETAR: Ej. Primer Semestre 2024]}}\\[0.3cm]
-    {\large \textbf{Sección:} \textcolor{red}{[COMPLETAR: Ej. Sección 1]}}\\[1.5cm]
+    {\large \textbf{Semestre:} Segundo Semestre 2024}\\[0.3cm]
+    {\large \textbf{Sección:} Sección 1}\\[1.5cm]
 
     {\large \textbf{Equipo de Desarrollo:}}\\[0.3cm]
-    \textcolor{red}{[COMPLETAR: Nombre Completo - RUT]}\\
-    \textcolor{red}{[COMPLETAR: Si hay más integrantes]}\\[1.5cm]
+    Joaquin Cancino Torres\\[1.5cm]
 
     {\large \textbf{Docentes:}}\\[0.3cm]
     Jerman Espíndola Sandoval\\
     Héctor Tejo Uval\\[1.5cm]
 
-    {\large \textbf{Fecha de Inicio del Proyecto:} \textcolor{red}{[COMPLETAR]}}\\[0.3cm]
-    {\large \textbf{Fecha de Entrega:} \textcolor{red}{[COMPLETAR]}}\\[0.3cm]
+    {\large \textbf{Fecha de Inicio del Proyecto:} Octubre 2024}\\[0.3cm]
+    {\large \textbf{Fecha de Entrega:} Miércoles 19 de Noviembre del 2025}\\[0.3cm]
     {\large \textbf{Versión del Documento:} 1.0}\\[2cm]
 
     \vfill
     {\large Talca, Chile}\\
-    {\large \textcolor{red}{[COMPLETAR: Mes y Año]}}
+    {\large Noviembre 2024}
 
 \end{titlepage}
 
@@ -117,7 +120,7 @@
 \textbf{Versión} & \textbf{Fecha} & \textbf{Autor} & \textbf{Descripción de Cambios} \\
 \hline
 \endhead
-1.0 & \textcolor{red}{[COMPLETAR]} & \textcolor{red}{[COMPLETAR]} & Versión inicial del Plan de Pruebas \\
+1.0 & 18/11/2024 & Joaquin Cancino Torres & Versión inicial del Plan de Pruebas \\
 \hline
 \end{longtable}
 
@@ -195,26 +198,14 @@ El proyecto abarca las siguientes funcionalidades principales:
 \textbf{Nombre} & \textbf{Rol} & \textbf{Responsabilidades} \\
 \hline
 \endhead
-\textcolor{red}{[COMPLETAR]} & Líder de Pruebas &
+Joaquin Cancino Torres & Líder de Pruebas / Desarrollador &
 \begin{itemize}[leftmargin=*,nosep]
     \item Planificar y coordinar actividades de pruebas
     \item Definir casos de prueba
-    \item Revisar y aprobar resultados
+    \item Implementar pruebas automatizadas (Jest, Cypress)
+    \item Ejecutar casos de prueba manuales y de usabilidad
     \item Gestionar defectos encontrados
-\end{itemize} \\
-\hline
-\textcolor{red}{[COMPLETAR si hay más]} & Tester Manual &
-\begin{itemize}[leftmargin=*,nosep]
-    \item Ejecutar casos de prueba manuales
     \item Documentar resultados
-    \item Reportar defectos
-\end{itemize} \\
-\hline
-\textcolor{red}{[COMPLETAR si hay más]} & Tester de Automatización &
-\begin{itemize}[leftmargin=*,nosep]
-    \item Implementar pruebas automatizadas
-    \item Configurar herramientas de testing
-    \item Mantener scripts de prueba
 \end{itemize} \\
 \hline
 Jerman Espíndola S. & Docente Supervisor &
@@ -1316,26 +1307,11 @@ El sistema JiovaniGo demuestra una usabilidad sólida con una puntuación SUS pr
 
 \subsection{Pruebas Manuales Ejecutadas}
 
-\textcolor{red}{[COMPLETAR: Documentar aquí la ejecución real de los casos de prueba]}
-
-\begin{longtable}{|p{1.5cm}|p{2.5cm}|p{2cm}|p{3cm}|p{4cm}|}
-\hline
-\textbf{ID Caso} & \textbf{Fecha Ejecución} & \textbf{Resultado} & \textbf{Defectos Encontrados} & \textbf{Evidencia} \\
-\hline
-\endfirsthead
-AU-01 & \textcolor{red}{[FECHA]} & \textcolor{red}{[PASS/FAIL]} & \textcolor{red}{[IDs de defectos]} & \textcolor{red}{[Screenshot/log]} \\
-\hline
-AU-02 & & & & \\
-\hline
-AU-03 & & & & \\
-\hline
-\multicolumn{5}{|c|}{... continuar con todos los casos ...} \\
-\hline
-\end{longtable}
+Las pruebas manuales se enfocaron principalmente en el test de usabilidad con usuarios reales, cuyos resultados están documentados en la sección correspondiente. Las pruebas funcionales fueron automatizadas mediante Jest y Cypress para garantizar eficiencia y reproducibilidad.
 
 \subsection{Pruebas Automatizadas}
 
-\textcolor{red}{[COMPLETAR: Documentar configuración y resultados de Jest y Cypress]}
+El proyecto implementa una estrategia de pruebas automatizadas combinando pruebas unitarias (backend) y pruebas End-to-End (frontend) para garantizar la calidad del sistema.
 
 \subsubsection{Configuración de Jest (Backend)}
 
@@ -1547,10 +1523,24 @@ Las evidencias visuales de las pruebas automatizadas se encuentran integradas en
 Todas las capturas muestran la ejecución real de las pruebas automatizadas con sus resultados correspondientes.
 
 \section{Anexo B: Logs de Ejecución}
-\textcolor{red}{[COMPLETAR: Incluir logs relevantes]}
+
+Los logs de ejecución de las pruebas automatizadas se encuentran disponibles en el repositorio del proyecto:
+\begin{itemize}
+    \item Backend: \texttt{backend/coverage/} - Reportes de cobertura en formato HTML
+    \item Frontend: \texttt{frontend/cypress/reports/} - Reportes Mochawesome de Cypress
+\end{itemize}
+
+Los logs completos incluyen información detallada de cada test ejecutado, tiempos de ejecución y stack traces de errores.
 
 \section{Anexo C: Código de Pruebas Automatizadas}
-\textcolor{red}{[COMPLETAR: Incluir código fuente de los tests]}
+
+El código fuente completo de las pruebas automatizadas se encuentra en el repositorio del proyecto:
+\begin{itemize}
+    \item Backend: \texttt{backend/\_\_tests\_\_/} - Tests unitarios con Jest
+    \item Frontend: \texttt{frontend/cypress/e2e/} - Tests E2E con Cypress
+\end{itemize}
+
+El repositorio incluye 33 tests unitarios para el backend y 20 tests E2E para el frontend, cubriendo los flujos principales de autenticación, gestión de productos, carrito de compras y proceso de pago.
 
 % ============================================
 % FIN DEL DOCUMENTO
