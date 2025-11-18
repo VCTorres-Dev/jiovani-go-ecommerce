@@ -16,27 +16,16 @@ let testUser;
 let userToken;
 
 // Mock de Transbank SDK (no queremos llamar a Transbank real en tests)
+// Creamos mocks reutilizables que pueden ser sobrescritos en tests individuales
+const mockTransbankCreate = jest.fn();
+const mockTransbankCommit = jest.fn();
+const mockTransbankStatus = jest.fn();
+
 jest.mock('../config/transbank', () => ({
   transaction: {
-    create: jest.fn().mockResolvedValue({
-      token: 'mock_token_12345',
-      url: 'https://webpay3gint.transbank.cl/webpayserver/initTransaction'
-    }),
-    commit: jest.fn().mockResolvedValue({
-      vci: 'TSY',
-      amount: 45000,
-      status: 'AUTHORIZED',
-      buy_order: 'ORD123456',
-      session_id: 'session123',
-      card_detail: { card_number: '6623' },
-      accounting_date: '1119',
-      transaction_date: '2024-11-19T12:00:00.000Z',
-      authorization_code: '1213',
-      payment_type_code: 'VD',
-      response_code: 0,
-      installments_number: 0
-    }),
-    status: jest.fn()
+    create: mockTransbankCreate,
+    commit: mockTransbankCommit,
+    status: mockTransbankStatus
   },
   WebpayPlus: {}
 }));
@@ -69,6 +58,10 @@ beforeAll(async () => {
   process.env.JWT_SECRET = 'test_secret_key_12345';
   process.env.NODE_ENV = 'test';
   process.env.FRONTEND_URL = 'http://localhost:3000';
+  // Configurar variables de Transbank para que el mock funcione
+  process.env.TRANSBANK_COMMERCE_CODE = '597055555532';
+  process.env.TRANSBANK_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C';
+  process.env.TRANSBANK_ENV = 'integration';
 
   app = setupApp();
 });
@@ -98,8 +91,50 @@ beforeEach(async () => {
     { expiresIn: '1d' }
   );
 
+  // Configurar comportamiento por defecto de los mocks de Transbank
+  mockTransbankCreate.mockResolvedValue({
+    token: 'mock_token_12345',
+    url: 'https://webpay3gint.transbank.cl/webpayserver/initTransaction'
+  });
+
+  mockTransbankCommit.mockResolvedValue({
+    vci: 'TSY',
+    amount: 45000,
+    status: 'AUTHORIZED',
+    buy_order: 'ORD123456',
+    session_id: 'session123',
+    card_detail: { card_number: '6623' },
+    accounting_date: '1119',
+    transaction_date: '2024-11-19T12:00:00.000Z',
+    authorization_code: '1213',
+    payment_type_code: 'VD',
+    response_code: 0,
+    installments_number: 0
+  });
+
   // Limpiar mocks entre tests
   jest.clearAllMocks();
+
+  // Re-configurar después de limpiar
+  mockTransbankCreate.mockResolvedValue({
+    token: 'mock_token_12345',
+    url: 'https://webpay3gint.transbank.cl/webpayserver/initTransaction'
+  });
+
+  mockTransbankCommit.mockResolvedValue({
+    vci: 'TSY',
+    amount: 45000,
+    status: 'AUTHORIZED',
+    buy_order: 'ORD123456',
+    session_id: 'session123',
+    card_detail: { card_number: '6623' },
+    accounting_date: '1119',
+    transaction_date: '2024-11-19T12:00:00.000Z',
+    authorization_code: '1213',
+    payment_type_code: 'VD',
+    response_code: 0,
+    installments_number: 0
+  });
 });
 
 afterEach(async () => {
@@ -296,7 +331,7 @@ describe('Pagos - Confirmación', () => {
       .expect(200);
 
     expect(response.body.success).toBe(false);
-    expect(response.body.reason).toBe('cancelled');
+    expect(response.body.reason).toBe('USER_CANCELLED');
 
     const updatedOrder = await Order.findById(pendingOrder._id);
     expect(updatedOrder.status).toBe('cancelled');
@@ -313,7 +348,7 @@ describe('Pagos - Confirmación', () => {
       .expect(200);
 
     expect(response.body.success).toBe(false);
-    expect(response.body.reason).toBe('timeout');
+    expect(response.body.reason).toBe('TIMEOUT');
 
     const updatedOrder = await Order.findById(pendingOrder._id);
     expect(updatedOrder.status).toBe('timeout');
@@ -338,12 +373,20 @@ describe('Pagos - Confirmación', () => {
   });
 
   test('PA-09: Stock NO se descuenta en pago fallido', async () => {
-    // Mock de pago rechazado
-    const { transaction } = require('../config/transbank');
-    transaction.commit.mockResolvedValueOnce({
+    // Mock de pago rechazado con todos los campos necesarios
+    mockTransbankCommit.mockResolvedValueOnce({
+      vci: 'TSN',
+      amount: 45000,
       status: 'FAILED',
+      buy_order: 'ORD123456',
+      session_id: 'session123',
+      card_detail: { card_number: '6623' },
+      accounting_date: '1119',
+      transaction_date: '2024-11-19T12:00:00.000Z',
+      authorization_code: '',
+      payment_type_code: 'VD',
       response_code: -1,
-      buy_order: 'ORD123456'
+      installments_number: 0
     });
 
     await request(app)

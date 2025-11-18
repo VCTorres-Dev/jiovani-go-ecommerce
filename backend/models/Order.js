@@ -38,7 +38,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'preparing', 'shipped', 'delivered', 'cancelled', 'completed', 'failed'],
+    enum: ['pending', 'preparing', 'shipped', 'delivered', 'cancelled', 'completed', 'failed', 'timeout'],
     default: 'pending',
   },
   // Información de seguimiento
@@ -224,6 +224,8 @@ orderSchema.methods.getPaymentStatusText = function() {
       return 'Cancelado';
     case 'completed':
       return 'Completado';
+    case 'timeout':
+      return 'Tiempo Agotado';
     default:
       return 'Desconocido';
   }
