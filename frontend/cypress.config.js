@@ -12,4 +12,15 @@ module.exports = defineConfig({
     defaultCommandTimeout: 10000,
     pageLoadTimeout: 30000,
   },
+  reporter: 'mochawesome',
+  reporterOptions: {
+    reportDir: 'cypress/reports',
+    overwrite: false,
+    html: true,
+    json: true,
+    charts: true,
+    reportPageTitle: 'Reporte de Pruebas E2E - JiovaniGo',
+    embeddedScreenshots: true,
+    inlineAssets: true
+  }
 });
