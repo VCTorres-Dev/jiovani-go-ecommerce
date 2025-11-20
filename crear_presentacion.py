@@ -70,6 +70,7 @@ def crear_presentacion():
 
     # Slide 2: Índice
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Índice")
 
     content_box = shapes.add_textbox(Inches(1.5), Inches(1.5), Inches(10), Inches(5))
@@ -99,6 +100,7 @@ def crear_presentacion():
 
     # Slide 3: Contexto del Proyecto
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Contexto del Proyecto")
 
     # Box de descripción
@@ -154,6 +156,7 @@ def crear_presentacion():
 
     # Slide 4: Funcionalidades Principales
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Funcionalidades Principales")
 
     # Columna izquierda
@@ -222,6 +225,7 @@ def crear_presentacion():
 
     # Slide 5: Objetivos
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Objetivos del Plan de Pruebas")
 
     # Objetivo general
@@ -276,6 +280,7 @@ def crear_presentacion():
 
     # Slide 6: Alcance
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Alcance de las Pruebas")
 
     # Columna izquierda - Dentro del alcance
@@ -332,6 +337,7 @@ def crear_presentacion():
 
     # Slide 7: Tipos de Pruebas
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Tipos de Pruebas Implementadas")
 
     # Crear 4 boxes para los tipos de pruebas
@@ -400,6 +406,7 @@ def crear_presentacion():
 
     # Slide 8: Criterios de Éxito
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Criterios de Éxito y Métricas Objetivo")
 
     # Crear tabla
@@ -453,6 +460,7 @@ def crear_presentacion():
 
     # Slide 9: Entorno de Pruebas
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Entorno de Pruebas")
 
     # Columna izquierda
@@ -509,6 +517,7 @@ def crear_presentacion():
 
     # Slide 10: Casos de Prueba
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Casos de Prueba Principales")
 
     modulos = [
@@ -561,6 +570,7 @@ def crear_presentacion():
 
     # Slide 11: Resultados Backend
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Resultados - Pruebas Backend (Jest)")
 
     # Columna izquierda
@@ -669,6 +679,7 @@ def crear_presentacion():
 
     # Slide 12: Resultados Frontend
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Resultados - Pruebas Frontend (Cypress)")
 
     # Columna izquierda
@@ -788,6 +799,7 @@ def crear_presentacion():
 
     # Slide 13: Test de Usabilidad - Metodología
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Test de Usabilidad - Metodología")
 
     # Box SUS
@@ -861,6 +873,7 @@ def crear_presentacion():
 
     # Slide 14: Resultados de Usabilidad
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Resultados del Test de Usabilidad")
 
     # Puntuación SUS
@@ -967,6 +980,7 @@ def crear_presentacion():
 
     # Slide 15: Aspectos Positivos y Mejoras
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Aspectos Positivos y Recomendaciones")
 
     # Columna izquierda - Positivos
@@ -1046,6 +1060,7 @@ def crear_presentacion():
 
     # Slide 16: Defectos
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Gestión de Defectos")
 
     # Box clasificación
@@ -1131,6 +1146,7 @@ def crear_presentacion():
 
     # Slide 17: Métricas Finales
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Métricas Finales del Proyecto")
 
     # Crear tabla
@@ -1205,6 +1221,7 @@ def crear_presentacion():
 
     # Slide 18: Conclusiones
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Conclusiones")
 
     # Logros
@@ -1259,6 +1276,7 @@ def crear_presentacion():
 
     # Slide 19: Lecciones Aprendidas
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
     agregar_header(slide, shapes, "Lecciones Aprendidas")
 
     content_box = shapes.add_textbox(Inches(1.5), Inches(1.5), Inches(10), Inches(5))
@@ -1286,6 +1304,7 @@ def crear_presentacion():
 
     # Slide 20: Cierre
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    shapes = slide.shapes
 
     # Fondo dorado superior
     header = shapes.add_shape(
