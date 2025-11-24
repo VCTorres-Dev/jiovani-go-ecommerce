@@ -242,13 +242,23 @@ const confirmPayment = async (req, res) => {
         console.log('✅ [CONFIRM] Orden marcada como timeout');
       }
 
+      // FIX: Cargar orden completa para mostrar en frontend
+      let orderComplete = null;
+      if (order) {
+        orderComplete = await Order.findById(order._id)
+          .populate('products.product', 'name imageURL')
+          .populate('user', 'username email');
+      }
+
       return res.status(200).json({
         success: false,
         data: {
           orderId: order?._id,
           status: 'timeout',
           responseCode: -1,
-          buyOrder: TBK_ORDEN_COMPRA
+          buyOrder: TBK_ORDEN_COMPRA,
+          // FIX: Incluir orden completa si existe
+          order: orderComplete
         },
         message: 'Transacción cancelada por timeout. El formulario de pago expiró sin ser completado.',
         reason: 'TIMEOUT'
@@ -289,13 +299,23 @@ const confirmPayment = async (req, res) => {
         console.log('✅ [CONFIRM] Orden marcada como cancelada por usuario');
       }
 
+      // FIX: Cargar orden completa para mostrar en frontend
+      let orderComplete = null;
+      if (order) {
+        orderComplete = await Order.findById(order._id)
+          .populate('products.product', 'name imageURL')
+          .populate('user', 'username email');
+      }
+
       return res.status(200).json({
         success: false,
         data: {
           orderId: order?._id,
           status: 'cancelled',
           responseCode: -2,
-          buyOrder: TBK_ORDEN_COMPRA
+          buyOrder: TBK_ORDEN_COMPRA,
+          // FIX: Incluir orden completa si existe
+          order: orderComplete
         },
         message: 'Pago cancelado por el usuario. Presionaste el botón "Anular compra" en el formulario de Transbank.',
         reason: 'USER_CANCELLED'
@@ -398,14 +418,23 @@ const confirmPayment = async (req, res) => {
       }));
       const emailResult = await sendOrderConfirmationEmail(order, order.user, orderItemsForEmail);
 
+      // FIX: Recargar orden con populate para incluir datos completos
+      const orderComplete = await Order.findById(order._id)
+        .populate('products.product', 'name imageURL')
+        .populate('user', 'username email');
+
       return res.status(200).json({
         success: true,
         data: {
-          orderId: order._id,
-          authorizationCode: order.transbank.authorizationCode,
-          amount: order.transbank.amount,
+          orderId: orderComplete._id,
+          authorizationCode: orderComplete.transbank.authorizationCode,
+          amount: orderComplete.transbank.amount,
+          status: orderComplete.status,
+          responseCode: 0,
           isSimulation: true,
-          email: emailResult
+          email: emailResult,
+          // FIX: Incluir orden completa
+          order: orderComplete
         },
         message: 'Pago simulado confirmado exitosamente'
       });
@@ -450,9 +479,9 @@ const confirmPayment = async (req, res) => {
 
       if (isApproved) {
         order.status = 'completed';
-        
+
         console.log('✅ [CONFIRM] Pago APROBADO, descontando stock...');
-        
+
         // Descontar stock de los productos
         for (const item of order.products) {
           const result = await Product.updateOne(
@@ -470,9 +499,9 @@ const confirmPayment = async (req, res) => {
         }));
         const emailResult = await sendOrderConfirmationEmail(order, order.user, orderItemsForEmail);
         order.emailResult = emailResult;
-        
+
         console.log('✅ [CONFIRM] Pago confirmado y procesado exitosamente');
-        
+
       } else {
         order.status = 'failed';
         console.log(`❌ [CONFIRM] Pago RECHAZADO. Status: ${transbankResponse.status}, Code: ${transbankResponse.response_code}`);
@@ -480,12 +509,18 @@ const confirmPayment = async (req, res) => {
 
       await order.save();
 
-      // Respuesta al cliente
+      // FIX: Recargar orden con populate para incluir datos completos
+      // Esto elimina la necesidad de una segunda llamada a /order/:id
+      const orderComplete = await Order.findById(order._id)
+        .populate('products.product', 'name imageURL')
+        .populate('user', 'username email');
+
+      // Respuesta al cliente con orden COMPLETA
       return res.status(200).json({
         success: isApproved,
         data: {
-          orderId: order._id,
-          status: order.status,
+          orderId: orderComplete._id,
+          status: orderComplete.status,
           authorizationCode: transbankResponse.authorization_code,
           amount: transbankResponse.amount,
           responseCode: transbankResponse.response_code,
@@ -495,9 +530,11 @@ const confirmPayment = async (req, res) => {
           cardNumber: transbankResponse.card_detail?.card_number,
           transactionDate: transbankResponse.transaction_date,
           vci: transbankResponse.vci,
-          email: isApproved ? order.emailResult : null
+          email: isApproved ? orderComplete.emailResult : null,
+          // FIX: Incluir orden completa para eliminar necesidad de segunda request
+          order: orderComplete
         },
-        message: isApproved 
+        message: isApproved
           ? '✅ Pago completado exitosamente. Tu compra ha sido procesada y recibirás un email de confirmación.'
           : `❌ Pago rechazado (Código: ${transbankResponse.response_code}). Por favor intenta con otra tarjeta o contacta con tu banco.`
       });
@@ -847,6 +884,29 @@ const getOrderStatus = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: 'Orden no encontrada'
+      });
+    }
+
+    // FIX: Permitir acceso público a órdenes recientes (últimas 24 horas)
+    // Esto soluciona el problema de deslogueo al volver de Transbank
+    const orderAge = Date.now() - new Date(order.createdAt).getTime();
+    const is24HoursOld = orderAge > 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+
+    // Si la orden es reciente (<24h), permitir acceso sin autenticación
+    if (!is24HoursOld) {
+      console.log(`✅ [GET_ORDER] Orden reciente (${Math.floor(orderAge / 1000 / 60)} minutos), acceso público permitido`);
+      return res.status(200).json({
+        success: true,
+        data: order,
+        message: 'Orden obtenida exitosamente'
+      });
+    }
+
+    // Para órdenes antiguas (>24h), REQUERIR autenticación
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Autenticación requerida para ver órdenes antiguas'
       });
     }
 

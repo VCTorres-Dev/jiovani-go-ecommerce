@@ -87,23 +87,36 @@ const PaymentResult = () => {
         console.log('📊 Resultado de confirmación:', {
           success: confirmResult.success,
           hasOrderId: !!confirmResult.data?.orderId,
+          hasOrderComplete: !!confirmResult.data?.order,
           status: confirmResult.data?.status,
           message: confirmResult.message
         });
 
-        // IMPORTANTE: Cargar orden incluso si NO es success: true
-        // (puede ser cancelled, timeout, o failed - todos válidos)
-        if (confirmResult.data?.orderId) {
+        // FIX: Usar orden completa de confirmPayment si está disponible (soluciona deslogueo)
+        // Esto elimina la necesidad de una segunda request autenticada a /order/:id
+        if (confirmResult.data?.order) {
+          console.log('✅ Usando orden completa desde confirmPayment (sin segunda request)');
+          setOrder(confirmResult.data.order);
+
+          // Mostrar toast apropiado
+          if (confirmResult.success) {
+            toast.success('✅ ' + (confirmResult.message || 'Pago completado exitosamente'));
+          } else {
+            // Para cancelled, timeout, failed - no es "error", es un estado válido
+            toast.info(confirmResult.message || 'Transacción procesada');
+          }
+        }
+        // FALLBACK: Si no viene orden completa, intentar obtenerla (compatibilidad con versiones antiguas)
+        else if (confirmResult.data?.orderId) {
           try {
-            console.log('📋 Obteniendo detalles de la orden...');
+            console.log('📋 Fallback: Obteniendo detalles de la orden (segunda request)...');
             const orderDetails = await getOrderStatus(confirmResult.data.orderId);
             setOrder(orderDetails);
-            
+
             // Mostrar toast apropiado
             if (confirmResult.success) {
               toast.success('✅ ' + (confirmResult.message || 'Pago completado exitosamente'));
             } else {
-              // Para cancelled, timeout, failed - no es "error", es un estado válido
               toast.info(confirmResult.message || 'Transacción procesada');
             }
           } catch (orderError) {

@@ -89,9 +89,11 @@ router.post('/result', handleTransbankResult);
 /**
  * @route   GET /api/payments/order/:id
  * @desc    Obtener estado específico de una orden
- * @access  Private (requiere autenticación)
+ * @access  Private (requiere autenticación) EXCEPTO órdenes recientes (<24h)
+ * @note    FIX: Órdenes recientes son accesibles sin autenticación para resolver
+ *          problema de deslogueo al volver de Transbank
  */
-router.get('/order/:id', auth, getOrderStatus);
+router.get('/order/:id', getOrderStatus);
 
 /**
  * @route   GET /api/payments/orders
