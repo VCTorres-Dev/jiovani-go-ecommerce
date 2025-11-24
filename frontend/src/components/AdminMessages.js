@@ -26,7 +26,7 @@ const AdminMessages = () => {
       });
 
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/contact?${queryParams}`,
+        `${process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api'}/contact?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -46,7 +46,7 @@ const AdminMessages = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/contact/stats/resumen`,
+        `${process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api'}/contact/stats/resumen`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -67,7 +67,7 @@ const AdminMessages = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/contact/${messageId}/leido`,
+        `${process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api'}/contact/${messageId}/leido`,
         { leido },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -84,7 +84,7 @@ const AdminMessages = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/contact/${messageId}/respondido`,
+        `${process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api'}/contact/${messageId}/respondido`,
         { respondido },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -101,7 +101,7 @@ const AdminMessages = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este mensaje?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/contact/${messageId}`, {
+        await axios.delete(`${process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api'}/contact/${messageId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchMessages();

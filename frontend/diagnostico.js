@@ -6,7 +6,7 @@ console.log('🔍 === DIAGNÓSTICO DEL SISTEMA ===\n');
 // 1. Verificar configuración
 console.log('1️⃣ CONFIGURACIÓN:');
 console.log('Frontend URL:', window.location.origin);
-console.log('API Base URL:', process.env.REACT_APP_API_URL || 'http://localhost:5000/api');
+console.log('API Base URL:', process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api');
 
 // 2. Verificar localStorage
 console.log('\n2️⃣ LOCALSTORAGE:');
@@ -16,7 +16,7 @@ console.log('Token:', localStorage.getItem('token') ? 'Existe' : 'No existe');
 
 // 3. Probar conexión con backend
 console.log('\n3️⃣ PROBANDO CONEXIÓN CON BACKEND...');
-fetch('http://localhost:5000/api/products?limit=1')
+fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api') + '/products?limit=1')
   .then(res => res.json())
   .then(data => {
     console.log('✅ Backend respondiendo correctamente');

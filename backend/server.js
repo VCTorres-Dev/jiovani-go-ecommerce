@@ -312,51 +312,9 @@ const requireMongoDB = (req, res, next) => {
 // ============================================================
 const Product = require('./models/Product');
 
-// Endpoint: Productos desde MongoDB
-app.get("/api/products", requireMongoDB, async (req, res) => {
-  try {
-    const { gender, page = 1, limit = 1000, search = '' } = req.query;
-    
-    // Construir query MongoDB
-    const query = {};
-    
-    // Filtrar por genero (case-insensitive)
-    if (gender && gender !== 'undefined' && gender !== '') {
-      query.gender = { $regex: new RegExp(`^${gender}$`, 'i') };
-    }
-    
-    // Filtrar por busqueda
-    if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
-    }
-    
-    const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(limit, 10);
-    
-    const totalProducts = await Product.countDocuments(query);
-    const totalPages = Math.ceil(totalProducts / limitNum);
-    
-    const products = await Product.find(query)
-      .sort({ name: 1 })
-      .limit(limitNum)
-      .skip((pageNum - 1) * limitNum);
-    
-    console.log(`[PRODUCTS] Devolviendo ${products.length} productos desde MongoDB`);
-    
-    res.json({
-      products,
-      totalPages,
-      currentPage: pageNum,
-      totalProducts
-    });
-  } catch (err) {
-    console.error(`Error fetching products: ${err.message}`);
-    res.status(500).json({ message: `Server Error: ${err.message}` });
-  }
-});
+// NOTA: La ruta manual /api/products ha sido eliminada para usar productRoutes
+// que incluye soporte para POST, PUT, DELETE (Admin)
+
 
 // ============================================================
 // IMPORTAR Y USAR RUTAS
@@ -374,7 +332,7 @@ try {
 }
 
 // Cargar rutas estandar
-let analyticsRoutes, orderRoutes, messageRoutes, userRoutes;
+let analyticsRoutes, orderRoutes, messageRoutes, userRoutes, productRoutes;
 try {
   analyticsRoutes = require("./routes/analyticsRoutes");
   console.log("[OK] analyticsRoutes cargado:", analyticsRoutes ? "✅" : "❌");
@@ -387,6 +345,9 @@ try {
   
   userRoutes = require("./routes/userRoutes");
   console.log("[OK] userRoutes cargado:", userRoutes ? "✅" : "❌");
+
+  productRoutes = require("./routes/productRoutes");
+  console.log("[OK] productRoutes cargado:", productRoutes ? "✅" : "❌");
 } catch (error) {
   console.error("[ERROR] Rutas estandar:", error.message);
 }
@@ -424,6 +385,12 @@ if (userRoutes) {
   console.log("  ✅ /api/users registrado");
 } else {
   console.log("  ❌ /api/users NO se pudo registrar (userRoutes es null)");
+}
+if (productRoutes) {
+  app.use("/api/products", productRoutes);
+  console.log("  ✅ /api/products registrado");
+} else {
+  console.log("  ❌ /api/products NO se pudo registrar (productRoutes es null)");
 }
 if (paymentRoutes) {
   app.use("/api/payments", paymentRoutes);

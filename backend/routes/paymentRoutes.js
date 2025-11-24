@@ -69,8 +69,8 @@ const handleTransbankResult = (req, res) => {
   console.log('📥 [RESULT] Datos recibidos:', params);
   
   // Construir URL del frontend
-  // Usar URL de entorno o fallback a localhost
-  const frontendUrl = process.env.FRONTEND_URL_REAL || 'http://localhost:3000';
+  // Usar URL de entorno o fallback a la URL de producción en Netlify
+  const frontendUrl = process.env.FRONTEND_URL_REAL || 'https://jiovannigo.netlify.app';
   
   // Convertir objeto a query string
   const queryString = new URLSearchParams(params).toString();

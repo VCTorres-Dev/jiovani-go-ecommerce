@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api';
 const API_URL = `${API_BASE}/analytics`;
 
 // Función estandarizada para obtener el token de autenticación

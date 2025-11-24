@@ -33,7 +33,7 @@ const Register = () => {
     try {
       // Extraemos confirmPassword para no enviarlo al backend
       const { confirmPassword, ...payload } = formData;
-      const apiBase = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+      const apiBase = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || "https://jiovani-go-ecommerce-production.up.railway.app/api";
       await axios.post(
         `${apiBase}/auth/register`,
         payload

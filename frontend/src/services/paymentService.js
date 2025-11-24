@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configuración base de la API
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || 'https://jiovani-go-ecommerce-production.up.railway.app/api';
 const PAYMENTS_API_URL = `${API_BASE}/payments`;
 
 // Función para obtener headers de autenticación

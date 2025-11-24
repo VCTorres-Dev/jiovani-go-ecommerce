@@ -1,0 +1,248 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 7,
+    "passes": 6,
+    "pending": 0,
+    "failures": 1,
+    "start": "2025-11-18T13:46:16.622Z",
+    "end": "2025-11-18T13:46:31.041Z",
+    "duration": 14419,
+    "testsRegistered": 7,
+    "passPercent": 85.71428571428571,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "17d2b1cc-e167-40b5-b3b7-ac0d8f3c0df2",
+      "title": "",
+      "fullFile": "cypress\\e2e\\auth.cy.js",
+      "file": "cypress\\e2e\\auth.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "dd1bf13c-1846-4855-9a89-bb5140ac9001",
+          "title": "Autenticación UI",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "UI-14: Página de login carga",
+              "fullTitle": "Autenticación UI UI-14: Página de login carga",
+              "timedOut": null,
+              "duration": 1373,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/login');\ncy.get('form').should('exist');\ncy.get('input[type=\"email\"], input[name=\"email\"]').should('exist');\ncy.get('input[type=\"password\"], input[name=\"password\"]').should('exist');\ncy.get('button[type=\"submit\"]').should('exist');",
+              "err": {},
+              "uuid": "e3275314-4343-403d-bd05-838effbebdb4",
+              "parentUUID": "dd1bf13c-1846-4855-9a89-bb5140ac9001",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "UI-15: Página de registro carga",
+              "fullTitle": "Autenticación UI UI-15: Página de registro carga",
+              "timedOut": null,
+              "duration": 167,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/register');\ncy.get('form').should('exist');\ncy.get('input').should('have.length.greaterThan', 2);",
+              "err": {},
+              "uuid": "2d70785f-be85-476e-a7d6-42183964423f",
+              "parentUUID": "dd1bf13c-1846-4855-9a89-bb5140ac9001",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "UI-16: Login con campos vacíos muestra error",
+              "fullTitle": "Autenticación UI UI-16: Login con campos vacíos muestra error",
+              "timedOut": null,
+              "duration": 227,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/login');\ncy.get('button[type=\"submit\"]').click();\n// Debe haber validación HTML5\ncy.get('input:invalid').should('exist');",
+              "err": {},
+              "uuid": "25a18ced-7984-4d14-821a-c80285307ab5",
+              "parentUUID": "dd1bf13c-1846-4855-9a89-bb5140ac9001",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "UI-17: Link entre login y registro funciona",
+              "fullTitle": "Autenticación UI UI-17: Link entre login y registro funciona",
+              "timedOut": null,
+              "duration": 10419,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/login');\ncy.contains(/registr/i).click();\ncy.url().should('include', '/register');",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 10000ms: Expected to find content: '/registr/i' but never did.",
+                "estack": "AssertionError: Timed out retrying after 10000ms: Expected to find content: '/registr/i' but never did.\n    at Context.eval (webpack://frontend/./cypress/e2e/auth.cy.js:29:7)",
+                "diff": null
+              },
+              "uuid": "ea5b7e91-149b-4a2b-957b-5ac0540ac364",
+              "parentUUID": "dd1bf13c-1846-4855-9a89-bb5140ac9001",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "UI-18: Formulario de login se puede completar",
+              "fullTitle": "Autenticación UI UI-18: Formulario de login se puede completar",
+              "timedOut": null,
+              "duration": 807,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/login');\ncy.get('input[type=\"email\"], input[name=\"email\"]').type('test@example.com');\ncy.get('input[type=\"password\"], input[name=\"password\"]').type('password123');\n// Verificar que los valores se ingresaron\ncy.get('input[type=\"email\"], input[name=\"email\"]').should('have.value', 'test@example.com');",
+              "err": {},
+              "uuid": "0b923461-22a0-40f2-9635-e39ac1d4afca",
+              "parentUUID": "dd1bf13c-1846-4855-9a89-bb5140ac9001",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "e3275314-4343-403d-bd05-838effbebdb4",
+            "2d70785f-be85-476e-a7d6-42183964423f",
+            "25a18ced-7984-4d14-821a-c80285307ab5",
+            "0b923461-22a0-40f2-9635-e39ac1d4afca"
+          ],
+          "failures": [
+            "ea5b7e91-149b-4a2b-957b-5ac0540ac364"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 12993,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "101d18c0-3f86-428b-a1f4-d69ae7282b36",
+          "title": "Navegación General",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "UI-19: Logo redirige a home",
+              "fullTitle": "Navegación General UI-19: Logo redirige a home",
+              "timedOut": null,
+              "duration": 255,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/catalogo-dama');\ncy.get('a[href=\"/\"]').first().click();\ncy.url().should('eq', Cypress.config().baseUrl + '/');",
+              "err": {},
+              "uuid": "403b6ce7-1ee6-4514-b766-228855079190",
+              "parentUUID": "101d18c0-3f86-428b-a1f4-d69ae7282b36",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "UI-20: Página 404 no existe (todas las rutas deben funcionar)",
+              "fullTitle": "Navegación General UI-20: Página 404 no existe (todas las rutas deben funcionar)",
+              "timedOut": null,
+              "duration": 936,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/');\ncy.visit('/catalogo-dama');\ncy.visit('/catalogo-varon');\ncy.visit('/contacto');\ncy.visit('/blog');\n// Todas deberían cargar sin error",
+              "err": {},
+              "uuid": "18f4d97d-c06e-456d-8330-311e51593c44",
+              "parentUUID": "101d18c0-3f86-428b-a1f4-d69ae7282b36",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "403b6ce7-1ee6-4514-b766-228855079190",
+            "18f4d97d-c06e-456d-8330-311e51593c44"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1191,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": true,
+        "json": true,
+        "charts": true,
+        "reportPageTitle": "Reporte de Pruebas E2E - JiovaniGo",
+        "embeddedScreenshots": true,
+        "inlineAssets": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

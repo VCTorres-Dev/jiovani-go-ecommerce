@@ -47,7 +47,7 @@ function App() {
           // NO setear user preliminar, esperar a la respuesta del backend
           // para evitar mostrar datos incompletos (sin username)
           
-          const apiBase = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+          const apiBase = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL_REAL || "https://jiovani-go-ecommerce-production.up.railway.app/api";
           console.log('[App.js] Haciendo petición a:', `${apiBase}/auth/user`);
           const res = await axios.get(`${apiBase}/auth/user`);
           console.log('[App.js] Respuesta recibida:', res.data);
@@ -59,9 +59,19 @@ function App() {
       } catch (err) {
         console.error('[App.js] Error loading user:', err.response ? err.response.data : err.message);
         console.error('[App.js] Error completo:', err);
-        localStorage.removeItem('token');
-        setAuthToken(null);
-        setUser(null);
+        
+        // FIX: Solo eliminar token si es error de autenticación (401/403)
+        // Si es error 500, 503 o error de red, MANTENER el token para que el próximo F5 funcione
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          console.log('[App.js] Token inválido o expirado (401/403). Cerrando sesión.');
+          localStorage.removeItem('token');
+          setAuthToken(null);
+          setUser(null);
+        } else {
+          console.log('[App.js] Error temporal (Server/Red). Manteniendo token en localStorage.');
+          // No borramos el token, pero el usuario quedará como null en esta sesión
+          // hasta que recargue y el servidor responda.
+        }
       } finally {
         setLoading(false);
         console.log('[App.js] loadUser finalizado, loading = false');
