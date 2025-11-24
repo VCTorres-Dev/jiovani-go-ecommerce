@@ -1021,16 +1021,26 @@ const getUserOrders = async (req, res) => {
  */
 const sendOrderConfirmationEmail = async (order, userEmail, orderItems) => {
   try {
-    // Obtener información del usuario
+    // Determinar si es usuario registrado o guest checkout
+    let customerName;
+    let customerEmail;
+
     const user = await User.findById(order.user);
-    
-    if (!user) {
-      console.log('⚠️ Usuario no encontrado para envío de email');
-      return;
+
+    if (user) {
+      // Usuario registrado - usar datos de cuenta
+      customerName = user.username;
+      customerEmail = user.email;
+      console.log('📧 [PAYMENT] Enviando email a usuario registrado:', customerEmail);
+    } else {
+      // Guest checkout - usar datos de shipping
+      customerName = order.shippingInfo.name;
+      customerEmail = order.shippingInfo.email;
+      console.log('📧 [PAYMENT] Enviando email a guest checkout:', customerEmail);
     }
 
     const emailData = {
-      customerName: user.username,
+      customerName: customerName,
       orderNumber: order.transbank.buyOrder || order._id,
       orderDate: new Date(order.createdAt).toLocaleDateString('es-CL'),
       paymentStatus: 'Aprobado',
@@ -1054,12 +1064,12 @@ const sendOrderConfirmationEmail = async (order, userEmail, orderItems) => {
 
     // Enviar email de confirmación con manejo robusto de errores
     console.log('📧 [PAYMENT] Preparando envío de email...');
-    const result = await EmailService.sendOrderConfirmation(user.email, emailData);
+    const result = await EmailService.sendOrderConfirmation(customerEmail, emailData);
     
     let emailResult = { success: false };
-    
+
     if (result && result.success) {
-      console.log(`✅ [PAYMENT] Email confirmación enviado exitosamente a: ${user.email}`);
+      console.log(`✅ [PAYMENT] Email confirmación enviado exitosamente a: ${customerEmail}`);
       console.log(`📨 [PAYMENT] Message ID: ${result.messageId}`);
       
       emailResult = {
