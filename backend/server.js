@@ -188,102 +188,26 @@ app.post("/api/payments/confirm-mock", (req, res) => {
   }
 });
 
-// CONFIRMATION ENDPOINT - Confirmar pago después que usuario retorna de Transbank
+// ============================================================
+// DEPRECATED: Endpoint legacy comentado - ahora se usa paymentRoutes
+// ============================================================
+// Este endpoint causaba conflictos porque esperaba { token } en lugar de { token_ws }
+// La implementación correcta está en backend/routes/paymentRoutes.js
+/*
 app.post("/api/payments/confirm", (req, res) => {
   try {
     console.log('[TRANSBANK CONFIRM] Confirmando transaccion...');
     const { token } = req.body;
-    
+
     if (!token) {
       return res.status(400).json({
         success: false,
         message: 'Token es requerido'
       });
     }
-    
-    // Credenciales Transbank
-    const commerceCode = process.env.TRANSBANK_COMMERCE_CODE || '597055555532';
-    const apiKey = process.env.TRANSBANK_API_KEY || '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C';
-    const isProduction = process.env.TRANSBANK_ENV === 'PRODUCTION';
-    const host = isProduction ? 'webpay3g.transbank.cl' : 'webpay3gint.transbank.cl';
-    
-    // Body para Transbank API
-    const body = JSON.stringify({
-      token_ws: token
-    });
-    
-    // Opciones del request HTTPS
-    const options = {
-      hostname: host,
-      path: '/rswebpay/api/webpay/v1.2/transactions/confirm',
-      method: 'POST',
-      headers: {
-        'Tbk-Api-Key-Id': commerceCode,
-        'Tbk-Api-Key-Secret': apiKey,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body)
-      }
-    };
-    
-    // Request a Transbank
-    const request = https.request(options, (response) => {
-      let data = '';
-      
-      response.on('data', (chunk) => {
-        data += chunk;
-      });
-      
-      response.on('end', () => {
-        try {
-          const result = JSON.parse(data);
-          
-          if (response.statusCode === 200) {
-            console.log('[TRANSBANK CONFIRM] Pago confirmado');
-            
-            res.json({
-              success: true,
-              message: 'Pago confirmado exitosamente',
-              data: {
-                transactionId: result.buy_order,
-                accountingDate: result.accounting_date,
-                transactionDate: result.transaction_date,
-                vci: result.vci,
-                status: result.status,
-                amount: result.amount,
-                cardNumber: result.card_detail?.card_number
-              }
-            });
-          } else {
-            console.error('[TRANSBANK CONFIRM] Error:', result);
-            res.status(response.statusCode).json({
-              success: false,
-              message: 'Error confirmando transaccion',
-              error: result.detail || result.message
-            });
-          }
-        } catch (parseError) {
-          console.error('[TRANSBANK CONFIRM] Error parsing response:', parseError);
-          res.status(500).json({
-            success: false,
-            message: 'Error procesando respuesta de Transbank',
-            error: parseError.message
-          });
-        }
-      });
-    });
-    
-    request.on('error', (error) => {
-      console.error('[TRANSBANK CONFIRM] Error en request:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Error comunicandose con Transbank',
-        error: error.message
-      });
-    });
-    
-    request.write(body);
-    request.end();
-    
+
+    // ... resto del código comentado
+    // Este endpoint ya no se usa, las rutas de paymentRoutes lo reemplazan
   } catch (error) {
     console.error('[TRANSBANK CONFIRM] Error:', error);
     res.status(500).json({
@@ -293,6 +217,7 @@ app.post("/api/payments/confirm", (req, res) => {
     });
   }
 });
+*/
 
 // ============================================================
 // MIDDLEWARE: Validar que MongoDB esté conectado
