@@ -143,21 +143,37 @@ router.post("/login", requireMongoDB, async (req, res) => {
 // @desc    Get user data from token
 // @access  Private
 router.get('/user', auth, requireMongoDB, async (req, res) => {
+  console.log('====================================');
+  console.log('[GET /auth/user] 🎯 Endpoint llamado');
+  console.log('====================================');
+
   try {
+    console.log('[GET /auth/user] 🔍 req.user establecido por middleware:', {
+      id: req.user._id || req.user.id,
+      username: req.user.username,
+      role: req.user.role
+    });
+
     // req.user is attached by the auth middleware, which has the user's id
+    console.log('[GET /auth/user] 🔎 Buscando usuario completo en BD...');
     const user = await User.findById(req.user.id).select('-password');
-    
+
     if (!user) {
-        return res.status(404).json({ 
+        console.log('[GET /auth/user] ❌ Usuario NO encontrado en BD');
+        return res.status(404).json({
           success: false,
-          message: 'Usuario no encontrado.' 
+          message: 'Usuario no encontrado.'
         });
     }
-    
-    // Log temporal para diagnosticar el rol
-    console.log(`[AUTH/USER] Usuario: ${user.username}, Rol en BD: ${user.role}`);
-    
-    res.json({
+
+    console.log('[GET /auth/user] ✅ Usuario encontrado en BD:', {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    });
+
+    const responseData = {
       success: true,
       user: {
         id: user.id,
@@ -165,9 +181,15 @@ router.get('/user', auth, requireMongoDB, async (req, res) => {
         email: user.email,
         role: user.role
       }
-    });
+    };
+
+    console.log('[GET /auth/user] 📤 Enviando respuesta al cliente:', JSON.stringify(responseData, null, 2));
+    console.log('====================================\n');
+
+    res.json(responseData);
   } catch (err) {
-    console.error(err.message);
+    console.log('[GET /auth/user] ❌ ERROR en endpoint:', err.message);
+    console.error(err);
     res.status(500).json({
       success: false,
       message: 'Error del servidor'
