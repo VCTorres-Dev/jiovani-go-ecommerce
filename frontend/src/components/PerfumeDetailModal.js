@@ -24,17 +24,7 @@ const PerfumeDetailModal = ({ perfume, onClose }) => {
   const [showToast, setShowToast] = useState(false);
   if (!perfume) return null;
 
-  // Lógica de imagen igual que en PerfumeCard
-  const API_BASE_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
-  
-  const imageSrc = perfume.imageURL
-    ? (perfume.imageURL.startsWith('http') ? perfume.imageURL : `${API_BASE_URL}${perfume.imageURL}`)
-    : generatePlaceholderSvg(perfume.name);
-
-  const handleImageError = (e) => {
-    e.target.src = generatePlaceholderSvg(perfume.name);
-  };
-
+  // Función helper para generar placeholder SVG (definida antes de su uso)
   const generatePlaceholderSvg = (name) => {
     const encodedSvg = encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">
@@ -56,6 +46,17 @@ const PerfumeDetailModal = ({ perfume, onClose }) => {
       </svg>
     `);
     return `data:image/svg+xml,${encodedSvg}`;
+  };
+
+  // Lógica de imagen igual que en PerfumeCard
+  const API_BASE_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
+
+  const imageSrc = perfume.imageURL
+    ? (perfume.imageURL.startsWith('http') ? perfume.imageURL : `${API_BASE_URL}${perfume.imageURL}`)
+    : generatePlaceholderSvg(perfume.name);
+
+  const handleImageError = (e) => {
+    e.target.src = generatePlaceholderSvg(perfume.name);
   };
 
   const handleAddToCart = () => {

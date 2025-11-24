@@ -60,7 +60,7 @@ const CatalogoPage = ({ gender, title }) => {
     return () => {
       clearTimeout(handler);
     };
-  }, [gender, searchTerm]);
+  }, [gender, searchTerm, priceRange.min, priceRange.max]);
 
   const handleFamilyChange = (family) => {
     setSelectedFamilies(prev =>

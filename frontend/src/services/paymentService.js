@@ -287,7 +287,7 @@ export const validateShippingInfo = (shippingInfo) => {
 };
 
 // Exportaciones por defecto
-export default {
+const paymentService = {
   initPayment,
   confirmPayment,
   getOrderStatus,
@@ -296,3 +296,5 @@ export default {
   formatOrderData,
   validateShippingInfo
 };
+
+export default paymentService;
