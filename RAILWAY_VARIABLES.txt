@@ -1,0 +1,53 @@
+═══════════════════════════════════════════════════════════
+   VARIABLES DE ENTORNO PARA RAILWAY - JIOVANNI GO
+═══════════════════════════════════════════════════════════
+
+INSTRUCCIONES:
+1. Ve a Railway → Tu proyecto → "Variables"
+2. Click en "New Variable" para cada una
+3. Copia el nombre y valor EXACTOS (sin espacios extra)
+4. Railway hará redeploy automático (~2 minutos)
+
+═══════════════════════════════════════════════════════════
+📧 CONFIGURACIÓN DE EMAIL
+═══════════════════════════════════════════════════════════
+
+EMAIL_ENABLED
+true
+
+SMTP_HOST
+smtp.gmail.com
+
+SMTP_PORT
+587
+
+EMAIL_USER
+jvcantorres@gmail.com
+
+EMAIL_PASS
+jtjfstolgrhj faeq
+
+EMAIL_FROM
+jvcantorres@gmail.com
+
+═══════════════════════════════════════════════════════════
+⚠️ IMPORTANTE:
+═══════════════════════════════════════════════════════════
+
+- La contraseña NO tiene espacios (Gmail la muestra con espacios pero se copia sin ellos)
+- Copia: jtjfstolgrhj faeq → Pega: jtjfstolgrhj faeq
+- Después de agregar todas, espera 2 minutos al redeploy
+- Verifica en logs que veas: "✅ Conexión con Gmail verificada exitosamente"
+
+═══════════════════════════════════════════════════════════
+✅ VERIFICACIÓN POST-DEPLOY
+═══════════════════════════════════════════════════════════
+
+En Railway logs deberías ver:
+✅ Ethereal email service configurado para pruebas
+📧 Host: smtp.gmail.com
+🔌 Port: 587
+✅ Conexión con Gmail verificada exitosamente
+
+Si ves eso → Email funcionando perfectamente
+Si NO → Revisa que la contraseña esté correcta (sin espacios)

@@ -84,8 +84,19 @@ const initPayment = async (req, res) => {
         fromCart: !!item.imageURL,
         fromDB: !!product.imageURL
       });
-      
+
       validatedProducts.push(validatedProduct);
+    }
+
+    // ==========================================
+    // RESERVAR STOCK: Descontar temporalmente
+    // ==========================================
+    console.log('📦 [PAYMENT] Reservando stock de productos...');
+    for (const item of orderItems) {
+      const product = await Product.findById(item._id);
+      product.stock -= item.quantity;
+      await product.save();
+      console.log(`✅ [PAYMENT] Stock reservado: ${product.name} (Nuevo stock: ${product.stock})`);
     }
 
     // Generar identificadores únicos para Transbank
@@ -238,8 +249,21 @@ const confirmPayment = async (req, res) => {
         order.transbank.responseCode = -1; // Código personalizado para timeout
         order.transbank.status = 'TIMEOUT';
         await order.save();
-        
+
         console.log('✅ [CONFIRM] Orden marcada como timeout');
+
+        // ==========================================
+        // DEVOLVER STOCK: Timeout
+        // ==========================================
+        console.log('📦 [CONFIRM] Devolviendo stock por timeout...');
+        for (const item of order.products) {
+          const product = await Product.findById(item.product);
+          if (product) {
+            product.stock += item.quantity;
+            await product.save();
+            console.log(`✅ [CONFIRM] Stock devuelto: ${product.name} (+${item.quantity}, nuevo stock: ${product.stock})`);
+          }
+        }
       }
 
       // FIX: Cargar orden completa para mostrar en frontend
@@ -295,8 +319,21 @@ const confirmPayment = async (req, res) => {
           order.transbank.responseCode = -2;
           await order.save();
         }
-        
+
         console.log('✅ [CONFIRM] Orden marcada como cancelada por usuario');
+
+        // ==========================================
+        // DEVOLVER STOCK: Cancelación
+        // ==========================================
+        console.log('📦 [CONFIRM] Devolviendo stock por cancelación...');
+        for (const item of order.products) {
+          const product = await Product.findById(item.product);
+          if (product) {
+            product.stock += item.quantity;
+            await product.save();
+            console.log(`✅ [CONFIRM] Stock devuelto: ${product.name} (+${item.quantity}, nuevo stock: ${product.stock})`);
+          }
+        }
       }
 
       // FIX: Cargar orden completa para mostrar en frontend
@@ -480,16 +517,10 @@ const confirmPayment = async (req, res) => {
       if (isApproved) {
         order.status = 'completed';
 
-        console.log('✅ [CONFIRM] Pago APROBADO, descontando stock...');
+        console.log('✅ [CONFIRM] Pago APROBADO - Stock ya fue descontado en initPayment');
 
-        // Descontar stock de los productos
-        for (const item of order.products) {
-          const result = await Product.updateOne(
-            { _id: item.product._id },
-            { $inc: { stock: -item.quantity } }
-          );
-          console.log(`   ✅ Stock descontado para ${item.name}: -${item.quantity}`);
-        }
+        // NOTA: Stock ya fue descontado en initPayment, no se descuenta aquí
+        // Si se descontara aquí, se descontaría dos veces
 
         // Enviar email de confirmación
         const orderItemsForEmail = order.products.map(item => ({
@@ -505,6 +536,19 @@ const confirmPayment = async (req, res) => {
       } else {
         order.status = 'failed';
         console.log(`❌ [CONFIRM] Pago RECHAZADO. Status: ${transbankResponse.status}, Code: ${transbankResponse.response_code}`);
+
+        // ==========================================
+        // DEVOLVER STOCK: Si el pago falló
+        // ==========================================
+        console.log('📦 [CONFIRM] Devolviendo stock reservado...');
+        for (const item of order.products) {
+          const product = await Product.findById(item.product);
+          if (product) {
+            product.stock += item.quantity;
+            await product.save();
+            console.log(`✅ [CONFIRM] Stock devuelto: ${product.name} (+${item.quantity}, nuevo stock: ${product.stock})`);
+          }
+        }
       }
 
       await order.save();
