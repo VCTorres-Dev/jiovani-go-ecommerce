@@ -1320,6 +1320,17 @@ const initTestPayment = async (req, res) => {
         });
       }
 
+      // ==========================================
+      // RESERVAR STOCK: Descontar temporalmente
+      // ==========================================
+      console.log('📦 [PAYMENT-TEST] Reservando stock de productos...');
+      for (const item of orderItems) {
+        const product = await Product.findById(item._id);
+        product.stock -= item.quantity;
+        await product.save();
+        console.log(`✅ [PAYMENT-TEST] Stock reservado: ${product.name} (Nuevo stock: ${product.stock})`);
+      }
+
       // Obtener userId (si existe) o generar temporal
       let userId;
       if (shippingInfo && shippingInfo.email) {
