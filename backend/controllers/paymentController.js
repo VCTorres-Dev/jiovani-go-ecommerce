@@ -1486,6 +1486,17 @@ const initGuestPayment = async (req, res) => {
       - Return URL: ${returnUrl}
       - Email: ${shippingInfo.email}`);
 
+    // ==========================================
+    // RESERVAR STOCK: Descontar temporalmente
+    // ==========================================
+    console.log('📦 [GUEST-PAYMENT] Reservando stock de productos...');
+    for (const item of orderItems) {
+      const product = await Product.findById(item._id);
+      product.stock -= item.quantity;
+      await product.save();
+      console.log(`✅ [GUEST-PAYMENT] Stock reservado: ${product.name} (Nuevo stock: ${product.stock})`);
+    }
+
     // Crear orden en la base de datos
     const order = new Order({
       user: userId,
